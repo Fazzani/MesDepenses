@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using MesDepenses.Tools;
@@ -32,21 +35,9 @@ namespace MesDepenses.Controllers
 
         public JsonResult ReadData()
         {
-            // Read sample data from CSV file
-            using (CsvFileReader reader = new CsvFileReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv")))
-            {
-                CsvRow row = new CsvRow();
-                var csv = new List<string[]>();
-                while (reader.ReadRow(row))
-                {
-                    foreach (string s in row)
-                        csv.Add(s.Split(','));
-                }
-                string json = new
-                            System.Web.Script.Serialization.JavaScriptSerializer().Serialize(csv);
-                Debug.WriteLine(json);
-                return Json(json, JsonRequestBehavior.AllowGet);
-            }
+            var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
+            //TODO: async 
+            return Json(stream.ReadToEnd().CsvToJson(), JsonRequestBehavior.AllowGet);
         }
     }
 }
