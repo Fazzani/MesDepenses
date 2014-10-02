@@ -1,22 +1,19 @@
-﻿$(function () {
-    $.getJSON(urlGetData, function (data) {
-        console.debug(data);
-    });
+﻿var urlGetData = '@Url.Action("ReadData", "Home")';
+var ViewModel = function () {
+    var self = this;
 
-    function AppViewModel() {
+    self.items = ko.observableArray();
 
-        this.data = $.getJSON(urlGetData, function (data) {
-            console.debug(data);
+    self.compteLength = ko.computed(function () {
+        return self.items().length;
+    }, this);
+
+    self.load = function () {
+        $.getJSON(urlGetData, function (data) {
+            ko.mapping.fromJS(JSON.parse(data), {}, self.items);
         });
-    }
-    
-    var Operation = {
-        compte : ko.observable(),
-        dateCompta : ko.observable(),
-        dateOp : ko.observable(),
-        libelle : ko.observable(),
-        refX : ko.observable(),
-        dateVal : ko.observable(),
-        montant : ko.observable()
-    }
-});
+    };
+    self.load();
+};
+
+//ko.applyBindings(new ViewModel());

@@ -4,10 +4,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using MesDepenses.Tools;
+using MesDepenses.Models;
 
 namespace MesDepenses.Controllers
 {
@@ -15,7 +16,11 @@ namespace MesDepenses.Controllers
     {
         public ActionResult Index()
         {
-
+            //var compte = new CompteModel();
+            //DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<OperationModel>));
+            //var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
+            //MemoryStream s = new MemoryStream(Encoding.UTF8.GetBytes(stream.ReadToEnd().CsvToJson()));
+            //compte.ListOperation = (List<OperationModel>)ser.ReadObject(s);
             return View();
         }
 
@@ -37,7 +42,8 @@ namespace MesDepenses.Controllers
         {
             var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
             //TODO: async 
-            return Json(stream.ReadToEnd().CsvToJson(), JsonRequestBehavior.AllowGet);
+            var tmp = stream.ReadToEnd().CsvToJson();
+            return Json(tmp, JsonRequestBehavior.AllowGet);
         }
     }
 }
