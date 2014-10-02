@@ -12,7 +12,7 @@ namespace MesDepenses.Controllers
     {
         public ActionResult Index()
         {
-            ReadTest();
+
             return View();
         }
 
@@ -30,32 +30,22 @@ namespace MesDepenses.Controllers
             return View();
         }
 
-        void WriteTest()
-        {
-            // Write sample data to CSV file
-            using (CsvFileWriter writer = new CsvFileWriter("App_Data/CyberPlus_OP_1_20141001165451.csv"))
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    CsvRow row = new CsvRow();
-                    for (int j = 0; j < 5; j++)
-                        row.Add(String.Format("Column{0}", j));
-                    writer.WriteRow(row);
-                }
-            }
-        }
-
-        void ReadTest()
+        public JsonResult ReadData()
         {
             // Read sample data from CSV file
-            using (CsvFileReader reader = new CsvFileReader(Server.MapPath("App_Data/CyberPlus_OP_1_20141001165451.csv")))
+            using (CsvFileReader reader = new CsvFileReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv")))
             {
                 CsvRow row = new CsvRow();
+                var csv = new List<string[]>();
                 while (reader.ReadRow(row))
                 {
                     foreach (string s in row)
-                        Debug.Write(s+Environment.NewLine);
+                        csv.Add(s.Split(','));
                 }
+                string json = new
+                            System.Web.Script.Serialization.JavaScriptSerializer().Serialize(csv);
+                Debug.WriteLine(json);
+                return Json(json, JsonRequestBehavior.AllowGet);
             }
         }
     }

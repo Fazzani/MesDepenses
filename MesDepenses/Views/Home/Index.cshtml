@@ -1,6 +1,14 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+@section scripts {
+    <script>
+        var urlGetData = '@Url.Action("ReadData","Home")';
+    </script>
+    <script src="~/Scripts/Custom/ViewModel/IndexVM.js"></script>
+    
+}
+
 @section featured {
     <section class="featured">
         <div class="content-wrapper">

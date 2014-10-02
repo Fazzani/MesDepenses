@@ -250,6 +250,7 @@
     <Content Include="Global.asax" />
     <Content Include="App_Data\CyberPlus_OP_1_20141001165451.csv" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Scripts\Custom\ViewModel\IndexVM.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
