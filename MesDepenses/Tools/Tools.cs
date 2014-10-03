@@ -33,14 +33,14 @@ namespace System
             {
                 string[] fields = lines[i].Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                 if (fields.Length != headers.Length) continue;
-                var jsonElements = headers.Zip(fields, (header, field) => string.Format("\"{0}\": \"{1}\"", header, field)).ToArray();
+                var jsonElements = headers.Zip(fields, (header, field) => string.Format("\"{0}\": \"{1}\"", header, field.Replace(" ", "_"))).ToArray();
                 string jsonObject = "{" + string.Format("{0}", string.Join(",", jsonElements)) + "}";
                 if (i < lines.Length - 1)
                     jsonObject += ",";
                 sb.AppendLine(jsonObject);
             }
             sb.AppendLine("]");
-            return sb.ToString().Replace(" ", "").Replace('é', 'e');
+            return sb.ToString().Replace(" ", "").Replace("_"," ").Replace('é', 'e');
         }
 
         public static T FromJson<T>(this string json)
