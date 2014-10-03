@@ -6,6 +6,7 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
+         <link href="~/Content/bootstrap.min.css" rel="stylesheet">
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
@@ -42,7 +43,7 @@
             </div>
         </footer>
         
-        @Scripts.Render("~/bundles/jquery","~/bundles/knockout")
+        @Scripts.Render("~/bundles/jquery","~/bundles/knockout","~/bundles/bootstrap")
         @RenderSection("scripts", required: false)
     </body>
 </html>
