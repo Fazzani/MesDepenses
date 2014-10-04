@@ -3,6 +3,16 @@
 }
 @section scripts {
     <script>
+        var OperationVM = function (montant,libelle, datevaleur,reference,compte) {
+            this.Montant = ko.observable(montant);
+            this.Libelle = ko.observable(libelle);
+            this.Datevaleur = ko.observable(datevaleur);
+            this.Reference = ko.observable(reference);
+            this.Compte = ko.observable(compte);
+            this.$type = 'OperationVM';
+           // ko.mapping.fromJS(data, mapping, this);
+        };
+
         var urlGetData = '@Url.Action("ReadData", "Home")';
         var ViewModel = function () {
             var self = this;
@@ -12,11 +22,28 @@
             self.compteLength = ko.computed(function () {
                 return self.items().length;
             }, this);
+            self.headShow = ko.computed(function () {
+                return self.ite
+            }, this);
+            self.groupBy = function () {
+                var tmp = _.groupBy(self.items(), function (item) {
+                    return item.Montant().length;
+                });
+                self.items(tmp);
+            };
+
+            self.sortBy = function () {
+                self.items(_.sortBy(self.items(), function (item) { return parseInt(item.Montant()); }));
+            };
 
             self.load = function () {
                 $.getJSON(urlGetData, function (data) {
                     //console.log(JSON.parse(data));
-                    ko.mapping.fromJS(JSON.parse(data), {}, self.items);
+                    var mappedData = ko.utils.arrayMap(JSON.parse(data), function (item) {
+                        return new OperationVM(item.Montant, item.Libelle, item.Datevaleur, item.Reference, item.Compte);
+                    });
+                    self.items(mappedData);
+
                 });
             };
             self.load();
@@ -44,6 +71,7 @@
     </section>
 }
 <h3>Mes Opérations</h3>
+
 <div class="table-responsive">
     <table class="table table-striped table-hover table-condensed">
         <thead>
@@ -67,4 +95,8 @@
             </tr>
         </tbody>
     </table>
+</div>
+<div class="actions">
+    <input type="button" value="group by" data-bind="click: groupBy" />
+    <input type="button" value="sort by" data-bind="click: sortBy" />
 </div>
