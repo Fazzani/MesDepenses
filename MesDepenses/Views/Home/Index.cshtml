@@ -3,14 +3,35 @@
 }
 @section scripts {
     <script>
-        var OperationVM = function (montant,libelle, datevaleur,reference,compte) {
+
+        //var carteregex = "^carte[ ]+([0-9]{6})+[ ]+cb:\\*([0-9]{7})[ ]+([a-z-A-Z.]+)+[ ]+([0-9]{2})(.+)$";
+        var carteregex = "^carte[ ]+([0-9]{6})+[ ]+cb:\\*([0-9]{7})[ ]+(.+)$";
+
+        var OperationVM = function (montant, libelle, datevaleur, reference, compte) {
+            var self = this;
             this.Montant = ko.observable(montant);
             this.Libelle = ko.observable(libelle);
             this.Datevaleur = ko.observable(datevaleur);
             this.Reference = ko.observable(reference);
             this.Compte = ko.observable(compte);
+            this.isCarte = ko.observable(false);
+            this.isPrlv = ko.observable(false);
+            this.isRetrait = ko.observable(false);
+            this.isCheque = ko.observable(false);
             this.$type = 'OperationVM';
-           // ko.mapping.fromJS(data, mapping, this);
+            this.SimpleLibelle = ko.dependentObservable(function () {
+                var myRegexp = new RegExp(carteregex, "gi");
+                //console.log(self.Libelle());
+
+                var match = myRegexp.exec(self.Libelle());
+                if (match != null) {
+                    self.isCarte = true;
+                    return match[3];
+                }
+                return self.Libelle();
+            }, this);
+
+
         };
 
         var urlGetData = '@Url.Action("ReadData", "Home")';
@@ -22,9 +43,7 @@
             self.compteLength = ko.computed(function () {
                 return self.items().length;
             }, this);
-            self.headShow = ko.computed(function () {
-                return self.ite
-            }, this);
+
             self.groupBy = function () {
                 var tmp = _.groupBy(self.items(), function (item) {
                     return item.Montant().length;
@@ -50,7 +69,7 @@
         };
         $(function () {
             ko.applyBindings(new ViewModel());
-
+            $("[data-toggle='tooltip']").tooltip();
         });
     </script>
 
@@ -87,8 +106,8 @@
             </tr>
         </thead>
         <tbody data-bind="foreach: items">
-            <tr data-bind="css: { 'warning': Montant() < 0, 'success': Montant() > 0, 'danger': Montant() <= -1000 }">
-                <td data-bind="text: Libelle"></td>
+            <tr data-toggle="tooltip" data-bind="css: { 'warning': Montant() < 0, 'success': Montant() > 0, 'danger': Montant() <= -1000 }, tooltip: { title: Libelle, trigger: 'hover', placement:'bottom' }" data-container="body">
+                <td data-bind="text: SimpleLibelle"></td>
                 <td data-bind="text: Datevaleur"></td>
                 <td data-bind="text: Reference"></td>
                 <td data-bind="text: Montant"></td>

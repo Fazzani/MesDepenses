@@ -24,6 +24,7 @@ namespace MesDepenses
                         "~/Scripts/knockout-*", "~/Scripts/knockout.mapping-latest*", "~/Scripts/underscore.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap*"));
+            bundles.Add(new ScriptBundle("~/bundles/custom").Include("~/Scripts/Custom/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
