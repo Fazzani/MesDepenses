@@ -1,49 +1,38 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-        <meta name="viewport" content="width=device-width" />
-        @Styles.Render("~/Content/css")
-         <link href="~/Content/bootstrap.min.css" rel="stylesheet">
-        @Scripts.Render("~/bundles/modernizr")
-    </head>
-    <body>
-        <header>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </header>
-        <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
-            </section>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <a class="navbar-btn" href="#">Mes comptes</a>
+            <a class="navbar-btn" href="#">Catégories</a>
+            <a class="navbar-btn" href="#">Paramètres</a>
+            <button type="button" class="btn btn-default navbar-btn">Sign in</button>
         </div>
-        <footer>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
-                </div>
+    </nav>
+    <div id="body"  class="container">
+        @RenderSection("featured", required: false)
+        <section>
+            @RenderBody()
+        </section>
+    </div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year Budgets application</p>
             </div>
-        </footer>
-        
-        @Scripts.Render("~/bundles/jquery","~/bundles/knockout","~/bundles/bootstrap","~/bundles/custom")
-        @RenderSection("scripts", required: false)
-    </body>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery", "~/bundles/knockout", "~/bundles/bootstrap", "~/bundles/custom")
+    @RenderSection("scripts", required: false)
+</body>
 </html>

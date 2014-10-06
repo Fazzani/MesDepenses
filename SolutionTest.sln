@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication", "Conso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesDepenses", "MesDepenses\MesDepenses.csproj", "{A75A043A-CA76-411B-80C6-66F5F6AC0451}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AAB59953-B631-41AB-9EF3-8F539789AC1B}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\AppData\Local\Microsoft\VisualStudio\11.0\Extensions\n32csakt.sui\schemas\WE-Palette.css = ..\..\..\AppData\Local\Microsoft\VisualStudio\11.0\Extensions\n32csakt.sui\schemas\WE-Palette.css
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

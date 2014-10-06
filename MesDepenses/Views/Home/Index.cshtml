@@ -79,17 +79,9 @@
 
 @section featured {
     <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title.</h1>
-                <h2>@ViewBag.Message</h2>
-            </hgroup>
-            <p>
-            </p>
-        </div>
     </section>
 }
-<h3>Mes Opérations</h3>
+
 
 <div class="table-responsive">
     <table class="table table-striped table-hover table-condensed">
@@ -99,17 +91,14 @@
                 </th>
                 <th>Date
                 </th>
-                <th>Référence
-                </th>
                 <th>Montant
                 </th>
             </tr>
         </thead>
         <tbody data-bind="foreach: items">
-            <tr data-toggle="tooltip" data-bind="css: { 'warning': Montant() < 0, 'success': Montant() > 0, 'danger': Montant() <= -1000 }, tooltip: { title: Libelle, trigger: 'hover', placement:'bottom' }" data-container="body">
+            <tr data-toggle="tooltip" data-bind="css: { 'warning': Montant() < 0, 'success': Montant() > 0, 'danger': Montant() <= -1000 }, tooltip: { title: Libelle, trigger: 'hover', placement: 'bottom' }" data-container="body">
                 <td data-bind="text: SimpleLibelle"></td>
                 <td data-bind="text: Datevaleur"></td>
-                <td data-bind="text: Reference"></td>
                 <td data-bind="text: Montant"></td>
             </tr>
         </tbody>
