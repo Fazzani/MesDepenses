@@ -620,7 +620,7 @@ function SparkLineDrawBarGraph(elem, arr, color){
 		var stacked_color = color;
 	}
 	else {
-		stacked_color = '#6AA6D6'
+	    stacked_color = '#6AA6D6';
 	}
 	elem.sparkline(arr, { type: 'bar', barWidth: 7, highlightColor: '#000', barSpacing: 2, height: 40, stackedBarColor: stacked_color});
 }
@@ -716,18 +716,18 @@ function CloseModalBox(){
 			}
 		}
 		});
-		table.find("input[type=text]").each(function(){
-			$(this).on('blur', function(event){
-			var target = event.target;
-			var col = $(target).parents("td");
-			if(table.find("input[name=string-fill]").prop("checked")==true) {
-				col.nextAll().find("input[type=text]").each(function() {
-					$(this).val($(target).val());
-				});
-			}
-		});
-	})
-};
+	    table.find("input[type=text]").each(function() {
+	        $(this).on('blur', function(event) {
+	            var target = event.target;
+	            var col = $(target).parents("td");
+	            if (table.find("input[name=string-fill]").prop("checked") == true) {
+	                col.nextAll().find("input[type=text]").each(function() {
+	                    $(this).val($(target).val());
+	                });
+	            }
+	        });
+	    });
+	};
 })( jQuery );
 //
 // Beauty Hover Plugin (backlight row and col when cell in mouseover)
@@ -2315,7 +2315,7 @@ $(document).ready(function () {
 			var current = $(this).next();
 			if (current.is(':visible')) {
 				li.find("ul.dropdown-menu").slideUp('fast');
-				li.find("ul.dropdown-menu a").removeClass('active')
+			    li.find("ul.dropdown-menu a").removeClass('active');
 			}
 			else {
 				another_items.find("ul.dropdown-menu").slideUp('fast');
@@ -2330,7 +2330,7 @@ $(document).ready(function () {
 		}
 		if ($(this).hasClass('active') == false) {
 			$(this).parents("ul.dropdown-menu").find('a').removeClass('active');
-			$(this).addClass('active')
+		    $(this).addClass('active');
 		}
 		if ($(this).hasClass('ajax-link')) {
 			e.preventDefault();
