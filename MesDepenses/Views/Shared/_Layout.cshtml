@@ -9,13 +9,13 @@
     <link href="~/Scripts/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
-    
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
 				<script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
 				<script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
 		<![endif]-->
-    @Styles.Render("~/Content/plugins","~/Content/css")
+    @Styles.Render("~/Content/plugins", "~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -46,7 +46,6 @@
         <div class="container-fluid expanded-panel">
             <div class="row">
                 <div id="logo" class="col-xs-12 col-sm-2">
-                    
                 </div>
                 <div id="top-panel" class="col-xs-12 col-sm-10">
                     <div class="row">
@@ -168,7 +167,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="ajax-link" href="ajax/tables_simple.html">Simple Tables</a></li>
-                            <li><a class="ajax-link" href="ajax/tables_datatables.html">Data Tables</a></li>
+                            <li>@Html.ActionLink("Mes Operations", "MyOperations", "Home", null, new { @class = "ajax-link" })</li>
                             <li><a class="ajax-link" href="ajax/tables_beauty.html">Beauty Tables</a></li>
                         </ul>
                     </li>
@@ -319,7 +318,7 @@
                     <div class="row">
                         <div id="breadcrumb" class="col-xs-12">
                             <ol class="breadcrumb">
-                                <li>@Html.ActionLink("Budgets","Index","Home")</li>
+                                <li>@Html.ActionLink("Budgets", "Index", "Home")</li>
                                 <li><a href="#">Dashboard</a></li>
                             </ol>
                         </div>
@@ -337,7 +336,7 @@
             </div>
         </div>
     </footer>*@
-    @Scripts.Render("~/bundles/jquery", "~/bundles/knockout", "~/bundles/bootstrap", "~/bundles/custom", "~/bundles/plugins")
+    @Scripts.Render("~/bundles/jquery","~/bundles/jqueryui", "~/bundles/knockout", "~/bundles/bootstrap", "~/bundles/custom", "~/bundles/plugins")
     @RenderSection("scripts", required: false)
 </body>
 </html>
