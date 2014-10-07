@@ -5,22 +5,17 @@
     <title>@ViewBag.Title</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
-    <link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">
-    <link href="plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Scripts/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
-    <link href="plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
-    <link href="plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
-    <link href="plugins/xcharts/xcharts.min.css" rel="stylesheet">
-    <link href="plugins/select2/select2.css" rel="stylesheet">
-    <link href="plugins/justified-gallery/justifiedGallery.css" rel="stylesheet">
+    
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
 				<script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
 				<script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
 		<![endif]-->
-    @Styles.Render("~/Content/css")
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    @Styles.Render("~/Content/plugins","~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -316,31 +311,33 @@
                 </ul>
             </div>
             @RenderSection("featured", required: false)
-            <section>
-                <div id="content" class="col-xs-12 col-sm-10">
-                    <div class="preloader">
-                        <img src="Images/devoops_getdata.gif" class="devoops-getdata" alt="preloader" />
-                    </div>
-                    <div id="ajax-content">
-                    @RenderBody()</div>
+            <div id="content" class="col-xs-12 col-sm-10">
+                <div class="preloader">
+                    <img src="Images/devoops_getdata.gif" class="devoops-getdata" alt="preloader" />
                 </div>
-            </section>
+                <div id="ajax-content">
+                    <div class="row">
+                        <div id="breadcrumb" class="col-xs-12">
+                            <ol class="breadcrumb">
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="#">Dashboard</a></li>
+                            </ol>
+                        </div>
+                    </div>
+                    @RenderBody()
+                </div>
+            </div>
         </div>
     </div>
 
-    <footer>
+    @*  <footer>
         <div class="content-wrapper">
             <div class="float-left">
                 <p>&copy; @DateTime.Now.Year Budgets application</p>
             </div>
         </div>
-    </footer>
-    @Scripts.Render("~/bundles/jquery", "~/bundles/knockout", "~/bundles/bootstrap", "~/bundles/custom")
-
-    <script src="plugins/justified-gallery/jquery.justifiedGallery.min.js"></script>
-    <script src="plugins/tinymce/tinymce.min.js"></script>
-    <script src="plugins/tinymce/jquery.tinymce.min.js"></script>
-    <!-- All functions for this theme + document.ready processing -->
+    </footer>*@
+    @Scripts.Render("~/bundles/jquery", "~/bundles/knockout", "~/bundles/bootstrap", "~/bundles/custom", "~/bundles/plugins")
     @RenderSection("scripts", required: false)
 </body>
 </html>

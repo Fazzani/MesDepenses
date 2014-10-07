@@ -273,7 +273,7 @@ a.show-sidebar:hover {
   float: left;
   margin-right: 5px;
 }
-.avatar > Images {
+.avatar > img {
   width:40px;
   height:40px;
   border: 1px solid #F8F8F8;
@@ -506,7 +506,7 @@ table.no-border-bottom tr:last-child td {
 .table-datatable tbody td {
   vertical-align: middle !important;
 }
-.table-datatable Images {
+.table-datatable img {
   margin-right: 10px;
   border: 1px solid #F8F8F8;
   width: 40px;
@@ -1603,7 +1603,7 @@ td.beauty-hover {
   display: inline-block;
   padding: 5px;
 }
-#simple_gallery a.fancybox Images {
+#simple_gallery a.fancybox img {
   width: 100%;
   padding: 2px;
   border: 1px solid #979797;
@@ -1611,7 +1611,7 @@ td.beauty-hover {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-#simple_gallery a.fancybox Images:hover {
+#simple_gallery a.fancybox img:hover {
   box-shadow: 0 0 10px #C7C7C7;
 }
 .ex-tooltip {
@@ -1979,7 +1979,7 @@ td.beauty-hover {
   opacity: 1;
   visibility: visible;
 }
-.qq-upload-list li Images {
+.qq-upload-list li img {
   border:1px solid #b4b4b4;
   margin-bottom: 5px;
 }
@@ -2046,7 +2046,7 @@ td.beauty-hover {
 #page-500 {
   background: #ebebeb;
 }
-#page-500 Images {
+#page-500 img {
   display: block;
   margin:30px auto;
 }
@@ -2088,7 +2088,7 @@ td.beauty-hover {
   text-align: center;
   overflow: hidden;
 }
-.page-feed .avatar Images {
+.page-feed .avatar img {
   width: 60px;
   height: 60px;
   border: 1px solid #F8F8F8;

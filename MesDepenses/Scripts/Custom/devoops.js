@@ -178,7 +178,7 @@ function LoadFlotScripts(callback){
 function LoadMorrisScripts(callback){
 	function LoadMorrisScript(){
 		if(!$.fn.Morris){
-			$.getScript('plugins/morris/morris.min.js', callback);
+			$.getScript('Scripts/plugins/morris/morris.min.js', callback);
 		}
 		else {
 			if (callback && typeof(callback) === "function") {
@@ -187,7 +187,7 @@ function LoadMorrisScripts(callback){
 		}
 	}
 	if (!$.fn.raphael){
-		$.getScript('plugins/raphael/raphael-min.js', LoadMorrisScript);
+	    $.getScript('Scripts/plugins/raphael/raphael-min.js', LoadMorrisScript);
 	}
 	else {
 		LoadMorrisScript();
@@ -199,7 +199,7 @@ function LoadMorrisScripts(callback){
 //
 function LoadFancyboxScript(callback){
 	if (!$.fn.fancybox){
-		$.getScript('plugins/fancybox/jquery.fancybox.js', callback);
+	    $.getScript('Scripts/plugins/fancybox/jquery.fancybox.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -213,7 +213,7 @@ function LoadFancyboxScript(callback){
 //
 function LoadKnobScripts(callback){
 	if(!$.fn.knob){
-		$.getScript('plugins/jQuery-Knob/jquery.knob.js', callback);
+	    $.getScript('Scripts/plugins/jQuery-Knob/jquery.knob.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -227,7 +227,7 @@ function LoadKnobScripts(callback){
 //
 function LoadSparkLineScript(callback){
 	if(!$.fn.sparkline){
-		$.getScript('plugins/sparkline/jquery.sparkline.min.js', callback);
+	    $.getScript('Scripts/plugins/sparkline/jquery.sparkline.min.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
