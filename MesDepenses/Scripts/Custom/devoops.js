@@ -1578,7 +1578,7 @@ function TestTable1(){
 function TestTable2(){
 	var asInitVals = [];
 	var oTable = $('#datatable-2').dataTable( {
-		"aaSorting": [[ 0, "asc" ]],
+		"aaSorting": [[ 1, "asc" ]],
 		"sDom": "<'box-content'<'col-sm-6'f><'col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
 		"sPaginationType": "bootstrap",
 		"oLanguage": {
@@ -1613,7 +1613,7 @@ function TestTable2(){
 //
 function TestTable3(){
 	$('#datatable-3').dataTable( {
-		"aaSorting": [[ 0, "asc" ]],
+		"aaSorting": [[ 1, "desc" ]],
 		"sDom": "T<'box-content'<'col-sm-6'f><'col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
 		"sPaginationType": "bootstrap",
 		"oLanguage": {
@@ -1644,11 +1644,11 @@ function SmallChangeVal(val) {
 	var new_val = Math.floor(100*Math.random());
 	var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
 	var result = val[0]+new_val*plusOrMinus;
-	if (parseInt(result) > 1000){
-		return [val[0] - new_val]
+	if (parseInt(result) > 1000) {
+	    return [val[0] - new_val];
 	}
-	if (parseInt(result) < 0){
-		return [val[0] + new_val]
+	if (parseInt(result) < 0) {
+	    return [val[0] + new_val];
 	}
 	return [result];
 }
@@ -1657,8 +1657,8 @@ function SmallChangeVal(val) {
 //
 function SparklineTestData(){
 	var arr = [];
-	for (var i=1; i<9; i++){
-		arr.push([Math.floor(1000*Math.random())])
+	for (var i=1; i<9; i++) {
+	    arr.push([Math.floor(1000 * Math.random())]);
 	}
 	return arr;
 }
