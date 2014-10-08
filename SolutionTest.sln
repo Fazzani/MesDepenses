@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\..\AppData\Local\Microsoft\VisualStudio\11.0\Extensions\n32csakt.sui\schemas\WE-Palette.css = ..\..\..\AppData\Local\Microsoft\VisualStudio\11.0\Extensions\n32csakt.sui\schemas\WE-Palette.css
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesDepensesServices", "MesDepensesServices\MesDepensesServices.csproj", "{8C2E165D-9C2F-4079-9982-686E83BC56F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{A75A043A-CA76-411B-80C6-66F5F6AC0451}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A75A043A-CA76-411B-80C6-66F5F6AC0451}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A75A043A-CA76-411B-80C6-66F5F6AC0451}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C2E165D-9C2F-4079-9982-686E83BC56F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C2E165D-9C2F-4079-9982-686E83BC56F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C2E165D-9C2F-4079-9982-686E83BC56F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C2E165D-9C2F-4079-9982-686E83BC56F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

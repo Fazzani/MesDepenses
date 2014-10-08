@@ -9,11 +9,15 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using MesDepenses.Models;
+using MesDepensesServices;
+using MesDepensesServices.DAL;
 
 namespace MesDepenses.Controllers
 {
     public class HomeController : Controller
     {
+
+
         public ActionResult Index()
         {
             //var compte = new CompteModel();
@@ -21,6 +25,12 @@ namespace MesDepenses.Controllers
             //var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
             //MemoryStream s = new MemoryStream(Encoding.UTF8.GetBytes(stream.ReadToEnd().CsvToJson()));
             //compte.ListOperation = (List<OperationModel>)ser.ReadObject(s);
+            using (var repository = new MesdepensesContext())
+            {
+                var tmp = repository.Categories.Count();
+                Debug.WriteLine(tmp);
+            }
+
             return View();
         }
 
