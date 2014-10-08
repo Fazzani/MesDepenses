@@ -28,9 +28,19 @@ namespace MesDepenses
 
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
-
+            bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
+                        "~/Scripts/plugins/justified-gallery/jquery.justifiedGallery.min.js",
+                        "~/Scripts/plugins/tinymce/tinymce.min.js",
+                        "~/Scripts/plugins/tinymce/jquery.tinymce.min.js"));
+         
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/style.css"));
-
+            bundles.Add(new StyleBundle("~/Content/plugins").Include(
+                "~/Scripts/plugins/fancybox/jquery.fancybox.css", 
+                "~/Scripts/plugins/fullcalendar/fullcalendar.css",
+                "~/Scripts/plugins/xcharts/xcharts.min.css", 
+                "~/Scripts/plugins/select2/select2.css", 
+                "~/Scripts/plugins/justified-gallery/justifiedGallery.css"));
+          
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
                         "~/Content/themes/base/jquery.ui.resizable.css",

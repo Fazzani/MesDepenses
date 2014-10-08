@@ -13,7 +13,7 @@
 function LoadCalendarScript(callback){
 	function LoadFullCalendarScript(){
 		if(!$.fn.fullCalendar){
-			$.getScript('plugins/fullcalendar/fullcalendar.js', callback);
+			$.getScript('../Scripts/plugins/fullcalendar/fullcalendar.js', callback);
 		}
 		else {
 			if (callback && typeof(callback) === "function") {
@@ -22,7 +22,7 @@ function LoadCalendarScript(callback){
 		}
 	}
 	if (!$.fn.moment){
-		$.getScript('plugins/moment/moment.min.js', LoadFullCalendarScript);
+		$.getScript('../Scripts/plugins/moment/moment.min.js', LoadFullCalendarScript);
 	}
 	else {
 		LoadFullCalendarScript();
@@ -48,7 +48,7 @@ function LoadOpenLayersScript(callback){
 //
 function LoadTimePickerScript(callback){
 	if (!$.fn.timepicker){
-		$.getScript('plugins/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.js', callback);
+		$.getScript('../Scripts/plugins/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -62,7 +62,7 @@ function LoadTimePickerScript(callback){
 //
 function LoadBootstrapValidatorScript(callback){
 	if (!$.fn.bootstrapValidator){
-		$.getScript('plugins/bootstrapvalidator/bootstrapValidator.min.js', callback);
+		$.getScript('../Scripts/plugins/bootstrapvalidator/bootstrapValidator.min.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -76,7 +76,7 @@ function LoadBootstrapValidatorScript(callback){
 //
 function LoadSelect2Script(callback){
 	if (!$.fn.select2){
-		$.getScript('plugins/select2/select2.min.js', callback);
+		$.getScript('../Scripts/plugins/select2/select2.min.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -90,10 +90,10 @@ function LoadSelect2Script(callback){
 //
 function LoadDataTablesScripts(callback){
 	function LoadDatatables(){
-		$.getScript('plugins/datatables/jquery.dataTables.js', function(){
-			$.getScript('plugins/datatables/ZeroClipboard.js', function(){
-				$.getScript('plugins/datatables/TableTools.js', function(){
-					$.getScript('plugins/datatables/dataTables.bootstrap.js', callback);
+		$.getScript('../Scripts/plugins/datatables/jquery.dataTables.js', function(){
+			$.getScript('../Scripts/plugins/datatables/ZeroClipboard.js', function(){
+				$.getScript('../Scripts/plugins/datatables/TableTools.js', function(){
+					$.getScript('../Scripts/plugins/datatables/dataTables.bootstrap.js', callback);
 				});
 			});
 		});
@@ -113,7 +113,7 @@ function LoadDataTablesScripts(callback){
 //
 function LoadFineUploader(callback){
 	if (!$.fn.fineuploader){
-		$.getScript('plugins/fineuploader/jquery.fineuploader-5.0.5.min.js', callback);
+		$.getScript('../Scripts/plugins/fineuploader/jquery.fineuploader-5.0.5.min.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -128,11 +128,11 @@ function LoadFineUploader(callback){
 //
 function LoadXChartScript(callback){
 	function LoadXChart(){
-		$.getScript('plugins/xcharts/xcharts.min.js', callback);
+		$.getScript('../Scripts/plugins/xcharts/xcharts.min.js', callback);
 	}
 	function LoadD3Script(){
-		if (!$.fn.d3){
-			$.getScript('plugins/d3/d3.min.js', LoadXChart)
+		if (!$.fn.d3) {
+		    $.getScript('../Scripts/plugins/d3/d3.min.js', LoadXChart);
 		}
 		else {
 			LoadXChart();
@@ -153,13 +153,13 @@ function LoadXChartScript(callback){
 //
 function LoadFlotScripts(callback){
 	function LoadFlotScript(){
-		$.getScript('plugins/flot/jquery.flot.js', LoadFlotResizeScript);
+		$.getScript('../Scripts/plugins/flot/jquery.flot.js', LoadFlotResizeScript);
 	}
 	function LoadFlotResizeScript(){
-		$.getScript('plugins/flot/jquery.flot.resize.js', LoadFlotTimeScript);
+		$.getScript('../Scripts/plugins/flot/jquery.flot.resize.js', LoadFlotTimeScript);
 	}
 	function LoadFlotTimeScript(){
-		$.getScript('plugins/flot/jquery.flot.time.js', callback);
+		$.getScript('../Scripts/plugins/flot/jquery.flot.time.js', callback);
 	}
 	if (!$.fn.flot){
 		LoadFlotScript();
@@ -178,7 +178,7 @@ function LoadFlotScripts(callback){
 function LoadMorrisScripts(callback){
 	function LoadMorrisScript(){
 		if(!$.fn.Morris){
-			$.getScript('plugins/morris/morris.min.js', callback);
+			$.getScript('Scripts/../Scripts/plugins/morris/morris.min.js', callback);
 		}
 		else {
 			if (callback && typeof(callback) === "function") {
@@ -187,7 +187,7 @@ function LoadMorrisScripts(callback){
 		}
 	}
 	if (!$.fn.raphael){
-		$.getScript('plugins/raphael/raphael-min.js', LoadMorrisScript);
+	    $.getScript('Scripts/../Scripts/plugins/raphael/raphael-min.js', LoadMorrisScript);
 	}
 	else {
 		LoadMorrisScript();
@@ -199,7 +199,7 @@ function LoadMorrisScripts(callback){
 //
 function LoadFancyboxScript(callback){
 	if (!$.fn.fancybox){
-		$.getScript('plugins/fancybox/jquery.fancybox.js', callback);
+	    $.getScript('Scripts/../Scripts/plugins/fancybox/jquery.fancybox.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -213,7 +213,7 @@ function LoadFancyboxScript(callback){
 //
 function LoadKnobScripts(callback){
 	if(!$.fn.knob){
-		$.getScript('plugins/jQuery-Knob/jquery.knob.js', callback);
+	    $.getScript('Scripts/../Scripts/plugins/jQuery-Knob/jquery.knob.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -227,7 +227,7 @@ function LoadKnobScripts(callback){
 //
 function LoadSparkLineScript(callback){
 	if(!$.fn.sparkline){
-		$.getScript('plugins/sparkline/jquery.sparkline.min.js', callback);
+	    $.getScript('Scripts/../Scripts/plugins/sparkline/jquery.sparkline.min.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -620,7 +620,7 @@ function SparkLineDrawBarGraph(elem, arr, color){
 		var stacked_color = color;
 	}
 	else {
-		stacked_color = '#6AA6D6'
+	    stacked_color = '#6AA6D6';
 	}
 	elem.sparkline(arr, { type: 'bar', barWidth: 7, highlightColor: '#000', barSpacing: 2, height: 40, stackedBarColor: stacked_color});
 }
@@ -716,18 +716,18 @@ function CloseModalBox(){
 			}
 		}
 		});
-		table.find("input[type=text]").each(function(){
-			$(this).on('blur', function(event){
-			var target = event.target;
-			var col = $(target).parents("td");
-			if(table.find("input[name=string-fill]").prop("checked")==true) {
-				col.nextAll().find("input[type=text]").each(function() {
-					$(this).val($(target).val());
-				});
-			}
-		});
-	})
-};
+	    table.find("input[type=text]").each(function() {
+	        $(this).on('blur', function(event) {
+	            var target = event.target;
+	            var col = $(target).parents("td");
+	            if (table.find("input[name=string-fill]").prop("checked") == true) {
+	                col.nextAll().find("input[type=text]").each(function() {
+	                    $(this).val($(target).val());
+	                });
+	            }
+	        });
+	    });
+	};
 })( jQuery );
 //
 // Beauty Hover Plugin (backlight row and col when cell in mouseover)
@@ -1578,7 +1578,7 @@ function TestTable1(){
 function TestTable2(){
 	var asInitVals = [];
 	var oTable = $('#datatable-2').dataTable( {
-		"aaSorting": [[ 0, "asc" ]],
+		"aaSorting": [[ 1, "asc" ]],
 		"sDom": "<'box-content'<'col-sm-6'f><'col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
 		"sPaginationType": "bootstrap",
 		"oLanguage": {
@@ -1613,7 +1613,7 @@ function TestTable2(){
 //
 function TestTable3(){
 	$('#datatable-3').dataTable( {
-		"aaSorting": [[ 0, "asc" ]],
+		"aaSorting": [[ 1, "desc" ]],
 		"sDom": "T<'box-content'<'col-sm-6'f><'col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
 		"sPaginationType": "bootstrap",
 		"oLanguage": {
@@ -1621,7 +1621,7 @@ function TestTable3(){
 			"sLengthMenu": '_MENU_'
 		},
 		"oTableTools": {
-			"sSwfPath": "plugins/datatables/copy_csv_xls_pdf.swf",
+			"sSwfPath": "../Scripts/plugins/datatables/copy_csv_xls_pdf.swf",
 			"aButtons": [
 				"copy",
 				"print",
@@ -1644,11 +1644,11 @@ function SmallChangeVal(val) {
 	var new_val = Math.floor(100*Math.random());
 	var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
 	var result = val[0]+new_val*plusOrMinus;
-	if (parseInt(result) > 1000){
-		return [val[0] - new_val]
+	if (parseInt(result) > 1000) {
+	    return [val[0] - new_val];
 	}
-	if (parseInt(result) < 0){
-		return [val[0] + new_val]
+	if (parseInt(result) < 0) {
+	    return [val[0] + new_val];
 	}
 	return [result];
 }
@@ -1657,8 +1657,8 @@ function SmallChangeVal(val) {
 //
 function SparklineTestData(){
 	var arr = [];
-	for (var i=1; i<9; i++){
-		arr.push([Math.floor(1000*Math.random())])
+	for (var i=1; i<9; i++) {
+	    arr.push([Math.floor(1000 * Math.random())]);
 	}
 	return arr;
 }
@@ -2315,7 +2315,7 @@ $(document).ready(function () {
 			var current = $(this).next();
 			if (current.is(':visible')) {
 				li.find("ul.dropdown-menu").slideUp('fast');
-				li.find("ul.dropdown-menu a").removeClass('active')
+			    li.find("ul.dropdown-menu a").removeClass('active');
 			}
 			else {
 				another_items.find("ul.dropdown-menu").slideUp('fast');
@@ -2330,7 +2330,7 @@ $(document).ready(function () {
 		}
 		if ($(this).hasClass('active') == false) {
 			$(this).parents("ul.dropdown-menu").find('a').removeClass('active');
-			$(this).addClass('active')
+		    $(this).addClass('active');
 		}
 		if ($(this).hasClass('ajax-link')) {
 			e.preventDefault();
