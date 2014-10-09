@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAL\AbstractDataRepository.cs" />
     <Compile Include="DAL\EventDataRepository.cs" />
     <Compile Include="DAL\IEventDataRepository.cs" />
     <Compile Include="DAL\MesdepensesContext.cs" />

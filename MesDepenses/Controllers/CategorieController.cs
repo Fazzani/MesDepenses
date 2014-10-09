@@ -23,70 +23,55 @@ namespace MesDepenses.Controllers
             _repository = repository;
         }
 
-        [EnableQuery()]
+        [EnableQuery]
         public IQueryable<Categorie> Get()
         {
-            using (var repository = new MesdepensesContext())
-            {
-                return repository.Categories;
-            }
+                return _repository.ListCategories();
         }
 
         // GET api/<controller>/5
         [ResponseType(typeof(Categorie))]
         public async Task<IHttpActionResult> Get(int id)
         {
-            using (var repository = new MesdepensesContext())
-            {
-                var categorie = await repository.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            var categorie = await _repository.ListCategories().FirstOrDefaultAsync(x => x.Id == id);
                 if (categorie == null)
                     throw new HttpResponseException(HttpStatusCode.NotFound);
 
-                return Ok(repository.Categories.FirstOrDefault(x => x.Id == id));
-            }
+                return Ok(_repository.ListCategories().FirstOrDefault(x => x.Id == id));
         }
 
         // POST api/<controller>
         public async Task<IHttpActionResult> Post([FromBody]Categorie categorie)
         {
-            using (var repository = new MesdepensesContext())
-            {
-                repository.Categories.Add(categorie);
-                if (await repository.SaveChangesAsync() > 0)
+            _repository.ListCategories().Add(categorie);
+            if (await _repository.SaveChangesAsync() > 0)
                     return Created(Request.RequestUri + categorie.Id.ToString(), categorie);
-            }
             return InternalServerError();
         }
 
         // PUT api/<controller>/5
         public async Task<IHttpActionResult> Put(int id, [FromBody]Categorie cat)
         {
-            using (var repository = new MesdepensesContext())
-            {
-                var categorie = repository.Categories.FirstOrDefault(x => x.Id == id);
+            var categorie = _repository.ListCategories().FirstOrDefault(x => x.Id == id);
                 if (categorie == null)
                     throw new HttpResponseException(HttpStatusCode.NotFound);
                 categorie.Libelle = cat.Libelle;
                 categorie.CategorieParent = cat.CategorieParent;
-                await repository.SaveChangesAsync();
+                await _repository.SaveChangesAsync();
                 return Ok();
-            }
         }
 
         // DELETE api/<controller>/5
         public async Task<IHttpActionResult> Delete(int id)
         {
-            using (var repository = new MesdepensesContext())
-            {
-                if (repository.Categories.Any(x => x.Id == id))
+            if (_repository.ListCategories().Any(x => x.Id == id))
                 {
-                    repository.Categories.Remove(repository.Categories.FirstOrDefault(x => x.Id == id));
-                    if (await repository.SaveChangesAsync() > 0)
+                    _repository.ListCategories().Remove(_repository.ListCategories().FirstOrDefault(x => x.Id == id));
+                    if (await _repository.SaveChangesAsync() > 0)
                         return Ok();
                     return InternalServerError();
                 }
                 return NotFound();
-            }
         }
     }
 }

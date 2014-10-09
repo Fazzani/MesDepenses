@@ -7,10 +7,13 @@ using MesDepensesServices.Domain;
 
 namespace MesDepensesServices.DAL
 {
-    public interface IEventDataRepository: IDisposable
+    public interface IEventDataRepository : IDisposable
     {
-        IEnumerable<Categorie> ListCategories();
-        IEnumerable<Tier> ListTiers();
-        IEnumerable<Operation> ListOperations();
+        IQueryable<Categorie> ListCategories();
+        IQueryable<Tier> ListTiers();
+        IQueryable<Operation> ListOperations();
+        void AddCategorie(Categorie categorie);
+        Task<int> SaveChangesAsync();
+        int SaveChanges();
     }
 }

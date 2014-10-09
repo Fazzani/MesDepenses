@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MesDepensesServices.Domain;
 
 namespace MesDepensesServices.DAL
 {
@@ -15,18 +16,22 @@ namespace MesDepensesServices.DAL
         {
             _context = context;
         }
-        public IEnumerable<Domain.Categorie> ListCategories()
-        {
-            
-            return _context.Categories;
-        }
 
-        public IEnumerable<Domain.Tier> ListTiers()
+        #region generic functions
+
+        public IQueryable<T> ListTiers<T>() where T: BaseDomain
         {
             return _context.Tiers;
         }
 
-        public IEnumerable<Domain.Operation> ListOperations()
+        #endregion
+
+        public IQueryable<Domain.Tier> ListTiers()
+        {
+            return _context.Tiers;
+        }
+
+        public IQueryable<Domain.Operation> ListOperations()
         {
             return _context.Operations;
         }
@@ -52,6 +57,30 @@ namespace MesDepensesServices.DAL
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        #endregion
+
+
+        public Task<int> SaveChangesAsync()
+        {
+            return SaveChangesAsync();
+        }
+
+        public int SaveChanges()
+        {
+            return SaveChanges();
+        }
+
+        #region Categorie
+        public void AddCategorie(Domain.Categorie categorie)
+        {
+            _context.Categories.Add(categorie);
+        }
+        public IQueryable<Domain.Categorie> ListCategories()
+        {
+
+            return _context.Categories;
+        }
+
         #endregion
     }
 }
