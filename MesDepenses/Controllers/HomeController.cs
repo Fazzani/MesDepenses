@@ -17,21 +17,21 @@ namespace MesDepenses.Controllers
 {
     public class HomeController : Controller
     {
+         private readonly IEventDataRepository _repository;
+
+         public HomeController(IEventDataRepository repository)
+        {
+            _repository = repository;
+        }
+
         public ActionResult Index()
         {
-            //var compte = new CompteModel();
-            //DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<OperationModel>));
-            //var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
-            //MemoryStream s = new MemoryStream(Encoding.UTF8.GetBytes(stream.ReadToEnd().CsvToJson()));
-            //compte.ListOperation = (List<OperationModel>)ser.ReadObject(s);
-            using (var repository = new MesdepensesContext())
-            {
-                repository.Categories.Add(new Categorie {Libelle = "Dépenses"});
-                repository.SaveChanges();
-                var tmp = repository.Categories.Count();
-                Debug.WriteLine(tmp);
-            }
-            
+            var compte = new CompteModel();
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<OperationModel>));
+            var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
+            MemoryStream s = new MemoryStream(Encoding.UTF8.GetBytes(stream.ReadToEnd().CsvToJson()));
+            compte.ListOperation = (List<OperationModel>)ser.ReadObject(s);
+           
             return View();
         }
 

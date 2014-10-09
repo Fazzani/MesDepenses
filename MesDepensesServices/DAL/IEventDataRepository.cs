@@ -7,7 +7,7 @@ using MesDepensesServices.Domain;
 
 namespace MesDepensesServices.DAL
 {
-    interface IEventDataRepository: IDisposable
+    public interface IEventDataRepository: IDisposable
     {
         IEnumerable<Categorie> ListCategories();
         IEnumerable<Tier> ListTiers();

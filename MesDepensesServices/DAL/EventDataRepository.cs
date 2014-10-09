@@ -9,9 +9,9 @@ namespace MesDepensesServices.DAL
     //[LifecycleTransient]
     public class EventDataRepository : IEventDataRepository 
     {
-        private readonly MesdepensesContext _context;
+        private readonly IMesdepensesContext _context;
 
-        public EventDataRepository(MesdepensesContext context)
+        public EventDataRepository(IMesdepensesContext context)
         {
             _context = context;
         }
