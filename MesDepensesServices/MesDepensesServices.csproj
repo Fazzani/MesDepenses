@@ -61,6 +61,7 @@
     <Compile Include="DAL\EventDataRepository.cs" />
     <Compile Include="DAL\IEventDataRepository.cs" />
     <Compile Include="DAL\MesdepensesContext.cs" />
+    <Compile Include="Domain\BaseDomain.cs" />
     <Compile Include="Domain\Categorie.cs" />
     <Compile Include="Domain\Operation.cs" />
     <Compile Include="Domain\Tier.cs" />

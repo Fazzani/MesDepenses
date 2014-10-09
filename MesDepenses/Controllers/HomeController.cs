@@ -11,13 +11,12 @@ using System.Web.Mvc;
 using MesDepenses.Models;
 using MesDepensesServices;
 using MesDepensesServices.DAL;
+using MesDepensesServices.Domain;
 
 namespace MesDepenses.Controllers
 {
     public class HomeController : Controller
     {
-
-
         public ActionResult Index()
         {
             //var compte = new CompteModel();
@@ -27,10 +26,12 @@ namespace MesDepenses.Controllers
             //compte.ListOperation = (List<OperationModel>)ser.ReadObject(s);
             using (var repository = new MesdepensesContext())
             {
+                repository.Categories.Add(new Categorie {Libelle = "Dépenses"});
+                repository.SaveChanges();
                 var tmp = repository.Categories.Count();
                 Debug.WriteLine(tmp);
             }
-
+            
             return View();
         }
 
