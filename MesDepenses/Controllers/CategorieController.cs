@@ -11,40 +11,44 @@ using System.Web.Http.Description;
 using System.Web.Http.OData;
 using MesDepensesServices.DAL;
 using MesDepensesServices.Domain;
+using MesDepensesServices.Services;
+using Repository.Pattern.UnitOfWork;
 
 namespace MesDepenses.Controllers
 {
     public class CategorieController : ApiController
     {
-        private readonly IEventDataRepository _repository;
+        private readonly CategorieService _categorieService;
+        private readonly IUnitOfWorkAsync _unitOfWork;
 
-        public CategorieController(IEventDataRepository repository)
+        public CategorieController(CategorieService categorieService, IUnitOfWorkAsync unitOfWork)
         {
-            _repository = repository;
+            _categorieService = categorieService;
+            _unitOfWork = unitOfWork;
         }
 
         [EnableQuery]
         public IQueryable<Categorie> Get()
         {
-                return _repository.ListCategories();
+                return _categorieService.Queryable();
         }
 
         // GET api/<controller>/5
         [ResponseType(typeof(Categorie))]
         public async Task<IHttpActionResult> Get(int id)
         {
-            var categorie = await _repository.ListCategories().FirstOrDefaultAsync(x => x.Id == id);
+            var categorie = await _categorieService.Queryable().FirstOrDefaultAsync(x => x.Id == id);
                 if (categorie == null)
                     throw new HttpResponseException(HttpStatusCode.NotFound);
 
-                return Ok(_repository.ListCategories().FirstOrDefault(x => x.Id == id));
+                return Ok(_categorieService.Queryable().FirstOrDefault(x => x.Id == id));
         }
 
         // POST api/<controller>
         public async Task<IHttpActionResult> Post([FromBody]Categorie categorie)
         {
-            _repository.ListCategories().Add(categorie);
-            if (await _repository.SaveChangesAsync() > 0)
+            _categorieService.Insert(categorie);
+            if (await _unitOfWork.SaveChangesAsync() > 0)
                     return Created(Request.RequestUri + categorie.Id.ToString(), categorie);
             return InternalServerError();
         }
@@ -52,22 +56,22 @@ namespace MesDepenses.Controllers
         // PUT api/<controller>/5
         public async Task<IHttpActionResult> Put(int id, [FromBody]Categorie cat)
         {
-            var categorie = _repository.ListCategories().FirstOrDefault(x => x.Id == id);
+            var categorie =await _categorieService.Queryable().FirstOrDefaultAsync(x => x.Id == id);
                 if (categorie == null)
                     throw new HttpResponseException(HttpStatusCode.NotFound);
                 categorie.Libelle = cat.Libelle;
                 categorie.CategorieParent = cat.CategorieParent;
-                await _repository.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
                 return Ok();
         }
 
         // DELETE api/<controller>/5
         public async Task<IHttpActionResult> Delete(int id)
         {
-            if (_repository.ListCategories().Any(x => x.Id == id))
+            if (_categorieService.Queryable().Any(x => x.Id == id))
                 {
-                    _repository.ListCategories().Remove(_repository.ListCategories().FirstOrDefault(x => x.Id == id));
-                    if (await _repository.SaveChangesAsync() > 0)
+                    await _categorieService.DeleteAsync(_categorieService.Queryable().FirstOrDefault(x => x.Id == id));
+                    if (await _unitOfWork.SaveChangesAsync() > 0)
                         return Ok();
                     return InternalServerError();
                 }

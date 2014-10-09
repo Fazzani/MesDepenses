@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MesDepensesServices.Domain;
+using Repository.Pattern.Ef6;
 
 namespace MesDepensesServices.DAL
 {
@@ -20,9 +21,10 @@ namespace MesDepensesServices.DAL
         void Dispose();
     }
 
-    public class MesdepensesContext : DbContext, IMesdepensesContext
+    public class MesdepensesContext : DataContext, IMesdepensesContext
     {
         public MesdepensesContext()
+            : base("MesdepensesContext")
         {
             // Turn off the Migrations, (NOT a code first Db)
             //Database.SetInitializer<MesdepensesContext>(null);

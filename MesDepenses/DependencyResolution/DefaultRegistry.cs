@@ -18,8 +18,16 @@
 using MesDepensesServices.DAL;
 
 namespace MesDepenses.DependencyResolution {
+    using MesDepensesServices.Domain;
+    using MesDepensesServices.Services;
+    using Repository.Pattern.DataContext;
+    using Repository.Pattern.Ef6;
+    using Repository.Pattern.Ef6.Factories;
+    using Repository.Pattern.Repositories;
+    using Repository.Pattern.UnitOfWork;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
+    using StructureMap.Pipeline;
 	
     public class DefaultRegistry : Registry {
         #region Constructors and Destructors
@@ -28,11 +36,15 @@ namespace MesDepenses.DependencyResolution {
             Scan(
                 scan => {
                     scan.TheCallingAssembly();
-                    scan.AssemblyContainingType<IEventDataRepository>();
+                    scan.AssemblyContainingType<CategorieService>();
                     scan.WithDefaultConventions();
 					scan.With(new ControllerConvention());
+                    scan.ExcludeType<RepositoryFactories>();
                 });
-            //For<IExample>().Use<Example>();
+            For<IUnitOfWorkAsync>().Use<UnitOfWork>().Singleton();
+            For<IDataContextAsync>().Use<MesdepensesContext>().Singleton();
+            For<IRepositoryAsync<Categorie>>().Use<Repository<Categorie>>().LifecycleIs<UniquePerRequestLifecycle>();
+            For<IRepositoryProvider>().Use<RepositoryProvider>().Ctor<RepositoryFactories>().Is(new RepositoryFactories()).Singleton();
         }
 
         #endregion

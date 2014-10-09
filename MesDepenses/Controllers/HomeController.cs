@@ -17,13 +17,6 @@ namespace MesDepenses.Controllers
 {
     public class HomeController : Controller
     {
-         private readonly IEventDataRepository _repository;
-
-         public HomeController(IEventDataRepository repository)
-        {
-            _repository = repository;
-        }
-
         public ActionResult Index()
         {
             var compte = new CompteModel();
