@@ -860,6 +860,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\MyOperations.cshtml" />
+    <Content Include="Views\Home\MyCategories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Framework\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">

@@ -47,6 +47,11 @@ namespace MesDepenses.Controllers
             return PartialView();
         }
 
+        public PartialViewResult MyCategories()
+        {
+            return PartialView();
+        }
+
         public JsonResult ReadData()
         {
             var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);

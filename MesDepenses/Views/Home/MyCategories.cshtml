@@ -1,0 +1,121 @@
+﻿<div class="row">
+    <div id="breadcrumb" class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Tables</a></li>
+            <li><a href="#">Data Tables</a></li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <div class="box-name">
+                    <i class="fa fa-usd"></i>
+                    <span>Mes Operations</span>
+                </div>
+                <div class="box-icons">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="expand-link">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+                <div class="no-move"></div>
+            </div>
+            <div class="box-content no-padding" id="table">
+                <table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-3">
+                    <thead>
+                        <tr>
+                            <th>Id
+                            </th>
+                            <th>Libellé
+                            </th>
+                            <th>Categorie Parente
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: items">
+                        <tr data-toggle="tooltip" data-bind="tooltip: { title: Libelle, trigger: 'hover', placement: 'bottom' }" data-container="body">
+                            <td data-bind="text: Id"></td>
+                            <td data-bind="text: Libelle"></td>
+                            <td data-bind="text: CategorieParent"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Libellé
+                            </th>
+                            <th>Date
+                            </th>
+                            <th>Montant
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var CategorieVM = function (id, libelle, categorieParent) {
+        var self = this;
+        this.Id = ko.observable(id);
+        this.Libelle = ko.observable(libelle);
+        this.CategorieParent = ko.observable(categorieParent);
+        this.$type = 'CategorieVM';
+    };
+    var urlGetData = '@Url.RouteUrl("DefaultApi", new { Action = "Get", Controller = "Categorie", httproute=""})';
+    console.log('______________________________________________');
+    console.log(urlGetData);
+    var ViewModel = function () {
+        var self = this;
+
+        self.items = ko.observableArray();
+
+        self.compteLength = ko.computed(function () {
+            return self.items().length;
+        }, this);
+
+        self.load = function () {
+            $.getJSON(urlGetData, function (data) {
+                //console.log(JSON.parse(data));
+                var mappedData = ko.utils.arrayMap(data, function (item) {
+                    return new CategorieVM(item.Id, item.Libelle, item.CategorieParent);
+                });
+                self.items(mappedData);
+
+            });
+        };
+        self.load();
+    };
+    $(function () {
+        ko.cleanNode($("#table")[0]);
+        ko.applyBindings(new ViewModel(), $("#table")[0]);
+        $("[data-toggle='tooltip']").tooltip();
+        // Run Datables plugin and create 3 variants of settings
+        function AllTables() {
+            TestTable3();
+            LoadSelect2Script(MakeSelect2);
+        }
+        function MakeSelect2() {
+            $('select').select2();
+            $('.dataTables_filter').each(function () {
+                $(this).find('label input[type=text]').attr('placeholder', 'Search');
+            });
+        }
+
+        // Load Datatables and run plugin on tables 
+        LoadDataTablesScripts(AllTables);
+        // Add Drag-n-Drop feature
+        WinMove();
+
+    });
+</script>
