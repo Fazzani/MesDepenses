@@ -26,9 +26,10 @@ namespace MesDepensesServices.DAL
         public MesdepensesContext()
             : base("MesdepensesContext")
         {
+            base.Configuration.ProxyCreationEnabled = false;
             // Turn off the Migrations, (NOT a code first Db)
             //Database.SetInitializer<MesdepensesContext>(null);
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<MesdepensesContext>());
+            //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<MesdepensesContext>());
         }
 
         public DbSet<Operation> Operations { get; set; }

@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using MesDepensesServices.DAL;
+using StructureMap.Web;
 
 namespace MesDepenses.DependencyResolution {
     using MesDepensesServices.Domain;
@@ -41,10 +42,10 @@ namespace MesDepenses.DependencyResolution {
 					scan.With(new ControllerConvention());
                     scan.ExcludeType<RepositoryFactories>();
                 });
-            For<IUnitOfWorkAsync>().Use<UnitOfWork>();
-            For<IDataContextAsync>().Use<MesdepensesContext>();
-            For<IRepositoryAsync<Categorie>>().Use<Repository<Categorie>>();
-            For<IRepositoryProvider>().Use<RepositoryProvider>().Ctor<RepositoryFactories>().Is(new RepositoryFactories());
+            For<IUnitOfWorkAsync>().HybridHttpOrThreadLocalScoped().Use<UnitOfWork>();
+            For<IDataContextAsync>().HybridHttpOrThreadLocalScoped().Use<MesdepensesContext>();
+            For<IRepositoryAsync<Categorie>>().HybridHttpOrThreadLocalScoped().Use<Repository<Categorie>>();
+            For<IRepositoryProvider>().HybridHttpOrThreadLocalScoped().Use<RepositoryProvider>().Ctor<RepositoryFactories>().Is(new RepositoryFactories());
         }
 
         #endregion
