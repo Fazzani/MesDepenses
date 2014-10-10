@@ -41,10 +41,10 @@ namespace MesDepenses.DependencyResolution {
 					scan.With(new ControllerConvention());
                     scan.ExcludeType<RepositoryFactories>();
                 });
-            For<IUnitOfWorkAsync>().Use<UnitOfWork>().Singleton();
-            For<IDataContextAsync>().Use<MesdepensesContext>().Singleton();
-            For<IRepositoryAsync<Categorie>>().Use<Repository<Categorie>>().LifecycleIs<UniquePerRequestLifecycle>();
-            For<IRepositoryProvider>().Use<RepositoryProvider>().Ctor<RepositoryFactories>().Is(new RepositoryFactories()).Singleton();
+            For<IUnitOfWorkAsync>().Use<UnitOfWork>();
+            For<IDataContextAsync>().Use<MesdepensesContext>();
+            For<IRepositoryAsync<Categorie>>().Use<Repository<Categorie>>();
+            For<IRepositoryProvider>().Use<RepositoryProvider>().Ctor<RepositoryFactories>().Is(new RepositoryFactories());
         }
 
         #endregion
