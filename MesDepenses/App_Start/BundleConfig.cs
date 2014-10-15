@@ -31,7 +31,8 @@ namespace MesDepenses
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
                         "~/Scripts/plugins/justified-gallery/jquery.justifiedGallery.min.js",
                         "~/Scripts/plugins/tinymce/tinymce.min.js",
-                        "~/Scripts/plugins/tinymce/jquery.tinymce.min.js"));
+                        "~/Scripts/plugins/tinymce/jquery.tinymce.min.js",
+                         "~/Scripts/plugins/jquery.jeditable.js"));
          
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/style.css"));
             bundles.Add(new StyleBundle("~/Content/plugins").Include(

@@ -2328,3 +2328,8 @@ td.beauty-hover {
     display: none;
   }
 }
+
+tr.active, tr.active td {
+    background-color:rgba(144, 194, 228, 0.43) !important;
+    font-weight:bold;
+}

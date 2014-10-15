@@ -13,7 +13,7 @@
 			<div class="box-header">
 				<div class="box-name">
 					<i class="fa fa-usd"></i>
-					<span>Mes Operations</span>
+					<span>Mes Catégroies</span>
 				</div>
 				<div class="box-icons">
 					<a class="collapse-link">
@@ -42,7 +42,7 @@
 					</thead>
 					<tbody data-bind="foreach: items">
 						<tr data-toggle="tooltip" data-bind="tooltip: { title: Libelle, trigger: 'hover', placement: 'bottom' }" data-container="body">
-							<td data-bind="text: Id"></td>
+							<td><span data-bind="text: Id"></span><input type="checkbox" data-bind="value: $data, checked: $parent.selectedItems"/></td>
 							<td data-bind="text: Libelle"></td>
 							<td data-bind="text: CategorieParent"></td>
 						</tr>
@@ -113,8 +113,6 @@
 	
 </div>
 
-
-
 <script type="text/javascript">
 
 	var CategorieVM = function (id, libelle, categorieParent) {
@@ -129,6 +127,17 @@
 		var self = this;
 
 		self.items = ko.observableArray();
+		self.selectedItems = ko.observableArray(self.items());
+
+		self.removeItem = function (item)
+		{
+		    self.items.remove(item);
+		};
+
+		self.removeSelected = function () {
+		    self.items.removeAll(self.selectedItems());
+		    self.selectedItems.removeAll();
+		};
 
 		self.load = function () {
 			$.getJSON(urlGetData, function (data) {
@@ -144,10 +153,14 @@
 	};
 	  $.fn.serializeForm = function () {
 	    return _.object(_.map($(this).serializeArray(), function(item) { return [item.name, item.value]; }));
-	};
+	  };
+
+	  var catModel = new ViewModel();
+
 	$(function () {
 	  
 	    ko.cleanNode($("#ajax-content")[0]);
+	    
 	    ko.applyBindings(new ViewModel(), $("#ajax-content")[0]);
 		$("[data-toggle='tooltip']").tooltip();
 		// Run Datables plugin and create 3 variants of settings
@@ -181,5 +194,6 @@
 		        }
 		    });
 		});
+        
 	});
 </script>

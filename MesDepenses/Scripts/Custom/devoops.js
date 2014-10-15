@@ -2,6 +2,7 @@
 //    Main script of DevOOPS v1.0 Bootstrap Theme
 //
 "use strict";
+
 /*-------------------------------------------
 	Dynamically load plugin scripts
 ---------------------------------------------*/
@@ -132,7 +133,7 @@ function LoadXChartScript(callback){
 	}
 	function LoadD3Script(){
 		if (!$.fn.d3) {
-		    $.getScript('../Scripts/plugins/d3/d3.min.js', LoadXChart);
+			$.getScript('../Scripts/plugins/d3/d3.min.js', LoadXChart);
 		}
 		else {
 			LoadXChart();
@@ -187,7 +188,7 @@ function LoadMorrisScripts(callback){
 		}
 	}
 	if (!$.fn.raphael){
-	    $.getScript('Scripts/../Scripts/plugins/raphael/raphael-min.js', LoadMorrisScript);
+		$.getScript('Scripts/../Scripts/plugins/raphael/raphael-min.js', LoadMorrisScript);
 	}
 	else {
 		LoadMorrisScript();
@@ -199,7 +200,7 @@ function LoadMorrisScripts(callback){
 //
 function LoadFancyboxScript(callback){
 	if (!$.fn.fancybox){
-	    $.getScript('Scripts/../Scripts/plugins/fancybox/jquery.fancybox.js', callback);
+		$.getScript('Scripts/../Scripts/plugins/fancybox/jquery.fancybox.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -213,7 +214,7 @@ function LoadFancyboxScript(callback){
 //
 function LoadKnobScripts(callback){
 	if(!$.fn.knob){
-	    $.getScript('Scripts/../Scripts/plugins/jQuery-Knob/jquery.knob.js', callback);
+		$.getScript('Scripts/../Scripts/plugins/jQuery-Knob/jquery.knob.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -227,7 +228,7 @@ function LoadKnobScripts(callback){
 //
 function LoadSparkLineScript(callback){
 	if(!$.fn.sparkline){
-	    $.getScript('Scripts/../Scripts/plugins/sparkline/jquery.sparkline.min.js', callback);
+		$.getScript('Scripts/../Scripts/plugins/sparkline/jquery.sparkline.min.js', callback);
 	}
 	else {
 		if (callback && typeof(callback) === "function") {
@@ -620,7 +621,7 @@ function SparkLineDrawBarGraph(elem, arr, color){
 		var stacked_color = color;
 	}
 	else {
-	    stacked_color = '#6AA6D6';
+		stacked_color = '#6AA6D6';
 	}
 	elem.sparkline(arr, { type: 'bar', barWidth: 7, highlightColor: '#000', barSpacing: 2, height: 40, stackedBarColor: stacked_color});
 }
@@ -716,17 +717,17 @@ function CloseModalBox(){
 			}
 		}
 		});
-	    table.find("input[type=text]").each(function() {
-	        $(this).on('blur', function(event) {
-	            var target = event.target;
-	            var col = $(target).parents("td");
-	            if (table.find("input[name=string-fill]").prop("checked") == true) {
-	                col.nextAll().find("input[type=text]").each(function() {
-	                    $(this).val($(target).val());
-	                });
-	            }
-	        });
-	    });
+		table.find("input[type=text]").each(function() {
+			$(this).on('blur', function(event) {
+				var target = event.target;
+				var col = $(target).parents("td");
+				if (table.find("input[name=string-fill]").prop("checked") == true) {
+					col.nextAll().find("input[type=text]").each(function() {
+						$(this).val($(target).val());
+					});
+				}
+			});
+		});
 	};
 })( jQuery );
 //
@@ -1621,7 +1622,8 @@ function TestTable3(){
 			"sLengthMenu": '_MENU_'
 		},
 		"oTableTools": {
-			"sSwfPath": "../Scripts/plugins/datatables/copy_csv_xls_pdf.swf",
+		    "sSwfPath": "../Scripts/plugins/datatables/copy_csv_xls_pdf.swf",
+		    "sRowSelect": "os",
 			"aButtons": [
 				"copy",
 				"print",
@@ -1629,7 +1631,14 @@ function TestTable3(){
 					"sExtends":    "collection",
 					"sButtonText": 'Save <span class="caret" />',
 					"aButtons":    [ "csv", "xls", "pdf" ]
-				}
+				},
+                 {
+                     "sExtends": "select", "sButtonText": "Delete Recods",
+                     "fnClick": function (nButton, oConfig, oFlash) {
+                         catModel.removeSelected();
+                     }
+
+                 }
 			]
 		}
 	});
@@ -1645,10 +1654,10 @@ function SmallChangeVal(val) {
 	var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
 	var result = val[0]+new_val*plusOrMinus;
 	if (parseInt(result) > 1000) {
-	    return [val[0] - new_val];
+		return [val[0] - new_val];
 	}
 	if (parseInt(result) < 0) {
-	    return [val[0] + new_val];
+		return [val[0] + new_val];
 	}
 	return [result];
 }
@@ -1658,7 +1667,7 @@ function SmallChangeVal(val) {
 function SparklineTestData(){
 	var arr = [];
 	for (var i=1; i<9; i++) {
-	    arr.push([Math.floor(1000 * Math.random())]);
+		arr.push([Math.floor(1000 * Math.random())]);
 	}
 	return arr;
 }
@@ -2294,17 +2303,20 @@ function DrawFullCalendar(){
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
 $(document).ready(function () {
-	$('.show-sidebar').on('click', function (e) {
-		e.preventDefault();
-		$('div#main').toggleClass('sidebar-show');
-		setTimeout(MessagesMenuWidth, 250);
-	});
+	var height = window.innerHeight - 49;
+
 	var ajax_url = location.hash.replace(/^#/, '');
 	if (ajax_url.length < 1) {
 		ajax_url = 'ajax/dashboard.html';
 	}
+
 	LoadAjaxContent(ajax_url);
-	$('.main-menu').on('click', 'a', function (e) {
+
+	$(document).on('click', '.show-sidebar', function () {
+		e.preventDefault();
+		$('div#main').toggleClass('sidebar-show');
+		setTimeout(MessagesMenuWidth, 250);
+	}).on('click', '.main-menu a', function (e) {
 		var parents = $(this).parents('li');
 		var li = $(this).closest('li.dropdown');
 		var another_items = $('.main-menu li').not(parents);
@@ -2315,7 +2327,7 @@ $(document).ready(function () {
 			var current = $(this).next();
 			if (current.is(':visible')) {
 				li.find("ul.dropdown-menu").slideUp('fast');
-			    li.find("ul.dropdown-menu a").removeClass('active');
+				li.find("ul.dropdown-menu a").removeClass('active');
 			}
 			else {
 				another_items.find("ul.dropdown-menu").slideUp('fast');
@@ -2330,7 +2342,7 @@ $(document).ready(function () {
 		}
 		if ($(this).hasClass('active') == false) {
 			$(this).parents("ul.dropdown-menu").find('a').removeClass('active');
-		    $(this).addClass('active');
+			$(this).addClass('active');
 		}
 		if ($(this).hasClass('ajax-link')) {
 			e.preventDefault();
@@ -2347,8 +2359,44 @@ $(document).ready(function () {
 		if ($(this).attr('href') == '#') {
 			e.preventDefault();
 		}
+	}).on('click','#locked-screen', function (e) {
+		e.preventDefault();
+		$('body').addClass('body-screensaver');
+		$('#screensaver').addClass("show");
+		ScreenSaver();
+	}).on('click', 'a.close-link', function (e) {
+		e.preventDefault();
+		CloseModalBox();
+	}).on('click', '#top-panel a', function (e) {
+		if ($(this).hasClass('ajax-link')) {
+			e.preventDefault();
+			if ($(this).hasClass('add-full')) {
+				$('#content').addClass('full-content');
+			}
+			else {
+				$('#content').removeClass('full-content');
+			}
+			var url = $(this).attr('href');
+			window.location.hash = url;
+			LoadAjaxContent(url);
+		}
+	}).on('keydown','#search', function (e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+			$('#content').removeClass('full-content');
+			ajax_url = 'ajax/page_search.html';
+			window.location.hash = ajax_url;
+			LoadAjaxContent(ajax_url);
+		}
+	}).on('mouseover','#screen_unlock', function () {
+		var header = 'Enter current username and password';
+		var form = $('<div class="form-group"><label class="control-label">Username</label><input type="text" class="form-control" name="username" /></div>' +
+					'<div class="form-group"><label class="control-label">Password</label><input type="password" class="form-control" name="password" /></div>');
+		var button = $('<div class="text-center"><a href="index.html" class="btn btn-primary">Unlock</a></div>');
+		OpenModalBox(header, form, button);
+
 	});
-	var height = window.innerHeight - 49;
+
 	$('#main').css('min-height', height)
 		.on('click', '.expand-link', function (e) {
 			var body = $('body');
@@ -2387,46 +2435,7 @@ $(document).ready(function () {
 			var content = $(this).closest('div.box');
 			content.remove();
 		});
-	$('#locked-screen').on('click', function (e) {
-		e.preventDefault();
-		$('body').addClass('body-screensaver');
-		$('#screensaver').addClass("show");
-		ScreenSaver();
-	});
-	$('body').on('click', 'a.close-link', function(e){
-		e.preventDefault();
-		CloseModalBox();
-	});
-	$('#top-panel').on('click','a', function(e){
-		if ($(this).hasClass('ajax-link')) {
-			e.preventDefault();
-			if ($(this).hasClass('add-full')) {
-				$('#content').addClass('full-content');
-			}
-			else {
-				$('#content').removeClass('full-content');
-			}
-			var url = $(this).attr('href');
-			window.location.hash = url;
-			LoadAjaxContent(url);
-		}
-	});
-	$('#search').on('keydown', function(e){
-		if (e.keyCode == 13){
-			e.preventDefault();
-			$('#content').removeClass('full-content');
-			ajax_url = 'ajax/page_search.html';
-			window.location.hash = ajax_url;
-			LoadAjaxContent(ajax_url);
-		}
-	});
-	$('#screen_unlock').on('mouseover', function(){
-		var header = 'Enter current username and password';
-		var form = $('<div class="form-group"><label class="control-label">Username</label><input type="text" class="form-control" name="username" /></div>'+
-					'<div class="form-group"><label class="control-label">Password</label><input type="password" class="form-control" name="password" /></div>');
-		var button = $('<div class="text-center"><a href="index.html" class="btn btn-primary">Unlock</a></div>');
-		OpenModalBox(header, form, button);
-	});
+	
 });
 
 
