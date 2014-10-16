@@ -42,7 +42,7 @@
 					</thead>
 					<tbody data-bind="foreach: items">
 						<tr data-toggle="tooltip" data-bind="tooltip: { title: Libelle, trigger: 'hover', placement: 'bottom' }" data-container="body">
-							<td><span data-bind="text: Id"></span><input type="checkbox" data-bind="value: $data, checked: $parent.selectedItems"/></td>
+							<td><span data-bind="text: Id"></span><input type="checkbox" data-bind="value: $data, checked: $parent.selectedItems, attr: { id: 'checkBox' + Id }"/></td>
 							<td data-bind="text: Libelle"></td>
 							<td data-bind="text: CategorieParent"></td>
 						</tr>
@@ -112,7 +112,7 @@
 	</div>
 	
 </div>
-
+<div data-bind="text: ko.toJSON($root)"></div>
 <script type="text/javascript">
 
 	var CategorieVM = function (id, libelle, categorieParent) {
@@ -122,12 +122,12 @@
 		this.CategorieParent = ko.observable(categorieParent);
 		this.$type = 'CategorieVM';
 	};
-	var urlGetData = '@Url.Action("Get","Categorie",new { httproute=""})';
+	var urlGetData = '@Url.Action("Get", "Categorie", new { httproute = "" })';
 	var ViewModel = function () {
 		var self = this;
 
 		self.items = ko.observableArray();
-		self.selectedItems = ko.observableArray(self.items());
+		self.selectedItems = ko.observableArray();
 
 		self.removeItem = function (item)
 		{
@@ -149,6 +149,7 @@
 
 			});
 		};
+		
 		self.load();
 	};
 	  $.fn.serializeForm = function () {
@@ -161,13 +162,14 @@
 	  
 	    ko.cleanNode($("#ajax-content")[0]);
 	    
-	    ko.applyBindings(new ViewModel(), $("#ajax-content")[0]);
+	    ko.applyBindings(catModel, $("#ajax-content")[0]);
 		$("[data-toggle='tooltip']").tooltip();
 		// Run Datables plugin and create 3 variants of settings
 		function AllTables() {
 			TestTable3();
 			LoadSelect2Script(MakeSelect2);
 		}
+		
 		function MakeSelect2() {
 			$('select').select2();
 			$('.dataTables_filter').each(function () {
@@ -177,6 +179,7 @@
 
 		// Load Datatables and run plugin on tables 
 		LoadDataTablesScripts(AllTables);
+		
 		// Add Drag-n-Drop feature
 		WinMove();
 		$("form").on("submit", function (event) {
