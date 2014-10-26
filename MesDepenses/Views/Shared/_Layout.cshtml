@@ -9,7 +9,7 @@
     <link href="~/Scripts/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
-    @Styles.Render( "~/Content/css","~/Content/plugins")
+    @Styles.Render("~/Content/css", "~/Content/plugins")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("head", required: false)
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -170,6 +170,7 @@
                             <li><a class="ajax-link" href="ajax/tables_simple.html">Simple Tables</a></li>
                             <li>@Html.ActionLink("Mes opérations", "MyOperations", "Home", null, new { @class = "ajax-link" })</li>
                             <li>@Html.ActionLink("Mes catégories", "MyCategories", "Home", null, new { @class = "ajax-link" })</li>
+                            <li>@Html.ActionLink("Mes tests", "Index", "Test", null, new { @class = "ajax-link" })</li>
                             <li><a class="ajax-link" href="ajax/tables_beauty.html">Beauty Tables</a></li>
                         </ul>
                     </li>

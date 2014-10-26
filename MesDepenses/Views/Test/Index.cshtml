@@ -1,0 +1,69 @@
+﻿<div class="row">
+    <div id="breadcrumb" class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">tests</a></li>
+            <li><a href="#">test Synchro</a></li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <div class="box-name">
+                    <i class="fa fa-usd"></i>
+                    <span>Mes Catégroies</span>
+                </div>
+                <div class="box-icons">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="expand-link">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+                <div class="no-move"></div>
+            </div>
+            <div class="box-content no-padding" id="fileListBox">
+                <button type="button" id="startbtn" value="Lancer">Lancer</button>
+                <button type="button" id="stopbtn" value="Arreter">Arreter</button>
+                <div id="listfiles"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var startURl = '@Url.Action("Lancer", "Test")';
+    var stopURl = '@Url.Action("Arreter", "Test")';
+    $(function () {
+        $(document).on("click", "#startbtn", function (e) {
+            var listFilesBloc = $("#listfiles");
+            listFilesBloc.html();
+            $.getJSON(startURl, function (data) {
+                //console.dir(data);
+                var items = [];
+                $.each(data, function (key, val) {
+                    items.push("<li id='" + key + "'>" + key + " : " + val + "</li>");
+                });
+
+                listFilesBloc.html($("<ul/>", {
+                    "class": "my-new-list",
+                    html: items.join("")
+                }).html());
+            });
+        }).on('click', '#stopbtn', function (e) {
+            $.getJSON(stopURl, function (data) {
+                if (data.Cancel === "ok") {
+                    alert("Canceled succes");
+                } else {
+                    alert("Not yet canceled!!!!");
+                }
+            });
+        });
+    });
+</script>
