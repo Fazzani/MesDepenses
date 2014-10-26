@@ -29,8 +29,10 @@
                 <div class="no-move"></div>
             </div>
             <div class="box-content no-padding" id="fileListBox">
-                <button type="button" id="startbtn" value="Lancer">Lancer</button>
-                <button type="button" id="stopbtn" value="Arreter">Arreter</button>
+                <button type="button" id="startbtn" value="Lancer" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-refresh spin'></span>Loading">
+                    Lancer
+                </button>
+                <button type="button" id="stopbtn" value="Arreter" class="btn btn-primary">Arreter</button>
                 <div id="listfiles"></div>
             </div>
         </div>
@@ -40,8 +42,16 @@
 <script type="text/javascript">
     var startURl = '@Url.Action("Lancer", "Test")';
     var stopURl = '@Url.Action("Arreter", "Test")';
+    var btnStart = $('#startbtn');
+    var btnStop = $('#stopbtn');
+    btnStop.prop('disabled', true);
+
     $(function () {
         $(document).on("click", "#startbtn", function (e) {
+            btnStart.button('loading');
+            //btnStart.html('<img src="http://www.bba-reman.com/images/fbloader.gif" />');
+            btnStop.prop('disabled', false);
+
             var listFilesBloc = $("#listfiles");
             listFilesBloc.html();
             $.getJSON(startURl, function (data) {
@@ -55,12 +65,13 @@
                     "class": "my-new-list",
                     html: items.join("")
                 }).html());
+                btnStart.button('reset');
             });
         }).on('click', '#stopbtn', function (e) {
             $.getJSON(stopURl, function (data) {
-                if (data.Cancel === "ok") {
-                    alert("Canceled succes");
-                } else {
+                btnStart.button('reset');
+                btnStart.prop('disabled', false);
+                if (data.Cancel !== "ok") {
                     alert("Not yet canceled!!!!");
                 }
             });
