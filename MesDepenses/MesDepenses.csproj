@@ -231,6 +231,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AsyncTestModel.cs" />
     <Compile Include="Models\CompteModel.cs" />
     <Compile Include="Models\OperationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

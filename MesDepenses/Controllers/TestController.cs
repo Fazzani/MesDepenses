@@ -29,44 +29,50 @@ namespace MesDepenses.Controllers
         [HandleError(ExceptionType = typeof(TimeoutException), View = "TimeoutError")]
         public async Task<JsonResult> Lancer(string search = "jquery", CancellationToken cancelToken = default(CancellationToken))
         {
+            var dirs = Directory.EnumerateDirectories(Server.MapPath("~/App_Data"), "*.*", SearchOption.AllDirectories).ToList();
             _cancellationTokenSource = new CancellationTokenSource();
+            Stopwatch sp = new Stopwatch();
+            sp.Start();
             return await Task.Run(async () =>
              {
-                 Dictionary<string, bool> dictionary = new Dictionary<string, bool>();
+                 AsyncTestModel model = new AsyncTestModel { DataDictionary = new Dictionary<string, bool>() };
                  try
                  {
-
-                     foreach (var dir in Directory.EnumerateDirectories(Server.MapPath("~/")))
+                     foreach (var dir in dirs)
                      {
-                         await Task.Delay(1000);
                          _cancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                         var files = Directory.EnumerateFiles(dir);
+                         var files = Directory.EnumerateFiles(dir, "*", SearchOption.TopDirectoryOnly);
                          foreach (var file in files)
                          {
                              StreamReader myFile = new StreamReader(file);
-                             string myString = await myFile.ReadToEndAsync().ConfigureAwait(false);
-                             dictionary.Add(file, myString.Contains(search));
+                             string myString = await myFile.ReadToEndAsync();
+                             model.DataDictionary.Add(file, myString.Contains(search));
                              myFile.Close();
                          }
                      }
-
-                     return Json(dictionary, JsonRequestBehavior.AllowGet);
-                 }
-                 catch (OperationCanceledException ex)
-                 {
-                     Console.WriteLine(ex.Message);
-                     return Json(dictionary, JsonRequestBehavior.AllowGet);
-
+                     UpdateAsyncTestModel(sp, model);
+                     return Json(model, JsonRequestBehavior.AllowGet);
                  }
                  catch (Exception ex)
                  {
-                     Console.WriteLine(ex.Message);
-                     return Json(dictionary, JsonRequestBehavior.AllowGet);
-
+                     UpdateAsyncTestModel(sp, model);
+                     model.ErrorMessage = ex.Message;
+                     return Json(model, JsonRequestBehavior.AllowGet);
+                 }
+                 finally
+                 {
+                     sp.Stop();
                  }
              }, _cancellationTokenSource.Token);
 
+        }
+
+        private static void UpdateAsyncTestModel(Stopwatch sp, AsyncTestModel model)
+        {
+            sp.Stop();
+            model.ElapsedTime = sp.Elapsed.ToString();
+            model.Count = model.DataDictionary.Count;
         }
 
         public async Task<JsonResult> Arreter()

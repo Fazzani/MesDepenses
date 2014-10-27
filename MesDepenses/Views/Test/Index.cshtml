@@ -29,10 +29,18 @@
                 <div class="no-move"></div>
             </div>
             <div class="box-content no-padding" id="fileListBox">
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <span id="spanAlert"></span>
+                </div>
                 <button type="button" id="startbtn" value="Lancer" class="btn btn-primary" data-loading-text="<span class='glyphicon glyphicon-refresh spin'></span>Loading">
                     Lancer
                 </button>
                 <button type="button" id="stopbtn" value="Arreter" class="btn btn-primary">Arreter</button>
+                <div>
+                    Elapsed Time : 
+                    <span id="elapsedTimeSpan"></span>
+                </div>
                 <div id="listfiles"></div>
             </div>
         </div>
@@ -44,20 +52,28 @@
     var stopURl = '@Url.Action("Arreter", "Test")';
     var btnStart = $('#startbtn');
     var btnStop = $('#stopbtn');
+    var elapsedTimeSpan = $('#elapsedTimeSpan');
     btnStop.prop('disabled', true);
-
+    var alert = function (message) {
+        $('#spanAlert').text(message);
+        $('.alert').alert();
+    };
     $(function () {
+        $('.alert').alert('close');
         $(document).on("click", "#startbtn", function (e) {
             btnStart.button('loading');
-            //btnStart.html('<img src="http://www.bba-reman.com/images/fbloader.gif" />');
             btnStop.prop('disabled', false);
 
             var listFilesBloc = $("#listfiles");
             listFilesBloc.html();
             $.getJSON(startURl, function (data) {
+                if (data.ErrorMessage != '') {
+                   alert(data.ErrorMessage);
+                }
+                elapsedTimeSpan.html('<strong>' + data.ElapsedTime + '</strong> for <strong>' + data.Count + ' items.</strong>');
                 //console.dir(data);
                 var items = [];
-                $.each(data, function (key, val) {
+                $.each(data.DataDictionary, function (key, val) {
                     items.push("<li id='" + key + "'>" + key + " : " + val + "</li>");
                 });
 
@@ -66,6 +82,8 @@
                     html: items.join("")
                 }).html());
                 btnStart.button('reset');
+            }).fail(function () {
+                alert('Error');
             });
         }).on('click', '#stopbtn', function (e) {
             $.getJSON(stopURl, function (data) {
