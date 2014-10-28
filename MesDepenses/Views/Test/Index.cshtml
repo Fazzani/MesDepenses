@@ -41,60 +41,87 @@
                     Elapsed Time : 
                     <span id="elapsedTimeSpan"></span>
                 </div>
-                <div id="listfiles"></div>
+                <div id="listfiles">
+                    <ul></ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
+ <script src="~/Scripts/jquery.signalR-2.1.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.connection.hub.logging = true;
+            var listFilesBloc = $("#listfiles ul");
 
-<script type="text/javascript">
-    var startURl = '@Url.Action("Lancer", "Test")';
-    var stopURl = '@Url.Action("Arreter", "Test")';
-    var btnStart = $('#startbtn');
-    var btnStop = $('#stopbtn');
-    var elapsedTimeSpan = $('#elapsedTimeSpan');
-    btnStop.prop('disabled', true);
-
-    var alert = function (message) {
-        $('#spanAlert').text(message);
-        $('.alert').alert();
-    };
-
-    $(function () {
-        $('.alert').alert('close');
-        $(document).on("click", "#startbtn", function (e) {
-            btnStart.button('loading');
-            btnStop.prop('disabled', false);
-
-            var listFilesBloc = $("#listfiles");
-            listFilesBloc.html();
-            $.getJSON(startURl, function (data) {
-                if (data.ErrorMessage != '') {
-                    alert(data.ErrorMessage);
-                }
-                elapsedTimeSpan.html('<strong>' + data.ElapsedTime + '</strong> for <strong>' + data.Count + '/' + data.RealCount + ' items.</strong>');
-                //console.dir(data);
-                var items = [];
-                $.each(data.DataDictionary, function (key, val) {
-                    items.push("<li id='" + key + "'>" + key + " : " + val + "</li>");
-                });
-
-                listFilesBloc.html($("<ul/>", {
-                    "class": "my-new-list",
-                    html: items.join("")
-                }).html());
-                btnStart.button('reset');
-            }).fail(function () {
-                alert('Error');
-            });
-        }).on('click', '#stopbtn', function (e) {
-            $.getJSON(stopURl, function (data) {
+            var filesHub = $.connection.filesHub;
+            
+            filesHub.client.addFile = function (file, isMatched) {
+                $("<li id='" + file + "'>" + file + " : " + isMatched + "</li>").appendTo(listFilesBloc);
+            };
+            
+            filesHub.client.end = function (elapsedTime, count) {
+                elapsedTimeSpan.html('<strong>' + elapsedTime + '</strong> for <strong>' + count + ' items.</strong>');
                 btnStart.button('reset');
                 btnStart.prop('disabled', false);
-                if (data.Cancel !== "ok") {
-                    alert("Not yet canceled!!!!");
-                }
+            };
+
+            var startURl = '@Url.Action("Lancer", "Test")';
+            var stopURl = '@Url.Action("Arreter", "Test")';
+            var btnStart = $('#startbtn');
+            var btnStop = $('#stopbtn');
+            var elapsedTimeSpan = $('#elapsedTimeSpan');
+            btnStop.prop('disabled', true);
+
+            var alert = function (message) {
+                $('#spanAlert').text(message);
+                $('.alert').alert();
+            };
+
+            $.connection.hub.start({ transport: ['longPolling'] }).done(function () {
+
+                $('.alert').alert('close');
+                $(document).on("click", "#startbtn", function (e) {
+                    btnStart.button('loading');
+                    btnStop.prop('disabled', false);
+                    listFilesBloc.empty();
+                    filesHub.server.lancer();
+                   // btnStart.button('reset');
+                    //$.getJSON(startURl, function (data) {
+                    //    if (data.ErrorMessage != '') {
+                    //        alert(data.ErrorMessage);
+                    //    }
+                    //    elapsedTimeSpan.html('<strong>' + data.ElapsedTime + '</strong> for <strong>' + data.Count + '/' + data.RealCount + ' items.</strong>');
+                    //    //console.dir(data);
+                    //    var items = [];
+                    //    $.each(data.DataDictionary, function (key, val) {
+                    //        items.push("<li id='" + key + "'>" + key + " : " + val + "</li>");
+                    //    });
+
+                    //    listFilesBloc.html($("<ul/>", {
+                    //        "class": "my-new-list",
+                    //        html: items.join("")
+                    //    }).html());
+                    //    btnStart.button('reset');
+                    //}).fail(function () {
+                    //    alert('Error');
+                    //});
+                }).on('click', '#stopbtn', function (e) {
+                    //$.getJSON(stopURl, function (data) {
+                    //    btnStart.button('reset');
+                    //    btnStart.prop('disabled', false);
+                    //    if (data.Cancel !== "ok") {
+                    //        alert("Not yet canceled!!!!");
+                    //    }
+                    //});
+                    filesHub.server.arreter();
+                    btnStart.button('reset');
+                    btnStart.prop('disabled', false);
+                });
+
             });
+
+
         });
-    });
-</script>
+    </script>
