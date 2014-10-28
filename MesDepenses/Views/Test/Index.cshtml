@@ -54,10 +54,12 @@
     var btnStop = $('#stopbtn');
     var elapsedTimeSpan = $('#elapsedTimeSpan');
     btnStop.prop('disabled', true);
+
     var alert = function (message) {
         $('#spanAlert').text(message);
         $('.alert').alert();
     };
+
     $(function () {
         $('.alert').alert('close');
         $(document).on("click", "#startbtn", function (e) {
@@ -68,9 +70,9 @@
             listFilesBloc.html();
             $.getJSON(startURl, function (data) {
                 if (data.ErrorMessage != '') {
-                   alert(data.ErrorMessage);
+                    alert(data.ErrorMessage);
                 }
-                elapsedTimeSpan.html('<strong>' + data.ElapsedTime + '</strong> for <strong>' + data.Count + ' items.</strong>');
+                elapsedTimeSpan.html('<strong>' + data.ElapsedTime + '</strong> for <strong>' + data.Count + '/' + data.RealCount + ' items.</strong>');
                 //console.dir(data);
                 var items = [];
                 $.each(data.DataDictionary, function (key, val) {

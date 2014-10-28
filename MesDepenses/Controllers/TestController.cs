@@ -29,13 +29,15 @@ namespace MesDepenses.Controllers
         [HandleError(ExceptionType = typeof(TimeoutException), View = "TimeoutError")]
         public async Task<JsonResult> Lancer(string search = "jquery", CancellationToken cancelToken = default(CancellationToken))
         {
-            var dirs = Directory.EnumerateDirectories(Server.MapPath("~/App_Data"), "*.*", SearchOption.AllDirectories).ToList();
+            string dirPath = Server.MapPath("~/");
+            var dirs = Directory.EnumerateDirectories(dirPath, "*.*", SearchOption.AllDirectories).ToList();
             _cancellationTokenSource = new CancellationTokenSource();
+            var countFiles = dirs.Select(x => Directory.EnumerateFiles(x, "*", SearchOption.TopDirectoryOnly).Count()).Sum(x => x);
             Stopwatch sp = new Stopwatch();
             sp.Start();
             return await Task.Run(async () =>
              {
-                 AsyncTestModel model = new AsyncTestModel { DataDictionary = new Dictionary<string, bool>() };
+                 AsyncTestModel model = new AsyncTestModel { DataDictionary = new Dictionary<string, bool>(), RealCount = countFiles };
                  try
                  {
                      foreach (var dir in dirs)
@@ -46,9 +48,22 @@ namespace MesDepenses.Controllers
                          foreach (var file in files)
                          {
                              StreamReader myFile = new StreamReader(file);
-                             string myString = await myFile.ReadToEndAsync();
-                             model.DataDictionary.Add(file, myString.Contains(search));
-                             myFile.Close();
+
+                             try
+                             {
+                                 string myString = await myFile.ReadToEndAsync();
+                                 model.DataDictionary.Add(file, myString.Contains(search));
+                                 myFile.Close();
+                             }
+                             catch (Exception)
+                             {
+                                 model.DataDictionary.Add(file, false);
+                             }
+                             finally
+                             {
+                                 myFile.Close();
+                             }
+
                          }
                      }
                      UpdateAsyncTestModel(sp, model);
