@@ -7,7 +7,7 @@
         </ol>
     </div>
 </div>
-<div class="row">
+<div class="row ">
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
@@ -58,7 +58,7 @@
         var filesHub = $.connection.filesHub;
 
         filesHub.client.addFile = function (file, isMatched) {
-            $("<li id='" + file + "'>" + file + " : " + isMatched + "</li>").appendTo(listFilesBloc);
+            $("<li id='" + file + "' class='" + (isMatched ? "bg-success" : "bg-danger") + "'>" + file + "</li>").appendTo(listFilesBloc);
         };
 
         filesHub.client.end = function (elapsedTime, count, treatedFiles) {
