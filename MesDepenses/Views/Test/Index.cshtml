@@ -61,8 +61,8 @@
             $("<li id='" + file + "'>" + file + " : " + isMatched + "</li>").appendTo(listFilesBloc);
         };
 
-        filesHub.client.end = function (elapsedTime, count) {
-            elapsedTimeSpan.html('<strong>' + elapsedTime + '</strong> for <strong>' + count + ' items.</strong>');
+        filesHub.client.end = function (elapsedTime, count, treatedFiles) {
+            elapsedTimeSpan.html('<strong>' + elapsedTime + '</strong> for <strong>' + treatedFiles + '/' + count + ' items.</strong>');
             btnStart.button('reset');
             btnStart.prop('disabled', false);
         };

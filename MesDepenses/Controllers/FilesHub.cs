@@ -31,6 +31,7 @@ namespace MesDepenses.Controllers
             Stopwatch sp = new Stopwatch();
             sp.Start();
             ParallelOptions parallelOptions = new ParallelOptions { CancellationToken = _cancellationTokenSource.Token, MaxDegreeOfParallelism = Environment.ProcessorCount };
+            int treatedFiles = 0;
 
             await Task.Run(async () =>
             {
@@ -51,6 +52,7 @@ namespace MesDepenses.Controllers
                             {
                                 string myString = await myFile.ReadToEndAsync();
                                 Clients.All.addFile(file, myString.Contains(search));
+                                Interlocked.Increment(ref treatedFiles);
                                 myFile.Close();
                             }
                             catch (Exception)
@@ -64,7 +66,7 @@ namespace MesDepenses.Controllers
 
                         });
                     });
-                    Clients.All.end(sp.Elapsed.ToString(), countFiles);
+                    Clients.All.end(sp.Elapsed.ToString(), countFiles, treatedFiles);
                 }
                 catch (Exception ex)
                 {
