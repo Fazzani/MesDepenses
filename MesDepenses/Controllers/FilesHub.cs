@@ -16,26 +16,29 @@ namespace MesDepenses.Controllers
     public class FilesHub : Hub
     {
         static CancellationTokenSource _cancellationTokenSource;
-
+        static int _treatedFiles, _countFiles ;
+        static Stopwatch _sp;
         //[AsyncTimeout(100000)]
         [HandleError(ExceptionType = typeof(TimeoutException), View = "TimeoutError")]
         public async void Lancer()
         {
+            _treatedFiles = _countFiles = 0;
+            _sp = new Stopwatch();
             string search = "jquery";
             var path = (HttpContext.Current == null)
                    ? System.Web.Hosting.HostingEnvironment.MapPath("~/")
                    : HttpContext.Current.Server.MapPath("~/");
             var dirs = Directory.EnumerateDirectories(path, "*.*", SearchOption.AllDirectories).ToList();
             _cancellationTokenSource = new CancellationTokenSource();
-            var countFiles = dirs.Select(x => Directory.EnumerateFiles(x, "*", SearchOption.TopDirectoryOnly).Count()).Sum(x => x);
-            Stopwatch sp = new Stopwatch();
-            sp.Start();
-            ParallelOptions parallelOptions = new ParallelOptions { CancellationToken = _cancellationTokenSource.Token, MaxDegreeOfParallelism = Environment.ProcessorCount };
-            int treatedFiles = 0;
+            _countFiles = dirs.Select(x => Directory.EnumerateFiles(x, "*", SearchOption.TopDirectoryOnly).Count()).Sum(x => x);
 
-            await Task.Run(async () =>
+            _sp.Start();
+            ParallelOptions parallelOptions = new ParallelOptions { CancellationToken = _cancellationTokenSource.Token, MaxDegreeOfParallelism = Environment.ProcessorCount };
+
+
+            await Task.Run(() =>
             {
-                AsyncTestModel model = new AsyncTestModel { DataDictionary = new Dictionary<string, bool>(), RealCount = countFiles };
+                AsyncTestModel model = new AsyncTestModel { DataDictionary = new Dictionary<string, bool>(), RealCount = _countFiles };
                 try
                 {
                     Parallel.ForEach(dirs, parallelOptions, dir =>
@@ -44,15 +47,15 @@ namespace MesDepenses.Controllers
 
                         var files = Directory.EnumerateFiles(dir, "*", SearchOption.TopDirectoryOnly);
 
-                        Parallel.ForEach(files, parallelOptions, async file =>
+                        Parallel.ForEach(files, parallelOptions, file =>
                         {
                             StreamReader myFile = new StreamReader(file);
 
                             try
                             {
-                                string myString = await myFile.ReadToEndAsync();
+                                string myString = myFile.ReadToEnd();
                                 Clients.All.addFile(file, myString.Contains(search));
-                                Interlocked.Increment(ref treatedFiles);
+                                Interlocked.Increment(ref _treatedFiles);
                                 myFile.Close();
                             }
                             catch (Exception)
@@ -66,7 +69,7 @@ namespace MesDepenses.Controllers
 
                         });
                     });
-                    Clients.All.end(sp.Elapsed.ToString(), countFiles, treatedFiles);
+                    Clients.All.end(_sp.Elapsed.ToString(), _countFiles, _treatedFiles);
                 }
                 catch (Exception ex)
                 {
@@ -74,7 +77,7 @@ namespace MesDepenses.Controllers
                 }
                 finally
                 {
-                    sp.Stop();
+                    _sp.Stop();
                 }
             }, _cancellationTokenSource.Token);
 
@@ -86,7 +89,7 @@ namespace MesDepenses.Controllers
             {
                 _cancellationTokenSource.Cancel();
                 _cancellationTokenSource.Dispose();
-
+                Clients.All.end(_sp.Elapsed.ToString(), _countFiles, _treatedFiles);
             }
         }
     }
