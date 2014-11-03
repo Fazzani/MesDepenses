@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using log4net;
 using MesDepenses.Models;
 using MesDepensesServices;
 using MesDepensesServices.DAL;
@@ -17,8 +18,12 @@ namespace MesDepenses.Controllers
 {
     public class HomeController : Controller
     {
+        private static readonly ILog _log = LogManager.GetLogger("MesDepenses");
+
         public ActionResult Index()
         {
+            _log.Info("HomeController....");
+
             var compte = new CompteModel();
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<OperationModel>));
             var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
@@ -54,6 +59,8 @@ namespace MesDepenses.Controllers
 
         public JsonResult ReadData()
         {
+            _log.Info("____________________HomeController : ReadData");
+
             var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
             //TODO: async 
             var tmp = stream.ReadToEnd().CsvToJson();
