@@ -22,28 +22,25 @@ namespace MesDepenses.Controllers
 
         public ActionResult Index()
         {
-            _log.Info("HomeController....");
-
+            _log.Error("test error");
             var compte = new CompteModel();
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<OperationModel>));
             var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
             MemoryStream s = new MemoryStream(Encoding.UTF8.GetBytes(stream.ReadToEnd().CsvToJson()));
             compte.ListOperation = (List<OperationModel>)ser.ReadObject(s);
-           
+
             return View();
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your app description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
@@ -59,8 +56,6 @@ namespace MesDepenses.Controllers
 
         public JsonResult ReadData()
         {
-            _log.Info("____________________HomeController : ReadData");
-
             var stream = new StreamReader(Server.MapPath("~/App_Data/CyberPlus_OP_1_20141001165451.csv"), Encoding.Default);
             //TODO: async 
             var tmp = stream.ReadToEnd().CsvToJson();
