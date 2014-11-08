@@ -240,6 +240,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AzureTraceAppender.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategorieController.cs" />
     <Compile Include="Controllers\FilesHub.cs" />

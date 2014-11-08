@@ -22,7 +22,7 @@ namespace MesDepenses
         {
             XmlConfigurator.Configure();
             AreaRegistration.RegisterAllAreas();
-            _log.Info("Application Start....");
+            _log.Error("Application Start....");
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
