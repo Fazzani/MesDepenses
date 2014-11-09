@@ -2812,3 +2812,6 @@ tr.active, tr.active td {
         transform: rotate(360deg);
     }
 }
+.modal {
+    z-index: 2000 !important;
+}

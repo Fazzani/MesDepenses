@@ -1,202 +1,233 @@
 ﻿<div class="row">
-	<div id="breadcrumb" class="col-md-12">
-		<ol class="breadcrumb">
-			<li><a href="#">Dashboard</a></li>
-			<li><a href="#">Tables</a></li>
-			<li><a href="#">Data Tables</a></li>
-		</ol>
-	</div>
+    <div id="breadcrumb" class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Tables</a></li>
+            <li><a href="#">Data Tables</a></li>
+        </ol>
+    </div>
 </div>
 <div class="row">
-	<div class="col-xs-12">
-		<div class="box">
-			<div class="box-header">
-				<div class="box-name">
-					<i class="fa fa-usd"></i>
-					<span>Mes Catégroies</span>
-				</div>
-				<div class="box-icons">
-					<a class="collapse-link">
-						<i class="fa fa-chevron-up"></i>
-					</a>
-					<a class="expand-link">
-						<i class="fa fa-expand"></i>
-					</a>
-					<a class="close-link">
-						<i class="fa fa-times"></i>
-					</a>
-				</div>
-				<div class="no-move"></div>
-			</div>
-			<div class="box-content no-padding" id="table">
-				<table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-3">
-					<thead>
-						<tr>
-							<th>Id
-							</th>
-							<th>Libellé
-							</th>
-							<th>Categorie Parente
-							</th>
-						</tr>
-					</thead>
-					<tbody data-bind="foreach: items">
-						<tr data-toggle="tooltip" data-bind="tooltip: { title: Libelle, trigger: 'hover', placement: 'bottom' }" data-container="body">
-							<td><span data-bind="text: Id"></span><input type="checkbox" data-bind="value: $data, checked: $parent.selectedItems, attr: { id: 'checkBox' + Id }"/></td>
-							<td data-bind="text: Libelle"></td>
-							<td data-bind="text: CategorieParent"></td>
-						</tr>
-					</tbody>
-					<tfoot>
-						<tr>
-							<th>Libellé
-							</th>
-							<th>Date
-							</th>
-							<th>Montant
-							</th>
-						</tr>
-					</tfoot>
-				</table>
-			</div>
-		</div>
-	</div>
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <div class="box-name">
+                    <i class="fa fa-usd"></i>
+                    <span>Mes Catégroies</span>
+                </div>
+                <div class="box-icons">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="expand-link">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+                <div class="no-move"></div>
+            </div>
+            <div class="box-content no-padding" id="table">
+                <table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-3">
+                    <thead>
+                        <tr>
+                            <th>Id
+                            </th>
+                            <th>Libellé
+                            </th>
+                            <th>Categorie Parente
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: items">
+                        <tr data-toggle="tooltip" data-bind="tooltip: { title: Libelle, trigger: 'hover', placement: 'bottom' }" data-container="body">
+                            <td><span data-bind="text: Id"></span>
+                                <input type="checkbox" data-bind="value: $data, checked: $parent.selectedItems, attr: { id: 'checkBox' + Id }" /></td>
+                            <td data-bind="text: Libelle"></td>
+                            <td data-bind="text: CategorieParent"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Libellé
+                            </th>
+                            <th>Date
+                            </th>
+                            <th>Montant
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="row">
-	<div class="col-xs-12 col-sm-8">
-		<div class="box">
-			<div class="box-header">
-				<div class="box-name">
-					<i class="fa fa-search"></i>
-					<span>Nouvelle catégorie</span>
-				</div>
-				<div class="box-icons">
-					<a class="collapse-link">
-						<i class="fa fa-chevron-up"></i>
-					</a>
-					<a class="expand-link">
-						<i class="fa fa-expand"></i>
-					</a>
-					<a class="close-link">
-						<i class="fa fa-times"></i>
-					</a>
-				</div>
-				<div class="no-move"></div>
-			</div>
-			<div class="box-content">
-				<form id="defaultForm" method="post" action="@Url.Action("Post","Categorie",new { httproute=""})" class="form-horizontal">
-					<fieldset>
-						@*<legend>Not Empty validator</legend>*@
-						<div class="form-group">
-							<label class="col-sm-3 control-label">Libellé</label>
-							<div class="col-sm-5">
-								<input type="text" class="form-control" name="Libelle" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label">Catégorie parente</label>
-							<div class="col-sm-5">
-								<select class="populate placeholder" name="CategorieParent" id="CategorieParent" data-bind="options: items, optionsText: function (item) { return item.Libelle; }, value: function (item) { return item.Id; }, optionsCaption: 'Choose...'">
-								</select>
-							</div>
-						</div>
-					</fieldset>
-					<div class="form-group">
-						<div class="col-sm-9 col-sm-offset-3">
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	
+    <div class="col-xs-12 col-sm-8">
+        <div class="box">
+            <div class="box-header">
+                <div class="box-name">
+                    <i class="fa fa-search"></i>
+                    <span>Nouvelle catégorie</span>
+                </div>
+                <div class="box-icons">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="expand-link">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+                <div class="no-move"></div>
+            </div>
+            <div class="box-content">
+                <form id="defaultForm" method="post" action="@Url.Action("Post", "Categorie", new { httproute = "" })" class="form-horizontal">
+                    <fieldset>
+                        @*<legend>Not Empty validator</legend>*@
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Libellé</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="Libelle" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Catégorie parente</label>
+                            <div class="col-sm-5">
+                                <select class="populate placeholder" name="CategorieParent" id="CategorieParent" data-bind="options: items, optionsText: function (item) { return item.Libelle; }, value: function (item) { return item.Id; }, optionsCaption: 'Choose...'">
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-3">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 <div data-bind="text: ko.toJSON($root)"></div>
 <script type="text/javascript">
 
-	var CategorieVM = function (id, libelle, categorieParent) {
-		var self = this;
-		this.Id = ko.observable(id);
-		this.Libelle = ko.observable(libelle);
-		this.CategorieParent = ko.observable(categorieParent);
-		this.$type = 'CategorieVM';
-	};
-	var urlGetData = '@Url.Action("Get", "Categorie", new { httproute = "" })';
-	var ViewModel = function () {
-		var self = this;
+    var CategorieVM = function (id, libelle, categorieParent) {
+        var self = this;
+        this.Id = ko.observable(id);
+        this.Libelle = ko.observable(libelle);
+        this.CategorieParent = ko.observable(categorieParent);
+        this.$type = 'CategorieVM';
+    };
+    var urlGetData = '@Url.Action("Get", "Categorie", new { httproute = "" })';
+    var urlDeleteData = '@Url.Action("Delete", "Categorie", new { httproute = "" })';
+    var ViewModel = function () {
+        var self = this;
 
-		self.items = ko.observableArray();
-		self.selectedItems = ko.observableArray();
+        self.items = ko.observableArray();
+        self.selectedItems = ko.observableArray();
 
-		self.removeItem = function (item)
-		{
-		    self.items.remove(item);
-		};
+        self.removeItem = function (item) {
+            self.items.remove(item);
+        };
 
-		self.removeSelected = function () {
-		    self.items.removeAll(self.selectedItems());
-		    self.selectedItems.removeAll();
-		};
+        self.removeSelected = function () {
+            BootstrapDialog.show({
+                title: 'Suppression de Catégorie',
+                message: 'Are youe sûr',
+                buttons: [{
+                    label: 'Annuler',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }, {
+                    label: 'Delete',
+                    action: function (dialog) {
+                        ko.utils.arrayForEach(self.selectedItems(), function (item) {
+                            $.ajax({
+                                url: 'api/Categorie/' + item.Id(),
+                                type: 'DELETE',
+                                dataType: 'json',
+                                crossDomain: true,
+                                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                                success: function (data, textStatus, xhr) {
+                                    console.log(data);
+                                },
+                                error: function (xhr, textStatus, errorThrown) {
+                                    console.log('Error in Operation : ' + errorThrown);
+                                }
+                            });
+                        });
+                        self.items.removeAll(self.selectedItems());
+                        self.selectedItems.removeAll();
+                        dialog.close();
+                    }
+                }]
+            });
+        };
 
-		self.load = function () {
-			$.getJSON(urlGetData, function (data) {
-				//console.log(JSON.parse(data));
-				var mappedData = ko.utils.arrayMap(data, function (item) {
-					return new CategorieVM(item.Id, item.Libelle, item.CategorieParent);
-				});
-				self.items(mappedData);
+        self.load = function () {
+            $.getJSON(urlGetData, function (data) {
+                //console.log(JSON.parse(data));
+                var mappedData = ko.utils.arrayMap(data, function (item) {
+                    return new CategorieVM(item.Id, item.Libelle, item.CategorieParent);
+                });
+                self.items(mappedData);
 
-			});
-		};
-		
-		self.load();
-	};
-	  $.fn.serializeForm = function () {
-	    return _.object(_.map($(this).serializeArray(), function(item) { return [item.name, item.value]; }));
-	  };
+            });
+        };
 
-	  var catModel = new ViewModel();
+        self.load();
+    };
+    $.fn.serializeForm = function () {
+        return _.object(_.map($(this).serializeArray(), function (item) { return [item.name, item.value]; }));
+    };
 
-	$(function () {
-	  
-	    ko.cleanNode($("#ajax-content")[0]);
-	    
-	    ko.applyBindings(catModel, $("#ajax-content")[0]);
-		$("[data-toggle='tooltip']").tooltip();
-		// Run Datables plugin and create 3 variants of settings
-		function AllTables() {
-			TestTable3();
-			LoadSelect2Script(MakeSelect2);
-		}
-		
-		function MakeSelect2() {
-			$('select').select2();
-			$('.dataTables_filter').each(function () {
-				$(this).find('label input[type=text]').attr('placeholder', 'Search');
-			});
-		}
+    var catModel = new ViewModel();
 
-		// Load Datatables and run plugin on tables 
-		LoadDataTablesScripts(AllTables);
-		
-		// Add Drag-n-Drop feature
-		WinMove();
-		$("form").on("submit", function (event) {
-		  
-		    event.preventDefault();
-		    $.ajax({
-		        url: $(this).attr('action'),
-		        data: JSON.stringify($(this).serializeForm()),
-		        type: "POST",
-		        contentType: "application/json;charset=utf-8",
-		        statusCode: {
-		            201: function (newcat) {
-		                console.dir(newcat);
-		            }
-		        }
-		    });
-		});
-        
-	});
+    $(function () {
+
+        ko.cleanNode($("#ajax-content")[0]);
+
+        ko.applyBindings(catModel, $("#ajax-content")[0]);
+        $("[data-toggle='tooltip']").tooltip();
+        // Run Datables plugin and create 3 variants of settings
+        function AllTables() {
+            TestTable3();
+            LoadSelect2Script(MakeSelect2);
+        }
+
+        function MakeSelect2() {
+            $('select').select2();
+            $('.dataTables_filter').each(function () {
+                $(this).find('label input[type=text]').attr('placeholder', 'Search');
+            });
+        }
+
+        // Load Datatables and run plugin on tables 
+        LoadDataTablesScripts(AllTables);
+
+        // Add Drag-n-Drop feature
+        WinMove();
+        $("form").on("submit", function (event) {
+
+            event.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                data: JSON.stringify($(this).serializeForm()),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                statusCode: {
+                    201: function (newcat) {
+                        // console.dir(newcat);
+                    }
+                }
+            });
+        });
+
+    });
 </script>

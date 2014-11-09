@@ -1641,6 +1641,8 @@ function TestTable3(){
                  }
 			]
 		}
+	}).on('click', 'tr', function () {
+	    $(this).toggleClass('selected');
 	});
 }
 /*-------------------------------------------
