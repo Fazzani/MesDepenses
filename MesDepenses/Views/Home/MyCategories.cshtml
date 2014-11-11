@@ -124,7 +124,7 @@
         this.$type = 'CategorieVM';
     };
     var urlGetData = '@Url.Action("Get", "Categorie", new { httproute = "" })';
-    var urlDeleteData = '@Url.Action("Delete", "Categorie", new { httproute = "" })';
+    var urlDeleteData = '@Url.Action("Delete", "Categorie", new { id = "00000" })';
     var ViewModel = function () {
         var self = this;
 
@@ -134,7 +134,7 @@
         self.removeItem = function (item) {
             self.items.remove(item);
         };
-
+        
         self.removeSelected = function () {
             BootstrapDialog.show({
                 title: 'Suppression de Catégorie',
@@ -148,8 +148,9 @@
                     label: 'Delete',
                     action: function (dialog) {
                         ko.utils.arrayForEach(self.selectedItems(), function (item) {
+                            console.log(urlDeleteData.replace('00000', item.Id()));
                             $.ajax({
-                                url: 'api/Categorie/' + item.Id(),
+                                url: urlDeleteData.replace('00000', item.Id()),
                                 type: 'DELETE',
                                 dataType: 'json',
                                 crossDomain: true,
