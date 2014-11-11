@@ -936,9 +936,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>51345</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/</IISUrl>
+          <IISUrl>http://test.mesdepenses.fr/</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://test.mesdepenses.fr</IISAppRootUrl>
+          <IISAppRootUrl>http://test.mesdepenses.fr/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://test.mesdepenses.fr</CustomServerUrl>

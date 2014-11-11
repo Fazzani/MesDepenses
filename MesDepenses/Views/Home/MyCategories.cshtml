@@ -124,7 +124,7 @@
         this.$type = 'CategorieVM';
     };
     var urlGetData = '@Url.Action("Get", "Categorie", new { httproute = "" })';
-    var urlDeleteData = '@Url.Action("Delete", "Categorie", new { id = "00000" })';
+    var urlDeleteData = '@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "Categorie", id = "00000" })';
     var ViewModel = function () {
         var self = this;
 
@@ -148,7 +148,6 @@
                     label: 'Delete',
                     action: function (dialog) {
                         ko.utils.arrayForEach(self.selectedItems(), function (item) {
-                            console.log(urlDeleteData.replace('00000', item.Id()));
                             $.ajax({
                                 url: urlDeleteData.replace('00000', item.Id()),
                                 type: 'DELETE',
