@@ -899,6 +899,7 @@
     <Content Include="Views\Home\MyOperations.cshtml" />
     <Content Include="Views\Home\MyCategories.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Home\TestTools.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Framework\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
@@ -912,6 +913,10 @@
     <ProjectReference Include="..\MesDepensesServices\MesDepensesServices.csproj">
       <Project>{8c2e165d-9c2f-4079-9982-686e83bc56f1}</Project>
       <Name>MesDepensesServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolsLibrary\ToolsLibrary.csproj">
+      <Project>{cb39723e-7bbb-4292-89e3-9f584c25334a}</Project>
+      <Name>ToolsLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

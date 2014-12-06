@@ -1,0 +1,27 @@
+﻿@model List<MesDepenses.Models.OperationModel>
+
+<div class="row">
+    <table>
+        <thead>
+            <tr>
+                <td>Libelle</td>
+                <td>Operation Name</td>
+                <td>IsNew</td>
+                <td>CreationDate</td>
+                <td>Montant</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var op in Model)
+            {
+                <tr>
+                    <td>@op.Libelle</td>
+                    <td>@op.History.OperationName</td>
+                    <td>@op.History.IsNew</td>
+                    <td>@op.History.CreationDate</td>
+                    <td>@op.Montant</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
