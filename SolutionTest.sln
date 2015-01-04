@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolsLibrary", "ToolsLibrar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSXbmcViewLog", "VSXbmcViewLog\VSXbmcViewLog.csproj", "{B0E98710-B87D-42BE-9062-BEAFDE74AD34}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Xbmc", "Xbmc", "{7B7E4878-2DEC-43C3-8BE2-A5645E608224}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
