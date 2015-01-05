@@ -11,56 +11,37 @@ using XBMCPluginData.Services.Scrapers.OmgTorrent;
 
 namespace XBMCPluginData.Controllers
 {
-    public class ScraperController : ApiController
+  public class ScraperController : ApiController
+  {
+    /// <summary>
+    /// GET api/values
+    /// </summary>
+    /// <returns></returns>
+    [Route("scraper/{site}/{path}/{page}/{orderBy}/{order}")]
+    public IEnumerable<Item> List(string site, string path = "", int page = 1, OmgScraperService.OrderByEnum orderBy = OmgScraperService.OrderByEnum.DateAjout, OmgScraperService.OrderEnum order = OmgScraperService.OrderEnum.Desc)
     {
-        /// <summary>
-        /// GET api/values
-        /// </summary>
-        /// <returns></returns>
-        [Route("scraper/{site}/{method}")]
-        public IEnumerable<Item> Get(string site, string method)
-        {
-            if (site == "omg")
-            {
-                var scraperService = new OmgScraperService(ConfigurationManager.AppSettings[site]);
-                return scraperService.LastMovies();
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// GET api/values/5
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        /// <summary>
-        /// POST api/values
-        /// </summary>
-        /// <param name="value"></param>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        /// <summary>
-        /// PUT api/values/5
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="value"></param>
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        /// <summary>
-        ///  DELETE api/values/5
-        /// </summary>
-        /// <param name="id"></param>
-        public void Delete(int id)
-        {
-        }
+      if (site == "omg")
+      {
+        var scraperService = new OmgScraperService(ConfigurationManager.AppSettings[site]);
+        return scraperService.ListTorrents(path, page, orderBy, order);
+      }
+      return null;
     }
+
+    /// <summary>
+    /// GET api/values
+    /// </summary>
+    /// <returns></returns>
+    [Route("scraper/index/{site}/{path}")]
+    public IEnumerable<Item> Index(string site, string path = "")
+    {
+      if (site == "omg")
+      {
+        var scraperService = new OmgScraperService(ConfigurationManager.AppSettings[site]);
+        return scraperService.ListTorrents();
+      }
+      return null;
+    }
+
+  }
 }

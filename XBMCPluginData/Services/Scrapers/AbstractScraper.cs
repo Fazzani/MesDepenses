@@ -52,5 +52,21 @@ namespace XBMCPluginData.Services.Scrapers
                 return _htmlWeb;
             }
         }
+        public enum OrderByEnum
+        {
+          Top,
+          Taille,
+          DateAjout,
+          Clients,
+          Categorie,
+          Source,
+          Nom,
+          Telechager
+        }
+        public enum OrderEnum
+        {
+          Asc,
+          Desc
+        }
     }
 }
