@@ -35,8 +35,8 @@ namespace Heni.VSXbmcViewLog
     [ProvideAutoLoad(Microsoft.VisualStudio.Shell.Interop.UIContextGuids80.SolutionExists)]
     public sealed class VSXbmcViewLogPackage : Package
     {
-        protected const string FilePath = @"C:\Users\Heni\AppData\Roaming\XBMC\xbmc.log";
-        OutputWindowPane owP;
+        private const string FilePath = @"C:\Users\Heni\AppData\Roaming\XBMC\xbmc.log";
+        OutputWindowPane _owP;
         /// <summary>
         /// Default constructor of the package.
         /// Inside this method you can place any initialization code that does not require 
@@ -46,7 +46,7 @@ namespace Heni.VSXbmcViewLog
         /// </summary>
         public VSXbmcViewLogPackage()
         {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this));
         }
 
         SelectionEvents _selectionEvents;
@@ -63,34 +63,36 @@ namespace Heni.VSXbmcViewLog
         {
             // Pass the applicationObject member variable to the code example.
             // Create a new FileSystemWatcher and set its properties.
-            LogWatcher watcher = new LogWatcher(FilePath);
+            var watcher = new LogWatcher(FilePath)
+            {
+                Path = Path.GetDirectoryName(FilePath),
+                NotifyFilter = (NotifyFilters.LastWrite | NotifyFilters.Size),
+                Filter = Path.GetFileName(FilePath),
+                EnableRaisingEvents = true
+            };
             //Set the directory of the file to monitor 
-            watcher.Path = Path.GetDirectoryName(FilePath);
             //Raise events when the LastWrite or Size attribute is changed
-            watcher.NotifyFilter = (NotifyFilters.LastWrite | NotifyFilters.Size);
             //Filter out events for only this file
-            watcher.Filter = Path.GetFileName(FilePath);
-            watcher.EnableRaisingEvents = true;
-            DTE2 dte = (DTE2)GetService(typeof(DTE));
-            var events = (Events)dte.Events;
+            var dte = (DTE2)GetService(typeof(DTE));
+            var events = dte.Events;
             _selectionEvents = events.SelectionEvents;
             _selectionEvents.OnChange += _textEditorEvents_OnChange;
             // Add a new pane to the Output window.
-            owP = dte.ToolWindows.OutputWindow.OutputWindowPanes.Add("Xbmc Log");
+            _owP = dte.ToolWindows.OutputWindow.OutputWindowPanes.Add("Xbmc Log");
             watcher.TextChanged += watcher_TextChanged;
             base.Initialize();
         }
 
         void _textEditorEvents_OnChange()
         {
-            FileInfo fileInfo = new FileInfo(FilePath);
+            var fileInfo = new FileInfo(FilePath);
             if (fileInfo.Exists)
                 fileInfo.Refresh();
         }
 
         void watcher_TextChanged(object sender, LogWatcherEventArgs e)
         {
-            owP.OutputString(e.Contents);
+            _owP.OutputString(e.Contents);
         }
 
         #endregion

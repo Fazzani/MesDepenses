@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using HtmlAgilityPack;
 
 namespace XBMCPluginData.Controllers
 {
@@ -16,6 +17,7 @@ namespace XBMCPluginData.Controllers
     /// <returns></returns>
     public IEnumerable<string> Get()
     {
+       
       return new string[] { "value1", "value2" };
     }
 
