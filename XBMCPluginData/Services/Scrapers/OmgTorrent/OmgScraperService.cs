@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentSharp.CoreLib;
 using HtmlAgilityPack;
 using FluentSharp.HtmlAgilityPacK;
+using TMDbLib.Client;
+using TMDbLib.Objects.Movies;
 using XBMCPluginData.Models.Xbmc;
 using XBMCPluginData.Models.Xbmc.InfoTypedItems;
 
@@ -27,21 +30,22 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         /// <param name="orderby"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        public IEnumerable<Item> ListTorrents(string path = "", int page = 1, OrderByEnum orderby = OrderByEnum.DateAjout, OrderEnum order = OrderEnum.Desc, TypeExtractEnum typeExtract=TypeExtractEnum.Raw)
+        public IEnumerable<Item> ListTorrents(string path = "", int page = 1, OrderByEnum orderby = OrderByEnum.DateAjout, OrderEnum order = OrderEnum.Desc, TypeExtractEnum typeExtract = TypeExtractEnum.Raw)
         {
             HtmlDocument doc = HtmlWeb.Load(BuildUrl(path, page, orderby, order));
             switch (typeExtract)
-            {       
-                   case TypeExtractEnum.Raw:
-                    return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr").AsParallel().Select(GetMediaItemRow);
-                    case TypeExtractEnum.Container:
+            {
+                case TypeExtractEnum.Raw:
+                    return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
+                        .AsParallel()
+                        .Select(GetMediaItemRow);
+                case TypeExtractEnum.Container:
 
-                    case TypeExtractEnum.Block:
-                    return 
+                case TypeExtractEnum.Block:
+                    return
                         doc.DocumentNode.SelectNodes("//div[@class='cadre torrents_conteneur']")
                             .AsParallel()
                             .Select(GetMediaItemContainer);
-
             }
             return null;
         }
@@ -181,7 +185,44 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                 };
                 var match = new Regex("([0-9]+.[0-9]*)(.)*").Match(node.SelectSingleNode(".//td[3]").InnerText);
                 if (match.Success)
-                    item.Info.InfoLabels.Size = (long)Convert.ToDouble(match.Groups[1].Value.replace(".",","));
+                    item.Info.InfoLabels.Size = (long)Convert.ToDouble(match.Groups[1].Value.replace(".", ","));
+                if (node.SelectSingleNode(".//td[1]").InnerText.ToLowerInvariant().Contains("série"))
+                {
+                    var infos = TorrentHelper.GetTvInfoFromTorrentName(item.Label);
+                    if (infos != null)
+                    {
+                        var res = TMDbClient.SearchTvShow(infos.Label);
+                        if (res.TotalResults > 0)
+                        {
+                            item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"),infos.SaisonNumber, infos.EpisodeNumber);
+                            item.Label2 = res.Results.FirstOrDefault().OriginalName;
+                            item.IconImage = string.Concat(TmdbConfig.ImageSmallBaseUrl,
+                                res.Results.FirstOrDefault().PosterPath);
+                            item.ThumbnailImage = string.Concat(TmdbConfig.ImageLargeBaseUrl,
+                                res.Results.FirstOrDefault().PosterPath);
+
+                        }
+                    }
+                }
+                else
+                {
+                    var infos = TorrentHelper.GetMovieInfoFromTorrentName(item.Label);
+                    if (infos != null)
+                    {
+                        var res = TMDbClient.SearchTvShow(infos.Label);
+                        if (res.TotalResults > 0)
+                        {
+                            item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
+                            item.Label2 = res.Results.FirstOrDefault().OriginalName;
+                            item.IconImage = string.Concat(TmdbConfig.ImageSmallBaseUrl,
+                                res.Results.FirstOrDefault().PosterPath);
+                            item.ThumbnailImage = string.Concat(TmdbConfig.ImageLargeBaseUrl,
+                                res.Results.FirstOrDefault().PosterPath);
+
+                        }
+                    }
+                }
+
                 return item;
             }
             catch (Exception)
@@ -194,7 +235,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
 
         public enum TypeExtractEnum
         {
-            Container, 
+            Container,
             Raw,
             Block
         }

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Web;
 using HtmlAgilityPack;
+using TMDbLib.Client;
+using XBMCPluginData.Helpers;
 
 namespace XBMCPluginData.Services.Scrapers
 {
@@ -14,12 +17,18 @@ namespace XBMCPluginData.Services.Scrapers
 
         protected HtmlDocument HtmlDoc { get; set; }
         protected readonly string _baseUrl;
+        protected readonly string BaseUrlTmdb;
+        protected readonly TmdbConfig TmdbConfig;
+        protected readonly TMDbClient TMDbClient;
+
         private HtmlWeb _htmlWeb;
 
         protected AbstractScraper(string baseUrl)
         {
             _baseUrl = baseUrl;
             HtmlDoc = new HtmlDocument();
+            TmdbConfig = new TmdbConfig();
+            TMDbClient = new TMDbClient(TmdbConfig.ApiKey);
         }
 
         protected string FullUrl(string urlSuffix)
