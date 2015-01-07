@@ -38,9 +38,9 @@ namespace XBMCPluginData.Services.Scrapers
 
         public bool OnPreRequest2(HttpWebRequest request)
         {
-            request.CookieContainer = new CookieContainer();
-            var domain = _baseUrl.Replace("http://www", "");
-            request.CookieContainer.Add(new Cookie("ot_affiche", "value", "/", domain));
+            //request.CookieContainer = new CookieContainer();
+            //var domain = _baseUrl.Replace("http://www", "");
+            //request.CookieContainer.Add(new Cookie("ot_affiche", "value", "/", domain));
             return true;
         }
 

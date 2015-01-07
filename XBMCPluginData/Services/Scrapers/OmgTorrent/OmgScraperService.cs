@@ -209,11 +209,11 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                     var infos = TorrentHelper.GetMovieInfoFromTorrentName(item.Label);
                     if (infos != null)
                     {
-                        var res = TMDbClient.SearchTvShow(infos.Label);
+                        var res = TMDbClient.SearchMovie(infos.Label);
                         if (res.TotalResults > 0)
                         {
-                            item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
-                            item.Label2 = res.Results.FirstOrDefault().OriginalName;
+                            item.CompleteInfo(TMDbClient.GetMovie(res.Results.FirstOrDefault().Id, "fr"));
+                            item.Label2 = res.Results.FirstOrDefault().OriginalTitle;
                             item.IconImage = string.Concat(TmdbConfig.ImageSmallBaseUrl,
                                 res.Results.FirstOrDefault().PosterPath);
                             item.ThumbnailImage = string.Concat(TmdbConfig.ImageLargeBaseUrl,
