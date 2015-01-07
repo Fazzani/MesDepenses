@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Mvc;
 using XBMCPluginData.Models.Xbmc;
 using XBMCPluginData.Services.Scrapers.OmgTorrent;
 
@@ -18,7 +19,7 @@ namespace XBMCPluginData.Controllers
         /// </summary>
         /// <returns></returns>
         [System.Web.Http.Route("{site}/{path}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}")]
-        //[OutputCache(Duration = 2000)]
+        [OutputCache(Duration = 2000, VaryByParam = "site;path;page;orderBy")]
         [System.Web.Http.HttpGet]
         public IEnumerable<Item> List(string site, string path = "", int page = 1, OmgScraperService.OrderByEnum orderBy = OmgScraperService.OrderByEnum.DateAjout, OmgScraperService.OrderEnum order = OmgScraperService.OrderEnum.Desc)
         {
@@ -27,7 +28,10 @@ namespace XBMCPluginData.Controllers
             if (site == "omg")
             {
                 var scraperService = new OmgScraperService(ConfigurationManager.AppSettings[site]);
-                return scraperService.ListTorrents(path, page, orderBy, order,OmgScraperService.TypeExtractEnum.Raw);
+                if (path.Equals("series"))
+                    return scraperService.ListTorrents(path, page, orderBy, order,OmgScraperService.TypeExtractEnum.Block);
+
+                return scraperService.ListTorrents(path, page, orderBy, order);
             }
             return null;
         }

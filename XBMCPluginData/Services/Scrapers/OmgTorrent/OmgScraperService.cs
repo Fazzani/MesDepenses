@@ -38,14 +38,21 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                 case TypeExtractEnum.Raw:
                     return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
                         .AsParallel()
-                        .Select(GetMediaItemRow);
-                case TypeExtractEnum.Container:
+                        .Select(GetMediaItemRow)
+                        .Where(x => x != null);
 
-                case TypeExtractEnum.Block:
+                case TypeExtractEnum.Container:
                     return
                         doc.DocumentNode.SelectNodes("//div[@class='cadre torrents_conteneur']")
                             .AsParallel()
-                            .Select(GetMediaItemContainer);
+                            .Select(GetMediaItemContainer)
+                            .Where(x => x != null);
+                case TypeExtractEnum.Block:
+                    return doc.DocumentNode.SelectNodes("//select/option")
+                        .Skip(1)
+                             .AsParallel()
+                             .Select(GetMediaItemBlock)
+                             .Where(x => x != null);
             }
             return null;
         }
@@ -194,7 +201,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                         var res = TMDbClient.SearchTvShow(infos.Label);
                         if (res.TotalResults > 0)
                         {
-                            item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"),infos.SaisonNumber, infos.EpisodeNumber);
+                            item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
                             item.Label2 = res.Results.FirstOrDefault().OriginalName;
                             item.IconImage = string.Concat(TmdbConfig.ImageSmallBaseUrl,
                                 res.Results.FirstOrDefault().PosterPath);
@@ -223,6 +230,47 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                     }
                 }
 
+                return item;
+            }
+            catch (Exception)
+            {
+
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// GetMediaItemBlock
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private Item GetMediaItemBlock(HtmlNode node)
+        {
+            try
+            {
+                var item = new Item();
+                item.Label = node.NextSibling.InnerText;
+
+                item.Info = new Info
+                {
+                    Type = TypeInfo.Video,
+                    InfoLabels = new InfoMovie()
+                };
+
+                var infos = TorrentHelper.GetTvInfoFromTorrentName(item.Label);
+                if (infos != null && !string.IsNullOrEmpty(infos.Label))
+                {
+                    var res = TMDbClient.SearchTvShow(infos.Label);
+                    if (res.TotalResults > 0)
+                    {
+                        item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
+                        item.Label2 = res.Results.FirstOrDefault().OriginalName;
+                        item.IconImage = string.Concat(TmdbConfig.ImageSmallBaseUrl,
+                            res.Results.FirstOrDefault().PosterPath);
+                        item.ThumbnailImage = string.Concat(TmdbConfig.ImageLargeBaseUrl,
+                            res.Results.FirstOrDefault().PosterPath);
+                    }
+                }
                 return item;
             }
             catch (Exception)

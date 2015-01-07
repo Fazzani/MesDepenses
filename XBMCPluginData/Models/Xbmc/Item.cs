@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Microsoft.Ajax.Utilities;
 using TMDbLib.Objects.Movies;
 using TMDbLib.Objects.TvShows;
 using XBMCPluginData.Models.Xbmc.InfoTypedItems;
