@@ -1,0 +1,17 @@
+﻿//TODO
+- search
+- Last Movies
+- Last Episodes
+
+- List Movies By category
+- List Movies By Quality
+- List TvSérie by Category
+- List TvSéries
+- Top Movies
+- Top Séries
+
+- Context Menu on TvSérie Episode to Go to the TevSérie
+- Tv Série Saisons
+- Tv Série épisodes
+
+

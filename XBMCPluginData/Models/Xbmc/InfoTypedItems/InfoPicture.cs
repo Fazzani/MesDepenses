@@ -7,7 +7,7 @@ using System.Web;
 namespace XBMCPluginData.Models.Xbmc.InfoTypedItems
 {
   [DataContract]
-  public class InfoPicture : InfoMediaBase
+  public class InfoPicture : Info
   {
     /*
      *  title: string (In the last summer-1)

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace XBMCPluginData.Models.Xbmc.InfoTypedItems
 {
-    public class InfoMovie : InfoMediaBase
+    public class InfoMovie : Info
     {
         /*
          * genre: string (Comedy)

@@ -7,7 +7,7 @@ using System.Web;
 namespace XBMCPluginData.Models.Xbmc.InfoTypedItems
 {
   [DataContract]
-  public class InfoMusic : InfoMediaBase
+  public class InfoMusic : Info
   {
     /*
      *  tracknumber: integer (8)

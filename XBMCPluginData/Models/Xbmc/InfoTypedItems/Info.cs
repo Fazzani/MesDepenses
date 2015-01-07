@@ -7,7 +7,7 @@ using System.Web;
 namespace XBMCPluginData.Models.Xbmc.InfoTypedItems
 {
     [DataContract]
-    public class InfoMediaBase
+    public class Info
     {
         /*
          *  count: integer (12) - can be used to store an id for later, or for sorting purposes
