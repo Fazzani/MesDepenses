@@ -106,7 +106,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     {
       if (string.IsNullOrEmpty(path))
         return FullUrl("/");
-      if (string.IsNullOrEmpty(category))
+      if (!string.IsNullOrEmpty(category))
         return FullUrl(string.Format("/{3}/genre/{4}/?order={0}&orderby={1}&page={2}", GetOrderBy(orderby), GetOrder(order), page, path, category));
 
       return FullUrl(string.Format("/{3}/?order={0}&orderby={1}&page={2}", GetOrderBy(orderby), GetOrder(order), page, path));

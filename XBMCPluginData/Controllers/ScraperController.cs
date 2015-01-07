@@ -18,10 +18,10 @@ namespace XBMCPluginData.Controllers
         /// GET api/values
         /// </summary>
         /// <returns></returns>
-        [System.Web.Http.Route("{site}/{path}/{category?}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}")]
+        [System.Web.Http.Route("{site}/{path}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}")]
         [OutputCache(Duration = 10000, VaryByParam = "site;path;category;page;orderBy")]
         [System.Web.Http.HttpGet]
-        public IEnumerable<Item> List(string site,string category="", string path = "", int page = 1, OmgScraperService.OrderByEnum orderBy = OmgScraperService.OrderByEnum.DateAjout, OmgScraperService.OrderEnum order = OmgScraperService.OrderEnum.Desc)
+        public IEnumerable<Item> List(string site, string path = "", int page = 1, OmgScraperService.OrderByEnum orderBy = OmgScraperService.OrderByEnum.DateAjout, OmgScraperService.OrderEnum order = OmgScraperService.OrderEnum.Desc)
         {
           //http://localhost:1307/scraper/omg/films/action/1/1/1
             //http://localhost:1307/scraper/omg/films/1/1/1
@@ -30,11 +30,34 @@ namespace XBMCPluginData.Controllers
             {
                 var scraperService = new OmgScraperService(ConfigurationManager.AppSettings[site]);
                 if (path.Equals("series"))
-                  return scraperService.ListTorrents(category,path, page, orderBy, order, OmgScraperService.TypeExtractEnum.Block);
+                  return scraperService.ListTorrents(string.Empty,path, page, orderBy, order, OmgScraperService.TypeExtractEnum.Block);
 
-                return scraperService.ListTorrents(category, path, page, orderBy, order);
+                return scraperService.ListTorrents(string.Empty, path, page, orderBy, order);
             }
             return null;
+        }
+
+        /// <summary>
+        /// GET api/values
+        /// </summary>
+        /// <returns></returns>
+        [System.Web.Http.Route("{site}/{path}/{category}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}")]
+        [OutputCache(Duration = 10000, VaryByParam = "site;path;category;page;orderBy")]
+        [System.Web.Http.HttpGet]
+        public IEnumerable<Item> List(string site, string category, string path = "", int page = 1, OmgScraperService.OrderByEnum orderBy = OmgScraperService.OrderByEnum.DateAjout, OmgScraperService.OrderEnum order = OmgScraperService.OrderEnum.Desc)
+        {
+          //http://localhost:1307/scraper/omg/films/action/1/1/1
+          //http://localhost:1307/scraper/omg/films/1/1/1
+          //http://localhost:1307/scraper/omg/series-episodes/1/1/1
+          if (site == "omg")
+          {
+            var scraperService = new OmgScraperService(ConfigurationManager.AppSettings[site]);
+            if (path.Equals("series"))
+              return scraperService.ListTorrents(category, path, page, orderBy, order, OmgScraperService.TypeExtractEnum.Block);
+
+            return scraperService.ListTorrents(category, path, page, orderBy, order);
+          }
+          return null;
         }
 
         /// <summary>
