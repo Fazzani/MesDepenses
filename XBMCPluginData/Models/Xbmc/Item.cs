@@ -45,7 +45,10 @@ namespace XBMCPluginData.Models.Xbmc
         Votes = tvShow.VoteAverage.ToString(),
         Status = tvShow.Status,
         Tvshowtitle = tvShow.Name,
-        Year = tvShow.FirstAirDate.Value.Year
+        Year = tvShow.FirstAirDate.Value.Year,
+        Rating = (float)tvShow.Popularity,
+        Code = tvShow.ExternalIds != null ? tvShow.ExternalIds.ImdbId : "0",
+        
       };
     }
 
@@ -67,7 +70,10 @@ namespace XBMCPluginData.Models.Xbmc
         Genre = movie.Genres.Select(x => x.Name).Aggregate((x, y) => string.Format("{0} {1}", x, y)),
         Trailer = GetValidTailers(movie.Trailers),
         Tagline = movie.Tagline,
-        Studio = movie.ProductionCompanies.Select(x => x.Name).Aggregate((x, y) => string.Format("{0} {1}", x, y))
+        Studio = movie.ProductionCompanies.Select(x => x.Name).Aggregate((x, y) => string.Format("{0} {1}", x, y)),
+        Rating = (float)movie.Popularity,
+        Code = movie.ImdbId,
+        Duration = ""
       };
     }
 

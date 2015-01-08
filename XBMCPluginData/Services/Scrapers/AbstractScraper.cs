@@ -36,6 +36,11 @@ namespace XBMCPluginData.Services.Scrapers
             return string.Format("{0}{1}", _baseUrl, urlSuffix);
         }
 
+        protected string FullUrlTorrent(string urlSuffix)
+        {
+          return string.Format("plugin://plugin.video.xbmctorrent/play/{0}{1}", _baseUrl, urlSuffix);
+        }
+
         public bool OnPreRequest2(HttpWebRequest request)
         {
             //request.CookieContainer = new CookieContainer();
@@ -70,7 +75,7 @@ namespace XBMCPluginData.Services.Scrapers
             Categorie,
             Source,
             Nom,
-            Telechager
+            Telecharger
         }
         public enum OrderEnum : int
         {

@@ -32,7 +32,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     /// <returns></returns>
     public IEnumerable<Item> ListTorrents(string category = "", string path = "", int page = 1, OrderByEnum orderby = OrderByEnum.DateAjout, OrderEnum order = OrderEnum.Desc, TypeExtractEnum typeExtract = TypeExtractEnum.Raw)
     {
-      HtmlDocument doc = HtmlWeb.Load(BuildUrl(category,path, page, orderby, order));
+      HtmlDocument doc = HtmlWeb.Load(BuildUrl(category, path, page, orderby, order));
       switch (typeExtract)
       {
         case TypeExtractEnum.Raw:
@@ -52,6 +52,11 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
               .Skip(1)
                    .AsParallel()
                    .Select(GetMediaItemBlock)
+                   .Where(x => x != null);
+        case TypeExtractEnum.SerieBlock:
+          return doc.DocumentNode.SelectNodes("//div[@class='cadre']")
+                   .AsParallel()
+                   .Select(GetMediaItemSerieBlock)
                    .Where(x => x != null);
       }
       return null;
@@ -88,7 +93,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
           break;
         case OrderByEnum.Nom:
           break;
-        case OrderByEnum.Telechager:
+        case OrderByEnum.Telecharger:
           break;
       }
       return "id";
@@ -164,6 +169,31 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     /// <summary>
     /// Get Media Container Html bloc
     /// </summary>
+    /// <param name="x"></param>
+    /// <returns></returns>
+    private Item GetMediaItemSerieBlock(HtmlNode x)
+    {
+      try
+      {
+        var item = new Item { Is_playable = false };
+        item.Label = x.Element("h1").InnerText;
+        item.Icon = FullUrl(x.Element("img").attribute("src").Value);
+        //item.Path = FullUrl(x.SelectSingleNode(".//div[2]").Element("a").attribute("href").Value);
+        item.Thumbnail = item.Icon;
+        SetInfoTvSerie(item);
+
+        return item;
+      }
+      catch (Exception)
+      {
+
+      }
+      return null;
+    }
+
+    /// <summary>
+    /// Get Media Container Html bloc
+    /// </summary>
     /// <param name="node"></param>
     /// <returns></returns>
     private Item GetMediaItemRow(HtmlNode node)
@@ -184,30 +214,14 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         //                node.SelectSingleNode(".//td[5]").InnerText
         //            }
         //        };
-        item.Info = new InfoMovie();
+        item.Info = new InfoMovie ();
 
         var match = new Regex("([0-9]+.[0-9]*)(.)*").Match(node.SelectSingleNode(".//td[3]").InnerText);
         if (match.Success)
           item.Info.Size = (long)Convert.ToDouble(match.Groups[1].Value.replace(".", ","));
         if (node.SelectSingleNode(".//td[1]").InnerText.ToLowerInvariant().Contains("série"))
         {
-          var infos = TorrentHelper.GetTvInfoFromTorrentName(item.Label);
-          if (infos != null)
-          {
-            var res = TMDbClient.SearchTvShow(infos.Label);
-            if (res.TotalResults > 0)
-            {
-              item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
-              item.Label2 = res.Results.FirstOrDefault().OriginalName;
-              item.Icon = string.Concat(TmdbConfig.ImageSmallBaseUrl,
-                  res.Results.FirstOrDefault().PosterPath);
-              item.Thumbnail = string.Concat(TmdbConfig.ImageLargeBaseUrl,
-                  res.Results.FirstOrDefault().PosterPath);
-              item.Properties = new Properties();
-              item.Properties.Fanart_image = string.Concat(TmdbConfig.ImageLargeBaseUrl,
-                  res.Results.FirstOrDefault().PosterPath);
-            }
-          }
+          SetInfoTvSerie(item);
         }
         else
         {
@@ -234,6 +248,27 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
 
       }
       return null;
+    }
+
+    private void SetInfoTvSerie(Item item)
+    {
+      item.Properties = new Properties();
+      var infos = TorrentHelper.GetTvInfoFromTorrentName(item.Label);
+      if (infos != null)
+      {
+        var res = TMDbClient.SearchTvShow(infos.Label);
+        if (res.TotalResults > 0)
+        {
+          item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
+          item.Label2 = res.Results.FirstOrDefault().OriginalName;
+          item.Icon = string.Concat(TmdbConfig.ImageSmallBaseUrl,
+              res.Results.FirstOrDefault().PosterPath);
+          item.Thumbnail = string.Concat(TmdbConfig.ImageLargeBaseUrl,
+              res.Results.FirstOrDefault().PosterPath);
+          item.Properties.Fanart_image = string.Concat(TmdbConfig.ImageLargeBaseUrl,
+              res.Results.FirstOrDefault().PosterPath);
+        }
+      }
     }
 
     /// <summary>
@@ -282,7 +317,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     {
       Container,
       Raw,
-      Block
+      Block,
+      SerieBlock
     }
   }
 }
