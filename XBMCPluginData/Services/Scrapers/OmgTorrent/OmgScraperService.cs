@@ -24,12 +24,52 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
 
     public IEnumerable<Item> Search(string query, int page)
     {
-      HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty,query, page, OrderByEnum.Nom, OrderEnum.Desc));
-      return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
+      HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, query, page, OrderByEnum.Nom, OrderEnum.Desc));
+      ParallelQuery<Item> items = null;
+      try
+      {
+        items = doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
               .AsParallel()
               .Select(GetMediaItemRow)
               .Where(x => x != null);
+      }
+      catch (Exception)
+      {
+
+      }
+      try
+      {
+        var tvSeries = doc.DocumentNode.SelectNodes("//div[@class='cadre']")
+                  .AsParallel()
+                  .Select(GetMediaItemSerieBlock)
+                  .Where(x => x != null);
+
+        items.Concat(tvSeries);
+      }
+      catch (Exception)
+      {
+
+      }
+
+      return items;
     }
+
+    /// <summary>
+    /// Get Saison
+    /// </summary>
+    /// <param name="serieName"></param>
+    /// <param name="serieId"></param>
+    /// <param name="saisonNumber"></param>
+    /// <returns></returns>
+    public IEnumerable<Item> GetSaison(string serieName, int serieId, int saisonNumber)
+    {
+      HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, string.Empty, 0, OrderByEnum.Nom, OrderEnum.Desc, serieName, serieId, saisonNumber));
+      return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
+             //.AsParallel()
+             .Select((item, epIndex) => GetTvEpisodeItem(item, saisonNumber, epIndex))
+             .Where(x => x != null);
+    }
+
     /// <summary>
     /// List Torrents
     /// </summary>
@@ -46,7 +86,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         foreach (var filter in filters)
           PostData.AppendFormat("{0}={1}&", filter.Value, filter.Key);
       }
-      HtmlDocument doc = HtmlWeb.Load(BuildUrl(category, path,string.Empty, page, orderby, order), "POST");
+      HtmlDocument doc = HtmlWeb.Load(BuildUrl(category, path, string.Empty, page, orderby, order), "POST");
       switch (typeExtract)
       {
         case TypeExtractEnum.Raw:
@@ -121,8 +161,10 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     /// <param name="orderby"></param>
     /// <param name="order"></param>
     /// <returns></returns>
-    private string BuildUrl(string category, string path, string query, int page, OrderByEnum orderby, OrderEnum order)
+    private string BuildUrl(string category, string path, string query, int page, OrderByEnum orderby = OrderByEnum.DateAjout, OrderEnum order = OrderEnum.Desc, string serieName = "", int serieId = 0, int saisonNumber = 0)
     {
+      if (!string.IsNullOrEmpty(serieName))//http://www.omgtorrent.com/series/elementary_saison_1_146.html
+        return FullUrl(string.Format("/series/{0}_{1}_{2}.html", serieName, saisonNumber, serieId));
       if (!string.IsNullOrEmpty(query))//http://www.omgtorrent.com/recherche/?query=men
         return FullUrl(string.Format("/recherche/?query={0}&page={1}", query, page));
       if (string.IsNullOrEmpty(path))
@@ -191,7 +233,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     {
       try
       {
-        var item = new Item { Is_playable = false };
+        var item = new Item { Is_playable = false, Label2 = GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)) + "," + x.SelectNodes(".//p").Count };
         item.Label = x.Element("h1").InnerText;
         item.Icon = FullUrl(x.Element("img").attribute("src").Value);
         //item.Path = FullUrl(x.SelectSingleNode(".//div[2]").Element("a").attribute("href").Value);
@@ -266,6 +308,29 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       return null;
     }
 
+    /// <summary>
+    /// Get Media Container Html bloc
+    /// </summary>
+    /// <param name="node"></param>
+    /// <returns></returns>
+    private Item GetTvEpisodeItem(HtmlNode node, int saisonNumber, int episodeNumber)
+    {
+      try
+      {
+        var item = new Item { Is_playable = true, Properties = new Properties() };
+        item.Label = node.SelectSingleNode(".//td[2]").InnerText;
+        item.Path = FullUrl(node.SelectSingleNode(".//td[4]").Element("a").attribute("href").Value);
+        //int episodeNumber = Convert.ToInt32(node.SelectSingleNode(".//td[2]").InnerText);
+        SetInfoTvSerie(item, saisonNumber, episodeNumber + 1);
+        return item;
+      }
+      catch (Exception)
+      {
+
+      }
+      return null;
+    }
+
     private void SetInfoTvSerie(Item item)
     {
       item.Properties = new Properties();
@@ -276,7 +341,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         if (res.TotalResults > 0)
         {
           item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
-          item.Label2 = res.Results.FirstOrDefault().OriginalName;
+          //item.Label2 = res.Results.FirstOrDefault().OriginalName;
           item.Icon = string.Concat(TmdbConfig.ImageSmallBaseUrl,
               res.Results.FirstOrDefault().PosterPath);
           item.Thumbnail = string.Concat(TmdbConfig.ImageLargeBaseUrl,
@@ -287,6 +352,42 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       }
     }
 
+    /// <summary>
+    /// Set Info TvSerie
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="saisonNumber"></param>
+    /// <param name="episodeNumber"></param>
+    private void SetInfoTvSerie(Item item, int saisonNumber, int episodeNumber)
+    {
+      item.Properties = new Properties();
+      var res = TMDbClient.SearchTvShow(item.Label);
+      if (res.TotalResults > 0)
+      {
+        item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), saisonNumber, episodeNumber);
+        //item.Label2 = res.Results.FirstOrDefault().OriginalName;
+        item.Icon = string.Concat(TmdbConfig.ImageSmallBaseUrl,
+            res.Results.FirstOrDefault().PosterPath);
+        item.Thumbnail = string.Concat(TmdbConfig.ImageLargeBaseUrl,
+            res.Results.FirstOrDefault().PosterPath);
+        item.Properties.Fanart_image = string.Concat(TmdbConfig.ImageLargeBaseUrl,
+            res.Results.FirstOrDefault().PosterPath);
+      }
+    }
+
+    /// <summary>
+    /// Get série Id from Url
+    /// </summary>
+    /// <param name="url"></param>
+    /// <returns></returns>
+    private string GetTvSerieId(string url)
+    {
+      Regex idregex = new Regex("(.*)/series/(.*)_saison_([0-9]+)_([0-9]+).*");
+      var match = idregex.Match(url);
+      if (match.Success)
+        return match.Groups[4].Value;
+      return string.Empty;
+    }
     /// <summary>
     /// GetMediaItemBlock
     /// </summary>

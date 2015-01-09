@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using TMDbLib.Objects.Movies;
@@ -48,7 +49,7 @@ namespace XBMCPluginData.Models.Xbmc
         Year = tvShow.FirstAirDate.Value.Year,
         Rating = (float)tvShow.Popularity,
         Code = tvShow.ExternalIds != null ? tvShow.ExternalIds.ImdbId : "0",
-        
+        Aired=DateTime.Today.ToShortDateString()
       };
     }
 
@@ -73,7 +74,8 @@ namespace XBMCPluginData.Models.Xbmc
         Studio = movie.ProductionCompanies.Select(x => x.Name).Aggregate((x, y) => string.Format("{0} {1}", x, y)),
         Rating = (float)movie.Popularity,
         Code = movie.ImdbId,
-        Duration = ""
+        Duration = "",
+        Aired=DateTime.Today.ToShortDateString()
       };
     }
 

@@ -17,7 +17,7 @@ namespace XBMCPluginData.Controllers
     /// GET api/values
     /// </summary>
     /// <returns></returns>
-    [System.Web.Http.Route("index/{site}/{path}",Order = 1)]
+    [System.Web.Http.Route("index/{site}/{path}", Order = 1)]
     [System.Web.Http.HttpGet]
     public IEnumerable<Item> Index(string site, string path = "")
     {
@@ -46,10 +46,26 @@ namespace XBMCPluginData.Controllers
     }
 
     /// <summary>
+    /// GET api/values #http://localhost:1307/scraper/omg/series/Elementary/2/1
+    /// </summary>
+    /// <returns></returns>
+    [System.Web.Http.Route("{site}/series/{serieName}/{serieId:int}/{saisonNumber:int}", Order = 3)]
+    [System.Web.Http.HttpGet]
+    public IEnumerable<Item> Index(string site, string serieName, int serieId, int saisonNumber)
+    {
+      if (site == "omg")
+      {
+        var scraperService = new OmgScraperService(ConfigurationManager.AppSettings[site]);
+        return scraperService.GetSaison(serieName, serieId, saisonNumber);
+      }
+      return null;
+    }
+
+    /// <summary>
     /// GET api/values
     /// </summary>
     /// <returns></returns>
-    [System.Web.Http.Route("{site}/{path}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}", Order = 3)]
+    [System.Web.Http.Route("{site}/{path}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}", Order = 4)]
     [OutputCache(Duration = 10000, VaryByParam = "site;path;category;page;orderBy")]
     [System.Web.Http.HttpGet]
     public IEnumerable<Item> List(string site, [FromUri]List<string> formatfilters, string path = "", int page = 1, OmgScraperService.OrderByEnum orderBy = OmgScraperService.OrderByEnum.DateAjout, OmgScraperService.OrderEnum order = OmgScraperService.OrderEnum.Desc)
@@ -73,7 +89,7 @@ namespace XBMCPluginData.Controllers
     /// GET api/values
     /// </summary>
     /// <returns></returns>
-    [System.Web.Http.Route("{site}/{path}/{category}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}", Order = 4)]
+    [System.Web.Http.Route("{site}/{path}/{category}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}", Order = 5)]
     [OutputCache(Duration = 10000, VaryByParam = "site;path;category;page;orderBy")]
     [System.Web.Http.HttpGet]
     public IEnumerable<Item> List(string site, string category, [FromUri]List<string> formatfilters, string path = "", int page = 1, OmgScraperService.OrderByEnum orderBy = OmgScraperService.OrderByEnum.DateAjout, OmgScraperService.OrderEnum order = OmgScraperService.OrderEnum.Desc)
@@ -93,7 +109,7 @@ namespace XBMCPluginData.Controllers
       return null;
     }
 
-    
+
 
   }
 }
