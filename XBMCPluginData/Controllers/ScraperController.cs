@@ -33,7 +33,7 @@ namespace XBMCPluginData.Controllers
     /// GET api/values
     /// </summary>
     /// <returns></returns>
-    [System.Web.Http.Route("search/{site}/{query}/{page}", Order = 2)]
+    [System.Web.Http.Route("{site}/search/{query}/{page}", Order = 2)]
     [System.Web.Http.HttpGet]
     public IEnumerable<Item> Index(string site, string query = "", int page = 0)
     {
