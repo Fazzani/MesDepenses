@@ -65,7 +65,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     {
       HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, string.Empty, 0, OrderByEnum.Nom, OrderEnum.Desc, serieName, serieId, saisonNumber));
       return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
-             //.AsParallel()
+             .AsParallel()
              .Select((item, epIndex) => GetTvEpisodeItem(item, saisonNumber, epIndex))
              .Where(x => x != null);
     }
@@ -233,13 +233,12 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     {
       try
       {
-        var item = new Item { Is_playable = false, Label2 = GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)) + "," + x.SelectNodes(".//p").Count };
+        var item = new Item { Is_playable = false };
         item.Label = x.Element("h1").InnerText;
         item.Icon = FullUrl(x.Element("img").attribute("src").Value);
-        //item.Path = FullUrl(x.SelectSingleNode(".//div[2]").Element("a").attribute("href").Value);
         item.Thumbnail = item.Icon;
         SetInfoTvSerie(item);
-
+        item.Label2 = string.Format("{0},{1},{2}", item.Label, GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)), x.SelectNodes(".//p").Count);
         return item;
       }
       catch (Exception)
@@ -388,6 +387,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         return match.Groups[4].Value;
       return string.Empty;
     }
+
     /// <summary>
     /// GetMediaItemBlock
     /// </summary>
