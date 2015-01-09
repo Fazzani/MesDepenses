@@ -22,6 +22,14 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     {
     }
 
+    public IEnumerable<Item> Search(string query, int page)
+    {
+      HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty,query, page, OrderByEnum.Nom, OrderEnum.Desc));
+      return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
+              .AsParallel()
+              .Select(GetMediaItemRow)
+              .Where(x => x != null);
+    }
     /// <summary>
     /// List Torrents
     /// </summary>
@@ -30,9 +38,15 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     /// <param name="orderby"></param>
     /// <param name="order"></param>
     /// <returns></returns>
-    public IEnumerable<Item> ListTorrents(string category = "", string path = "", int page = 1, OrderByEnum orderby = OrderByEnum.DateAjout, OrderEnum order = OrderEnum.Desc, TypeExtractEnum typeExtract = TypeExtractEnum.Raw)
+    public IEnumerable<Item> ListTorrents(Dictionary<string, string> filters, string category = "", string path = "", int page = 1, OrderByEnum orderby = OrderByEnum.DateAjout, OrderEnum order = OrderEnum.Desc, TypeExtractEnum typeExtract = TypeExtractEnum.Raw)
     {
-      HtmlDocument doc = HtmlWeb.Load(BuildUrl(category, path, page, orderby, order));
+      if (filters != null && filters.Count > 0)
+      {
+        PostData = new System.Text.StringBuilder();
+        foreach (var filter in filters)
+          PostData.AppendFormat("{0}={1}&", filter.Value, filter.Key);
+      }
+      HtmlDocument doc = HtmlWeb.Load(BuildUrl(category, path,string.Empty, page, orderby, order), "POST");
       switch (typeExtract)
       {
         case TypeExtractEnum.Raw:
@@ -107,8 +121,10 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     /// <param name="orderby"></param>
     /// <param name="order"></param>
     /// <returns></returns>
-    private string BuildUrl(string category, string path, int page, OrderByEnum orderby, OrderEnum order)
+    private string BuildUrl(string category, string path, string query, int page, OrderByEnum orderby, OrderEnum order)
     {
+      if (!string.IsNullOrEmpty(query))//http://www.omgtorrent.com/recherche/?query=men
+        return FullUrl(string.Format("/recherche/?query={0}&page={1}", query, page));
       if (string.IsNullOrEmpty(path))
         return FullUrl("/");
       if (!string.IsNullOrEmpty(category))
@@ -214,7 +230,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         //                node.SelectSingleNode(".//td[5]").InnerText
         //            }
         //        };
-        item.Info = new InfoMovie ();
+        item.Info = new InfoMovie();
 
         var match = new Regex("([0-9]+.[0-9]*)(.)*").Match(node.SelectSingleNode(".//td[3]").InnerText);
         if (match.Success)
