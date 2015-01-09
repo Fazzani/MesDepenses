@@ -39,12 +39,10 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       }
       try
       {
-        var tvSeries = doc.DocumentNode.SelectNodes("//div[@class='cadre']")
+        return items.Union(doc.DocumentNode.SelectNodes("//div[@class='cadre']")
                   .AsParallel()
                   .Select(GetMediaItemSerieBlock)
-                  .Where(x => x != null);
-
-        items.Concat(tvSeries);
+                  .Where(x => x != null));
       }
       catch (Exception)
       {
@@ -66,7 +64,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, string.Empty, 0, OrderByEnum.Nom, OrderEnum.Desc, serieName, serieId, saisonNumber));
       return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
              .AsParallel()
-             .Select((item, epIndex) => GetTvEpisodeItem(item, saisonNumber, epIndex))
+             .Select((item, epIndex) => GetTvEpisodeItem(item, serieName, saisonNumber, epIndex))
              .Where(x => x != null);
     }
 
@@ -238,7 +236,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         item.Icon = FullUrl(x.Element("img").attribute("src").Value);
         item.Thumbnail = item.Icon;
         SetInfoTvSerie(item);
-        item.Label2 = string.Format("{0},{1},{2}", item.Label, GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)), x.SelectNodes(".//p").Count);
+        item.Label2 = string.Format("{0}={1}={2}", item.Label, GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)), x.SelectNodes(".//p[2]/a").Count);
         return item;
       }
       catch (Exception)
@@ -311,8 +309,11 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     /// Get Media Container Html bloc
     /// </summary>
     /// <param name="node"></param>
+    /// <param name="serieName"></param>
+    /// <param name="saisonNumber"></param>
+    /// <param name="episodeNumber"></param>
     /// <returns></returns>
-    private Item GetTvEpisodeItem(HtmlNode node, int saisonNumber, int episodeNumber)
+    private Item GetTvEpisodeItem(HtmlNode node, string serieName, int saisonNumber, int episodeNumber)
     {
       try
       {
@@ -320,7 +321,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         item.Label = node.SelectSingleNode(".//td[2]").InnerText;
         item.Path = FullUrl(node.SelectSingleNode(".//td[4]").Element("a").attribute("href").Value);
         //int episodeNumber = Convert.ToInt32(node.SelectSingleNode(".//td[2]").InnerText);
-        SetInfoTvSerie(item, saisonNumber, episodeNumber + 1);
+        SetInfoTvSerie(item, serieName, saisonNumber, episodeNumber + 1);
         return item;
       }
       catch (Exception)
@@ -357,18 +358,19 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     /// <param name="item"></param>
     /// <param name="saisonNumber"></param>
     /// <param name="episodeNumber"></param>
-    private void SetInfoTvSerie(Item item, int saisonNumber, int episodeNumber)
+    private void SetInfoTvSerie(Item item, string serieName, int saisonNumber, int episodeNumber)
     {
       item.Properties = new Properties();
-      var res = TMDbClient.SearchTvShow(item.Label);
+      var res = TMDbClient.SearchTvShow(serieName);
       if (res.TotalResults > 0)
       {
-        item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), saisonNumber, episodeNumber);
+        var tvEp = TMDbClient.GetTvEpisode(res.Results.FirstOrDefault().Id, saisonNumber, episodeNumber, language: "fr");
+        item.CompleteInfo(tvEp);
         //item.Label2 = res.Results.FirstOrDefault().OriginalName;
         item.Icon = string.Concat(TmdbConfig.ImageSmallBaseUrl,
             res.Results.FirstOrDefault().PosterPath);
         item.Thumbnail = string.Concat(TmdbConfig.ImageLargeBaseUrl,
-            res.Results.FirstOrDefault().PosterPath);
+            tvEp.StillPath);
         item.Properties.Fanart_image = string.Concat(TmdbConfig.ImageLargeBaseUrl,
             res.Results.FirstOrDefault().PosterPath);
       }

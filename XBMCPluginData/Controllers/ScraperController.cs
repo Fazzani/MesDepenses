@@ -49,7 +49,7 @@ namespace XBMCPluginData.Controllers
     /// GET api/values #http://localhost:1307/scraper/omg/series/Elementary/2/1
     /// </summary>
     /// <returns></returns>
-    [System.Web.Http.Route("{site}/series/{serieName}/{serieId:int}/{saisonNumber:int}", Order = 3)]
+    [System.Web.Http.Route("{site}/series_all/{serieName}/{serieId:int}/{saisonNumber:int}", Order = 3)]
     [System.Web.Http.HttpGet]
     public IEnumerable<Item> Index(string site, string serieName, int serieId, int saisonNumber)
     {

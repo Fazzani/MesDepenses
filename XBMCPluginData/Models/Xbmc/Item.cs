@@ -49,7 +49,29 @@ namespace XBMCPluginData.Models.Xbmc
         Year = tvShow.FirstAirDate.Value.Year,
         Rating = (float)tvShow.Popularity,
         Code = tvShow.ExternalIds != null ? tvShow.ExternalIds.ImdbId : "0",
-        Aired=DateTime.Today.ToShortDateString()
+        Aired = DateTime.Today.ToShortDateString()
+      };
+    }
+
+    /// <summary>
+    /// CompleteInfo tvShow
+    /// </summary>
+    public void CompleteInfo(TvEpisode tvEpisode)
+    {
+      Info = new InfoMovie
+      {
+        Duration="45",
+        Tvshowtitle = tvEpisode.Name,
+        Season = tvEpisode.SeasonNumber.Value,
+        Episode = tvEpisode.EpisodeNumber,
+        Plot = tvEpisode.Overview,
+        Plotoutline = tvEpisode.Overview,
+        Title = tvEpisode.Name,
+        Votes = tvEpisode.VoteCount.ToString(),
+        Year = tvEpisode.AirDate.Year,
+        Rating = (float)tvEpisode.VoteAverage,
+        Code = tvEpisode.ExternalIds != null ? tvEpisode.ExternalIds.ImdbId : "0",
+        Aired = DateTime.Today.ToShortDateString()
       };
     }
 
@@ -75,7 +97,7 @@ namespace XBMCPluginData.Models.Xbmc
         Rating = (float)movie.Popularity,
         Code = movie.ImdbId,
         Duration = "",
-        Aired=DateTime.Today.ToShortDateString()
+        Aired = DateTime.Today.ToShortDateString()
       };
     }
 
