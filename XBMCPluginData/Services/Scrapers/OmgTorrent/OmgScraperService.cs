@@ -233,7 +233,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       {
         var item = new Item { Is_playable = false };
         item.Label = x.Element("h1").InnerText;
-        item.Icon = FullUrl(x.Element("img").attribute("src").Value);
+        var iconPath = x.Element("img").attribute("src").Value;
+        item.Icon = iconPath.Contains("http") ? iconPath : FullUrl(iconPath);
         item.Thumbnail = item.Icon;
         SetInfoTvSerie(item);
         item.Label2 = string.Format("{0}={1}={2}", item.Label, GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)), x.SelectNodes(".//p[2]/a").Count);

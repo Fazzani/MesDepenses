@@ -96,7 +96,7 @@ namespace XBMCPluginData.Models.Xbmc
         Studio = movie.ProductionCompanies.Select(x => x.Name).Aggregate((x, y) => string.Format("{0} {1}", x, y)),
         Rating = (float)movie.Popularity,
         Code = movie.ImdbId,
-        Duration = "",
+        Duration = "45",
         Aired = DateTime.Today.ToShortDateString()
       };
     }
