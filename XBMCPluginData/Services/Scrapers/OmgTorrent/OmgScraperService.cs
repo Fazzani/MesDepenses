@@ -184,22 +184,22 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       try
       {
         Debug.WriteLine(x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("alt").Value);
-        var i = new Item { Is_playable = true };
-        i.Label = x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("alt").Value;
+        var item = new Item { Is_playable = true };
+        item.Label = x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("alt").Value;
         item.Label2 = item.Label;
         //i.IconImage =
         //    FullUrl(x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("src").value());
-        i.Path = FullUrl(x.SelectSingleNode(".//div[2]").Element("a").attribute("href").Value);
-        i.Thumbnail =
+        item.Path = FullUrl(x.SelectSingleNode(".//div[2]").Element("a").attribute("href").Value);
+        item.Thumbnail =
             FullUrl(x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("src").value());
-        if (i.Properties == null)
-          i.Properties = new Properties();
+        if (item.Properties == null)
+          item.Properties = new Properties();
 
-        i.Properties.Sources =x.SelectSingleNode(".//span[@class='sources']")
+        item.Properties.Sources =x.SelectSingleNode(".//span[@class='sources']")
                             .InnerText;
-        i.Properties.Sources =x.SelectSingleNode(".//span[@class='clients']")
+        item.Properties.Sources =x.SelectSingleNode(".//span[@class='clients']")
                             .InnerText;
-        i.Info = new InfoMovie
+        item.Info = new InfoMovie
           {
             Genre =
                 x.SelectSingleNode(".//div[@class='torrents_genre']").InnerText,
@@ -208,7 +208,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                     x.SelectSingleNode(".//div[@class='torrents_annee_de_production']")
                         .InnerText)
           };
-        return i;
+        return item;
       }
       catch (Exception)
       {
