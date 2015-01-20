@@ -58,21 +58,22 @@ namespace XBMCPluginData.Models.Xbmc
     /// </summary>
     public void CompleteInfo(TvEpisode tvEpisode)
     {
-      Info = new InfoMovie
-      {
-        Duration="45",
-        Tvshowtitle = tvEpisode.Name,
-        Season = tvEpisode.SeasonNumber.Value,
-        Episode = tvEpisode.EpisodeNumber,
-        Plot = tvEpisode.Overview,
-        Plotoutline = tvEpisode.Overview,
-        Title = tvEpisode.Name,
-        Votes = tvEpisode.VoteCount.ToString(),
-        Year = tvEpisode.AirDate.Year,
-        Rating = (float)tvEpisode.VoteAverage,
-        Code = tvEpisode.ExternalIds != null ? tvEpisode.ExternalIds.ImdbId : "0",
-        Aired = DateTime.Today.ToShortDateString()
-      };
+      if (!string.IsNullOrEmpty(tvEpisode.Name))
+        Info = new InfoMovie
+        {
+          Duration = "45",
+          Tvshowtitle = tvEpisode.Name,
+          Season = tvEpisode.SeasonNumber.Value,
+          Episode = tvEpisode.EpisodeNumber,
+          Plot = tvEpisode.Overview,
+          Plotoutline = tvEpisode.Overview,
+          Title = tvEpisode.Name,
+          Votes = tvEpisode.VoteCount.ToString(),
+          Year = tvEpisode.AirDate.Year,
+          Rating = (float)tvEpisode.VoteAverage,
+          Code = tvEpisode.ExternalIds != null ? tvEpisode.ExternalIds.ImdbId : "0",
+          Aired = DateTime.Today.ToShortDateString()
+        };
     }
 
     /// <summary>

@@ -162,7 +162,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     private string BuildUrl(string category, string path, string query, int page, OrderByEnum orderby = OrderByEnum.DateAjout, OrderEnum order = OrderEnum.Desc, string serieName = "", int serieId = 0, int saisonNumber = 0)
     {
       if (!string.IsNullOrEmpty(serieName))//http://www.omgtorrent.com/series/elementary_saison_1_146.html
-        return FullUrl(string.Format("/series/{0}_{1}_{2}.html", serieName, saisonNumber, serieId));
+        return FullUrl(string.Format("/series/{0}_saison_{1}_{2}.html", serieName, saisonNumber, serieId));
       if (!string.IsNullOrEmpty(query))//http://www.omgtorrent.com/recherche/?query=men
         return FullUrl(string.Format("/recherche/?query={0}&page={1}", query, page));
       if (string.IsNullOrEmpty(path))
@@ -186,24 +186,19 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         Debug.WriteLine(x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("alt").Value);
         var i = new Item { Is_playable = true };
         i.Label = x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("alt").Value;
+        item.Label2 = item.Label;
         //i.IconImage =
         //    FullUrl(x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("src").value());
         i.Path = FullUrl(x.SelectSingleNode(".//div[2]").Element("a").attribute("href").Value);
         i.Thumbnail =
             FullUrl(x.Descendants("div").FirstOrDefault().Element("a").Element("img").attribute("src").value());
-        //i.Bag = new Dictionary<string, string>
-        //        {
-        //            {
-        //                "sources",
-        //                x.SelectSingleNode(".//span[@class='sources']")
-        //                    .InnerText
-        //            },
-        //            {
-        //                "clients",
-        //                x.SelectSingleNode(".//span[@class='clients']")
-        //                    .InnerText
-        //            }
-        //        };
+        if (i.Properties == null)
+          i.Properties = new Properties();
+
+        i.Properties.Sources =x.SelectSingleNode(".//span[@class='sources']")
+                            .InnerText;
+        i.Properties.Sources =x.SelectSingleNode(".//span[@class='clients']")
+                            .InnerText;
         i.Info = new InfoMovie
           {
             Genre =
@@ -236,7 +231,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         var iconPath = x.Element("img").attribute("src").Value;
         item.Icon = iconPath.Contains("http") ? iconPath : FullUrl(iconPath);
         item.Thumbnail = item.Icon;
-        SetInfoTvSerie(item);
+        SetInfoTvSerie(item, null);
         item.Label2 = string.Format("{0}={1}={2}", item.Label, GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)), x.SelectNodes(".//p[2]/a").Count);
         return item;
       }
@@ -258,18 +253,19 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       {
         var item = new Item { Is_playable = true, Properties = new Properties() };
         item.Label = node.SelectSingleNode(".//td[2]").Element("a").InnerText;
+        item.Label2 = item.Label;
         item.Path = FullUrl(node.SelectSingleNode(".//td[6]").Element("a").attribute("href").Value);
-        //item.Bag = new Dictionary<string, string>
-        //        {
-        //            {
-        //                "sources",
-        //                node.SelectSingleNode(".//td[4]").InnerText
-        //            },
-        //            {
-        //                "clients",
-        //                node.SelectSingleNode(".//td[5]").InnerText
-        //            }
-        //        };
+        var infoplus = new Dictionary<string, string>
+                {
+                    {
+                        "Sources",
+                        node.SelectSingleNode(".//td[4]").InnerText
+                    },
+                    {
+                        "Clients",
+                        node.SelectSingleNode(".//td[5]").InnerText
+                    }
+                };
         item.Info = new InfoMovie();
 
         var match = new Regex("([0-9]+.[0-9]*)(.)*").Match(node.SelectSingleNode(".//td[3]").InnerText);
@@ -277,7 +273,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
           item.Info.Size = (long)Convert.ToDouble(match.Groups[1].Value.replace(".", ","));
         if (node.SelectSingleNode(".//td[1]").InnerText.ToLowerInvariant().Contains("série"))
         {
-          SetInfoTvSerie(item);
+          SetInfoTvSerie(item, infoplus);
         }
         else
         {
@@ -287,6 +283,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
             var res = TMDbClient.SearchMovie(infos.Label);
             if (res.TotalResults > 0)
             {
+              item.Properties.Clients = infoplus["Clients"];
+              item.Properties.Sources = infoplus["Sources"];
               item.CompleteInfo(TMDbClient.GetMovie(res.Results.FirstOrDefault().Id, "fr"));
               item.Label2 = res.Results.FirstOrDefault().OriginalTitle;
               //item.IconImage = string.Concat(TmdbConfig.ImageSmallBaseUrl, res.Results.FirstOrDefault().PosterPath);
@@ -320,19 +318,20 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       {
         var item = new Item { Is_playable = true, Properties = new Properties() };
         item.Label = node.SelectSingleNode(".//td[2]").InnerText;
+        item.Label2 = item.Label;
         item.Path = FullUrl(node.SelectSingleNode(".//td[4]").Element("a").attribute("href").Value);
         //int episodeNumber = Convert.ToInt32(node.SelectSingleNode(".//td[2]").InnerText);
         SetInfoTvSerie(item, serieName, saisonNumber, episodeNumber + 1);
         return item;
       }
-      catch (Exception)
+      catch (Exception ex)
       {
-
+        Debug.WriteLine(ex.Message);
       }
       return null;
     }
 
-    private void SetInfoTvSerie(Item item)
+    private void SetInfoTvSerie(Item item, Dictionary<string, string> infosplus)
     {
       item.Properties = new Properties();
       var infos = TorrentHelper.GetTvInfoFromTorrentName(item.Label);
@@ -342,6 +341,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         if (res.TotalResults > 0)
         {
           item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
+          item.Properties.Clients = infosplus["Clients"];
+          item.Properties.Sources = infosplus["Sources"];
           //item.Label2 = res.Results.FirstOrDefault().OriginalName;
           item.Icon = string.Concat(TmdbConfig.ImageSmallBaseUrl,
               res.Results.FirstOrDefault().PosterPath);
@@ -402,6 +403,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       {
         var item = new Item();
         item.Label = node.NextSibling.InnerText;
+        item.Label2 = item.Label;
 
         //item.Info = new Info
         //{
