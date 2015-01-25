@@ -23,8 +23,6 @@ namespace XBMCPluginData.Models.Xbmc
     public string Path { get; set; }
     [DataMember]
     public Info Info { get; set; }
-    //[DataMember]
-    //public Dictionary<string, string> Bag { get; set; }
     [DataMember]
     public bool Is_playable { get; set; }
     [DataMember]
@@ -35,7 +33,7 @@ namespace XBMCPluginData.Models.Xbmc
     /// </summary>
     public void CompleteInfo(TvShow tvShow, int saison, int episode)
     {
-      Info = new InfoMovie
+      Info = new InfoTvShow
       {
         Season = saison,
         Episode = episode,
@@ -89,7 +87,6 @@ namespace XBMCPluginData.Models.Xbmc
         Originaltitle = movie.OriginalTitle,
         Votes = movie.VoteAverage.ToString(),
         Status = movie.Status,
-        Tvshowtitle = movie.Title,
         Year = movie.ReleaseDate.Value.Year,
         Genre = movie.Genres.Select(x => x.Name).Aggregate((x, y) => string.Format("{0} {1}", x, y)),
         Trailer = GetValidTailers(movie.Trailers),

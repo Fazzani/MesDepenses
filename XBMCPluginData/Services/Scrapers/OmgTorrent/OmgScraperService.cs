@@ -195,9 +195,9 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         if (item.Properties == null)
           item.Properties = new Properties();
 
-        item.Properties.Sources =x.SelectSingleNode(".//span[@class='sources']")
+        item.Properties.Sources = x.SelectSingleNode(".//span[@class='sources']")
                             .InnerText;
-        item.Properties.Sources =x.SelectSingleNode(".//span[@class='clients']")
+        item.Properties.Sources = x.SelectSingleNode(".//span[@class='clients']")
                             .InnerText;
         item.Info = new InfoMovie
           {
@@ -351,7 +351,11 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
           item.Properties.Fanart_image = string.Concat(TmdbConfig.ImageLargeBaseUrl,
               res.Results.FirstOrDefault().PosterPath);
         }
+        else
+          item.Info = new InfoMovie { Tvshowtitle = item.Label };
       }
+      else
+        item.Info = new InfoMovie { Tvshowtitle = item.Label };
     }
 
     /// <summary>
