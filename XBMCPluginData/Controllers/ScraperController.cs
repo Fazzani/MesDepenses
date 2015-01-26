@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Torrent.BEncode;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using XBMCPluginData.Models.Xbmc;
@@ -109,7 +114,20 @@ namespace XBMCPluginData.Controllers
       return null;
     }
 
-
+    [System.Web.Http.Route("index")]
+    [System.Web.Http.HttpGet]
+    public async Task<dynamic> TestDecodeFile()
+    {
+      WebClient webClient = new WebClient();
+      webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
+      var bytes = await webClient.DownloadDataTaskAsync("http://www.omgtorrent.com/clic_dl.php?id=18911");
+      //var f = File.OpenRead(HttpContext.Current.Server.MapPath("~/Test/24 heures chrono S01 FRENCH DVDRip XviD [www.OMGTORRENT.com].torrent"));
+      var res = BencodingUtils.Decode(bytes)as BDict;
+      var infos = (res.SingleOrDefault(x => x.Key == "info").Value as BDict).FirstOrDefault().Value;
+      var tmp = (infos as BList).Select(x => x).Cast<BDict>().Select(x => new { Label = x.FirstOrDefault(k => k.Key == "path").Value, size = x.FirstOrDefault(k => k.Key == "length").Value });
+      return tmp;
+      //BencodingUtils.Decode()
+    }
 
   }
 }
