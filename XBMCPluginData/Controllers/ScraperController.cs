@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using XBMCPluginData.Helpers;
 using XBMCPluginData.Models.Xbmc;
 using XBMCPluginData.Services.Scrapers.OmgTorrent;
 
@@ -115,27 +116,12 @@ namespace XBMCPluginData.Controllers
       return null;
     }
 
-    [System.Web.Http.Route("index")]
-    [System.Web.Http.HttpGet]
-    public async Task<dynamic> TestDecodeFile()
-    {
-      WebClient webClient = new WebClient();
-      webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
-      var bytes = await webClient.DownloadDataTaskAsync("http://www.omgtorrent.com/clic_dl.php?id=18911");
-      //var f = File.OpenRead(HttpContext.Current.Server.MapPath("~/Test/24 heures chrono S01 FRENCH DVDRip XviD [www.OMGTORRENT.com].torrent"));
-      var res = BencodingUtils.Decode(bytes)as BDict;
-      var infos = (res.SingleOrDefault(x => x.Key == "info").Value as BDict).FirstOrDefault().Value;
-      var tmp = (infos as BList).Select(x => x).Cast<BDict>().Select(x => new { Label = x.FirstOrDefault(k => k.Key == "path").Value, size = x.FirstOrDefault(k => k.Key == "length").Value });
-        Metadata meta = new Metadata(new MemoryStream(bytes));
-        var magnetLinkMeta =
-            MagnetLink.ResolveToMetadata(
-                "magnet:?xt=urn:btih:FA58ACBFFFEB1A3C24BDF4346A9D93290DA5870A&dn=24.S01.FRENCH.DVDRiP.XviD-FiG0LU&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.ccc.de%3A80&tr=udp%3A%2F%2Ftracker.istole.it%3A80");
-        var lenght = "MjQuUzAxRTEyLkZSRU5DSC5EVkRSaVAuWHZpRC1GaUcwTFUuYXZp".Length;
-        //http://en.wikipedia.org/wiki/Magnet_URI_scheme
-       // BencodingUtils.EncodeBytes()
-      return tmp;
-      //BencodingUtils.Decode()
-    }
+    //[System.Web.Http.Route("index")]
+    //[System.Web.Http.HttpGet]
+    //public async Task<IEnumerable<KeyValuePair<string, string>>> TestDecodeFile()
+    //{
+    //  return await Tools.GetTorrentInfoAsync("http://www.omgtorrent.com/clic_dl.php?id=18911");
+    //}
 
   }
 }
