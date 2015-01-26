@@ -15,5 +15,7 @@ namespace XBMCPluginData.Models.Xbmc
     public string Sources { get; set; }
     [DataMember]
     public string Clients { get; set; }
+    [DataMember]
+    public bool IsSaison { get; set; }
   }
 }

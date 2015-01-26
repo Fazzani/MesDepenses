@@ -63,10 +63,46 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     public IEnumerable<Item> GetSaison(string serieName, int serieId, int saisonNumber)
     {
       HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, string.Empty, 0, OrderByEnum.Nom, OrderEnum.Desc, serieName, serieId, saisonNumber));
+      var saisonLink = Tools.TryGetValue<string>(() => FullUrl(doc.DocumentNode.SelectSingleNode("//p[@class='serie_saison']").Element("a").attribute("href").Value));
+
       return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
              .AsParallel()
-             .Select((item, epIndex) => GetTvEpisodeItem(item, serieName, saisonNumber, epIndex))
+             .Select((item, epIndex) => GetTvEpisodeItem(item, serieName, saisonNumber, epIndex, saisonLink))
              .Where(x => x != null);
+    }
+
+    /// <summary>
+    /// Get Media Container Html bloc
+    /// </summary>
+    /// <param name="node"></param>
+    /// <param name="serieName"></param>
+    /// <param name="saisonNumber"></param>
+    /// <param name="episodeNumber"></param>
+    /// <param name="saisonLink"></param>
+    /// <returns></returns>
+    private Item GetTvEpisodeItem(HtmlNode node, string serieName, int saisonNumber, int episodeNumber, string saisonLink)
+    {
+      try
+      {
+        var item = new Item { Is_playable = true, Properties = new Properties() };
+        item.Label = node.SelectSingleNode(".//td[2]").InnerText;
+        item.Label2 = item.Label;
+        if (!string.IsNullOrEmpty(saisonLink))
+        {
+          item.Properties.IsSaison = true;
+          item.Path = saisonLink;
+        }
+        else
+          item.Path = Tools.TryGetValue<string>(() => FullUrl(node.SelectSingleNode(".//td[4]").Element("a").attribute("href").Value));
+        //int episodeNumber = Convert.ToInt32(node.SelectSingleNode(".//td[2]").InnerText);
+        SetInfoTvSerie(item, serieName, saisonNumber, episodeNumber + 1);
+        return item;
+      }
+      catch (Exception ex)
+      {
+        Debug.WriteLine(ex.Message);
+      }
+      return null;
     }
 
     /// <summary>
@@ -304,33 +340,6 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       return null;
     }
 
-    /// <summary>
-    /// Get Media Container Html bloc
-    /// </summary>
-    /// <param name="node"></param>
-    /// <param name="serieName"></param>
-    /// <param name="saisonNumber"></param>
-    /// <param name="episodeNumber"></param>
-    /// <returns></returns>
-    private Item GetTvEpisodeItem(HtmlNode node, string serieName, int saisonNumber, int episodeNumber)
-    {
-      try
-      {
-        var item = new Item { Is_playable = true, Properties = new Properties() };
-        item.Label = node.SelectSingleNode(".//td[2]").InnerText;
-        item.Label2 = item.Label;
-        item.Path = FullUrl(node.SelectSingleNode(".//td[4]").Element("a").attribute("href").Value);
-        //int episodeNumber = Convert.ToInt32(node.SelectSingleNode(".//td[2]").InnerText);
-        SetInfoTvSerie(item, serieName, saisonNumber, episodeNumber + 1);
-        return item;
-      }
-      catch (Exception ex)
-      {
-        Debug.WriteLine(ex.Message);
-      }
-      return null;
-    }
-
     private void SetInfoTvSerie(Item item, Dictionary<string, string> infosplus)
     {
       item.Properties = new Properties();
@@ -342,7 +351,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         {
           item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
           item.Properties.Clients = Tools.TryGetValue(() => infosplus["Clients"]);
-          item.Properties.Sources = Tools.TryGetValue(() =>infosplus["Sources"]);
+          item.Properties.Sources = Tools.TryGetValue(() => infosplus["Sources"]);
           //item.Label2 = res.Results.FirstOrDefault().OriginalName;
           item.Icon = Tools.TryGetValue(() => string.Concat(TmdbConfig.ImageSmallBaseUrl,
               res.Results.FirstOrDefault().PosterPath));
