@@ -15,7 +15,7 @@
     <AssemblyName>XBMCPluginData</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -58,6 +58,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Torrent">
+      <HintPath>..\packages\System.Net.Torrent.0.2.1\lib\net40\System.Net.Torrent.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web.Entity" />
@@ -224,6 +227,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\TmdbConfig.cs" />
+    <Compile Include="Helpers\Tools.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -232,6 +236,7 @@
     <Compile Include="Models\Xbmc\InfoTypedItems\InfoMovie.cs" />
     <Compile Include="Models\Xbmc\InfoTypedItems\InfoMusic.cs" />
     <Compile Include="Models\Xbmc\InfoTypedItems\InfoPicture.cs" />
+    <Compile Include="Models\Xbmc\InfoTypedItems\InfoTvShow.cs" />
     <Compile Include="Models\Xbmc\Item.cs" />
     <Compile Include="Models\Xbmc\Properties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -299,6 +304,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Test\24 heures chrono S01 FRENCH DVDRip XviD [www.OMGTORRENT.com].torrent" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -328,7 +334,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1307</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1307/</IISUrl>
+          <IISUrl>http://localhost/XBMCPluginData</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

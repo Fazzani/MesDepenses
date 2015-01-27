@@ -11,5 +11,9 @@ namespace XBMCPluginData.Models.Xbmc
   {
     [DataMember]
     public string Fanart_image { get; set; }
+    [DataMember]
+    public string Sources { get; set; }
+    [DataMember]
+    public string Clients { get; set; }
   }
 }
