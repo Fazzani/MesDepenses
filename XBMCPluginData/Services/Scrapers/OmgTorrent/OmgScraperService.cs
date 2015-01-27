@@ -89,7 +89,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         item.Label2 = item.Label;
         if (!string.IsNullOrEmpty(saisonLink))
         {
-          item.Properties.IsSaison = true;
+          item.Properties.IsSaison = "1";
           item.Path = saisonLink;
         }
         else
@@ -319,8 +319,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
             var res = TMDbClient.SearchMovie(infos.Label);
             if (res.TotalResults > 0)
             {
-              item.Properties.Clients = Tools.TryGetValue(() => infoplus["Clients"]);
-              item.Properties.Sources = Tools.TryGetValue(() => infoplus["Sources"]);
+              item.Properties.Clients = Tools.TryGetValue(() => infoplus["Clients"], "0");
+              item.Properties.Sources = Tools.TryGetValue(() => infoplus["Sources"], "0");
               item.CompleteInfo(TMDbClient.GetMovie(res.Results.FirstOrDefault().Id, "fr"));
               item.Label2 = Tools.TryGetValue(() => res.Results.FirstOrDefault().OriginalTitle);
               //item.IconImage = string.Concat(TmdbConfig.ImageSmallBaseUrl, res.Results.FirstOrDefault().PosterPath);
@@ -350,8 +350,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         if (res.TotalResults > 0)
         {
           item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
-          item.Properties.Clients = Tools.TryGetValue(() => infosplus["Clients"]);
-          item.Properties.Sources = Tools.TryGetValue(() => infosplus["Sources"]);
+          item.Properties.Clients = Tools.TryGetValue(() => infosplus["Clients"], "0");
+          item.Properties.Sources = Tools.TryGetValue(() => infosplus["Sources"], "0");
           //item.Label2 = res.Results.FirstOrDefault().OriginalName;
           item.Icon = Tools.TryGetValue(() => string.Concat(TmdbConfig.ImageSmallBaseUrl,
               res.Results.FirstOrDefault().PosterPath));

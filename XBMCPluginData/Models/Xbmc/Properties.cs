@@ -9,13 +9,28 @@ namespace XBMCPluginData.Models.Xbmc
   [DataContract]
   public class Properties
   {
+    string _sources = "0";
+    string _clients = "0";
+    string isSaison = "0";
     [DataMember]
     public string Fanart_image { get; set; }
     [DataMember]
-    public string Sources { get; set; }
+    public string Sources
+    {
+      get { return _sources; }
+      set { _sources = value; }
+    }
     [DataMember]
-    public string Clients { get; set; }
+    public string Clients
+    {
+      get { return _clients; }
+      set { _clients = value; }
+    }
     [DataMember]
-    public bool IsSaison { get; set; }
+    public string IsSaison
+    {
+      get { return isSaison; }
+      set { isSaison = value; }
+    }
   }
 }

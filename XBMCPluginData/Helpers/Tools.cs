@@ -23,6 +23,17 @@ namespace XBMCPluginData.Helpers
       }
       return default(T);
     }
+    public static T TryGetValue<T>(Func<T> func, T defaultValue)
+    {
+      try
+      {
+        return func();
+      }
+      catch (Exception)
+      {
+      }
+      return defaultValue;
+    }
 
     public static async Task<IEnumerable<KeyValuePair<string, string>>> GetTorrentInfoAsync(string uri)
     {
