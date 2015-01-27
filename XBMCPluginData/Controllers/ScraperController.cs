@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Torrent;
 using System.Net.Torrent.BEncode;
 using System.Threading.Tasks;
 using System.Web;
@@ -125,6 +126,13 @@ namespace XBMCPluginData.Controllers
       var res = BencodingUtils.Decode(bytes)as BDict;
       var infos = (res.SingleOrDefault(x => x.Key == "info").Value as BDict).FirstOrDefault().Value;
       var tmp = (infos as BList).Select(x => x).Cast<BDict>().Select(x => new { Label = x.FirstOrDefault(k => k.Key == "path").Value, size = x.FirstOrDefault(k => k.Key == "length").Value });
+        Metadata meta = new Metadata(new MemoryStream(bytes));
+        var magnetLinkMeta =
+            MagnetLink.ResolveToMetadata(
+                "magnet:?xt=urn:btih:FA58ACBFFFEB1A3C24BDF4346A9D93290DA5870A&dn=24.S01.FRENCH.DVDRiP.XviD-FiG0LU&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.ccc.de%3A80&tr=udp%3A%2F%2Ftracker.istole.it%3A80");
+        var lenght = "MjQuUzAxRTEyLkZSRU5DSC5EVkRSaVAuWHZpRC1GaUcwTFUuYXZp".Length;
+        //http://en.wikipedia.org/wiki/Magnet_URI_scheme
+       // BencodingUtils.EncodeBytes()
       return tmp;
       //BencodingUtils.Decode()
     }
