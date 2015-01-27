@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleApplication.VistorPattern;
 using MesDepensesServices.DAL;
 
 namespace ConsoleApplication
@@ -21,12 +23,16 @@ namespace ConsoleApplication
             //    Console.WriteLine(string.Format("traitement de la chaine {0}", s));
             //    Console.WriteLine(Common.GetPatternUrl(s));
             //}
-            using (var repository = new MesdepensesContext())
-            {
-                var tmp = repository.Categories.Count();
-                Console.WriteLine(tmp);
-            }
 
+
+            //using (var repository = new MesdepensesContext())
+            //{
+            //    var tmp = repository.Categories.Count();
+            //    Console.WriteLine(tmp);
+            //}
+            var p = new ExpressionPrinter(Console.Out);
+            Expression<Func<int, int>> e = i => (0 == i % 2) ? -i * i : Math.Abs(i);
+            p.Print(e.Body);
             Console.ReadKey();
         }
     }
