@@ -12,7 +12,8 @@ namespace XBMCPluginData.Services.Scrapers
         //Revenge S04E05 FASTSUB VOSTFR HDTV XviD
         private const string tvRegex = @"^(.*)S(?<season>\d{1,2})E(?<episode>\d{1,2})(.*)$";
         //10 bonnes raisons de te larguer FRENCH DVDRip XviD-NoTag
-        private const string movieRegex = @"^(.*?)(dvdrip|xvid| cd[0-9]|dvdscr|brrip|divx|[\{\(\[]?[0-9]{4}).*$";
+        private const string movieRegex = @"^(.*?)(STV|FRENCH|dvdrip|(?:XviD-?(?:.*))|cd[0-9]|dvdscr|brrip|divx|[\{\(\[]?[0-9]{4}).*$";
+        private const string dateRegex = @"^\w* ([0-9]{4} )+.*$";
         /// <summary>
         /// Get Tv série Info From Torrent Name
         /// </summary>
@@ -32,7 +33,7 @@ namespace XBMCPluginData.Services.Scrapers
                     SaisonNumber = Convert.ToInt32(match.Groups["season"].Value)
                 };
             }
-            return new InfoFromTorrentName{Label = torrentName};
+            return new InfoFromTorrentName { Label = torrentName };
         }
 
         /// <summary>
@@ -43,12 +44,20 @@ namespace XBMCPluginData.Services.Scrapers
         public static InfoFromTorrentName GetMovieInfoFromTorrentName(string torrentName)
         {
             Regex reg = new Regex(movieRegex);
-            var match = reg.Match(torrentName);
-            if (match.Success)
+            var matchLabel = reg.Match(torrentName);
+            if (matchLabel.Success)
             {
+                reg = new Regex(dateRegex);
+                var matchDate = reg.Match(torrentName);
+                if (!matchDate.Success)
+                    return new InfoFromTorrentName
+                    {
+                        Label = matchLabel.Groups[1].Value,
+                    };
                 return new InfoFromTorrentName
                 {
-                    Label = match.Groups[1].Value,
+                    Label = matchLabel.Groups[1].Value,
+                    Year = Int32.Parse(matchDate.Groups[1].Value)
                 };
             }
             return new InfoFromTorrentName { Label = torrentName };
@@ -61,6 +70,7 @@ namespace XBMCPluginData.Services.Scrapers
         public int SaisonNumber { get; set; }
         public int EpisodeNumber { get; set; }
         public string Quality { get; set; }
+        public int Year { get; set; }
     }
 
 }

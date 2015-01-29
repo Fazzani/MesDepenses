@@ -14,11 +14,21 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
 {
     public class OmgScraperService : AbstractScraper
     {
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="url"></param>
         public OmgScraperService(string url)
             : base(url)
         {
         }
 
+        /// <summary>
+        /// Search
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public IEnumerable<Item> Search(string query, int page)
         {
             HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, query, page, OrderByEnum.Nom));
@@ -242,7 +252,18 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                 var iconPath = Tools.TryGetValue(() => x.Element("img").attribute("src").Value);
                 item.Icon = iconPath.Contains("http") ? iconPath : FullUrl(iconPath);
                 item.Thumbnail = item.Icon;
-                SetInfoTvSerie(item, null);
+                var infosplus = new Dictionary<string, string>
+                {
+                    {
+                        "TvSerieId",
+                        GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value))
+                    },
+                    {
+                        "SaisonCount", 
+                        x.SelectNodes(".//p[2]/a").Count.ToString()
+                    }
+                };
+                SetInfoTvSerie(item, infosplus);
                 item.Label2 = Tools.TryGetValue(() => string.Format("{0}={1}={2}", item.Label, GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)), x.SelectNodes(".//p[2]/a").Count));
                 return item;
             }
@@ -262,8 +283,12 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         {
             try
             {
-                var item = new Item { Is_playable = true, Properties = new Properties() };
-                item.Label = node.SelectSingleNode(".//td[2]").Element("a").InnerText;
+                var item = new Item
+                {
+                    Is_playable = true,
+                    Properties = new Properties(),
+                    Label = node.SelectSingleNode(".//td[2]").Element("a").InnerText
+                };
                 item.Label2 = item.Label;
                 item.Path = FullUrl(node.SelectSingleNode(".//td[6]").Element("a").attribute("href").Value);
                 var infoplus = new Dictionary<string, string>
@@ -291,7 +316,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                     var infos = TorrentHelper.GetMovieInfoFromTorrentName(item.Label);
                     if (infos != null)
                     {
-                        var res = TMDbClient.SearchMovie(infos.Label);
+                        var res = infos.Year > 0 ? TMDbClient.SearchMovie(infos.Label, infos.Year) : TMDbClient.SearchMovie(infos.Label);
                         if (res.TotalResults > 0)
                         {
                             item.Properties.Clients = Tools.TryGetValue(() => infoplus["Clients"], "0");
@@ -301,11 +326,9 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                             //item.IconImage = string.Concat(TmdbConfig.ImageSmallBaseUrl, res.Results.FirstOrDefault().PosterPath);
                             item.Thumbnail = Tools.TryGetValue(() => string.Concat(TmdbConfig.ImageLargeBaseUrl,
                                 res.Results.FirstOrDefault().PosterPath));
-
                         }
                     }
                 }
-
                 return item;
             }
             catch (Exception)
@@ -315,6 +338,11 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
             return null;
         }
 
+        /// <summary>
+        /// Set Info TvSerie
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="infosplus"></param>
         private void SetInfoTvSerie(Item item, Dictionary<string, string> infosplus)
         {
             item.Properties = new Properties();
@@ -327,6 +355,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                     item.CompleteInfo(TMDbClient.GetTvShow(res.Results.FirstOrDefault().Id, language: "fr"), infos.SaisonNumber, infos.EpisodeNumber);
                     item.Properties.Clients = Tools.TryGetValue(() => infosplus["Clients"], "0");
                     item.Properties.Sources = Tools.TryGetValue(() => infosplus["Sources"], "0");
+                    item.Properties.TvSerieId = Tools.TryGetValue(() => infosplus["TvSerieId"], "0");
+                    item.Properties.SaisonCount = Tools.TryGetValue(() => infosplus["SaisonCount"], "0");
                     //item.Label2 = res.Results.FirstOrDefault().OriginalName;
                     item.Icon = Tools.TryGetValue(() => string.Concat(TmdbConfig.ImageSmallBaseUrl,
                         res.Results.FirstOrDefault().PosterPath));

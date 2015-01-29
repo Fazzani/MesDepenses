@@ -13,7 +13,7 @@ namespace XBMCPluginData.Controllers
     public class ScraperController : ApiController
     {
         /// <summary>
-        /// Index
+        /// Index ex: http://localhost:1307/scraper/omg/search/men/1
         /// </summary>
         /// <param name="site"></param>
         /// <param name="query"></param>
