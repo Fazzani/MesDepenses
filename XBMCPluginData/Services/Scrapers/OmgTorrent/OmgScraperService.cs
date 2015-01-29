@@ -36,10 +36,15 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
             }
             try
             {
-                return items.Union(doc.DocumentNode.SelectNodes("//div[@class='cadre']")
-                          .AsParallel()
-                          .Select(GetMediaItemSerieBlock)
-                          .Where(x => x != null));
+                if (items != null)
+                    return items.Union(doc.DocumentNode.SelectNodes("//div[@class='cadre']")
+                        .AsParallel()
+                        .Select(GetMediaItemSerieBlock)
+                        .Where(x => x != null));
+                return doc.DocumentNode.SelectNodes("//div[@class='cadre']")
+                        .AsParallel()
+                        .Select(GetMediaItemSerieBlock)
+                        .Where(x => x != null);
             }
             catch (Exception)
             {
