@@ -21,7 +21,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
 
         public IEnumerable<Item> Search(string query, int page)
         {
-            HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, query, page, OrderByEnum.Nom, OrderEnum.Desc));
+            HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, query, page, OrderByEnum.Nom));
             ParallelQuery<Item> items = null;
             try
             {
@@ -30,9 +30,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                       .Select(GetMediaItemRow)
                       .Where(x => x != null);
             }
-            catch (Exception)
+            catch
             {
-
             }
             try
             {
@@ -46,7 +45,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                         .Select(GetMediaItemSerieBlock)
                         .Where(x => x != null);
             }
-            catch (Exception)
+            catch
             {
 
             }
