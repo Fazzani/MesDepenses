@@ -21,21 +21,6 @@ namespace XBMCPluginData.Controllers
     public class ScraperController : ApiController
     {
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="site"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        [System.Web.Http.Route("index/{site}/{path}", Order = 1)]
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Item> Index(string site, string path = "")
-        {
-            if (site != "omg") return null;
-            var scraperService = new OmgScraperService(ConfigurationManager.AppSettings[site]);
-            return scraperService.ListTorrents(null);
-        }
-
-        /// <summary>
         /// Index
         /// </summary>
         /// <param name="site"></param>
