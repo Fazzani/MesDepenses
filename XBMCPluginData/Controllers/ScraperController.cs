@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Torrent;
-using System.Net.Torrent.BEncode;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using XBMCPluginData.Helpers;
 using XBMCPluginData.Models.Xbmc;
 using XBMCPluginData.Services.Scrapers.OmgTorrent;
 
@@ -107,13 +99,6 @@ namespace XBMCPluginData.Controllers
 
             return scraperService.ListTorrents(filters, category, path, page, orderBy, order);
         }
-
-        //[System.Web.Http.Route("index")]
-        //[System.Web.Http.HttpGet]
-        //public async Task<IEnumerable<KeyValuePair<string, string>>> TestDecodeFile()
-        //{
-        //  return await Tools.GetTorrentInfoAsync("http://www.omgtorrent.com/clic_dl.php?id=18911");
-        //}
 
     }
 }
