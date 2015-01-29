@@ -21,8 +21,10 @@ namespace XBMCPluginData.Controllers
   public class ScraperController : ApiController
   {
     /// <summary>
-    /// GET api/values
+    /// 
     /// </summary>
+    /// <param name="site"></param>
+    /// <param name="path"></param>
     /// <returns></returns>
     [System.Web.Http.Route("index/{site}/{path}", Order = 1)]
     [System.Web.Http.HttpGet]
@@ -37,8 +39,11 @@ namespace XBMCPluginData.Controllers
     }
 
     /// <summary>
-    /// GET api/values
+    /// Index
     /// </summary>
+    /// <param name="site"></param>
+    /// <param name="query"></param>
+    /// <param name="page"></param>
     /// <returns></returns>
     [System.Web.Http.Route("{site}/search/{query}/{page}", Order = 2)]
     [System.Web.Http.HttpGet]
@@ -53,8 +58,12 @@ namespace XBMCPluginData.Controllers
     }
 
     /// <summary>
-    /// GET api/values #http://localhost:1307/scraper/omg/series/Elementary/2/1
+    /// GET ex: http://localhost:1307/scraper/omg/series/Elementary/2/1
     /// </summary>
+    /// <param name="site"></param>
+    /// <param name="serieName"></param>
+    /// <param name="serieId"></param>
+    /// <param name="saisonNumber"></param>
     /// <returns></returns>
     [System.Web.Http.Route("{site}/series_all/{serieName}/{serieId:int}/{saisonNumber:int}", Order = 3)]
     [System.Web.Http.HttpGet]
@@ -69,8 +78,14 @@ namespace XBMCPluginData.Controllers
     }
 
     /// <summary>
-    /// GET api/values
+    /// List
     /// </summary>
+    /// <param name="site"></param>
+    /// <param name="formatfilters"></param>
+    /// <param name="path"></param>
+    /// <param name="page"></param>
+    /// <param name="orderBy"></param>
+    /// <param name="order"></param>
     /// <returns></returns>
     [System.Web.Http.Route("{site}/{path}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}", Order = 4)]
     [OutputCache(Duration = 10000, VaryByParam = "site;path;category;page;orderBy")]
@@ -93,8 +108,15 @@ namespace XBMCPluginData.Controllers
     }
 
     /// <summary>
-    /// GET api/values
+    /// List
     /// </summary>
+    /// <param name="site"></param>
+    /// <param name="category"></param>
+    /// <param name="formatfilters"></param>
+    /// <param name="path"></param>
+    /// <param name="page"></param>
+    /// <param name="orderBy"></param>
+    /// <param name="order"></param>
     /// <returns></returns>
     [System.Web.Http.Route("{site}/{path}/{category}/{page:int:min(1)?}/{orderBy:int?}/{order:int?}", Order = 5)]
     [OutputCache(Duration = 10000, VaryByParam = "site;path;category;page;orderBy")]
