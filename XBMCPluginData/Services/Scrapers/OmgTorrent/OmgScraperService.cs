@@ -247,8 +247,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         {
             try
             {
-                var item = new Item { Is_playable = false };
-                item.Label = x.Element("h1").InnerText;
+                var item = new Item {Is_playable = false, Label = x.Element("h1").InnerText};
                 var iconPath = Tools.TryGetValue(() => x.Element("img").attribute("src").Value);
                 item.Icon = iconPath.Contains("http") ? iconPath : FullUrl(iconPath);
                 item.Thumbnail = item.Icon;
@@ -264,7 +263,9 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                     }
                 };
                 SetInfoTvSerie(item, infosplus);
-                item.Label2 = Tools.TryGetValue(() => string.Format("{0}={1}={2}", item.Label, GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)), x.SelectNodes(".//p[2]/a").Count));
+                //TODO: In python 
+                //item.Label2 = Tools.TryGetValue(() => string.Format("{0}={1}={2}", item.Label, GetTvSerieId(FullUrl(x.SelectSingleNode(".//p[2]").Element("a").attribute("href").Value)), x.SelectNodes(".//p[2]/a").Count));
+                item.Label2 = infosplus["SaisonCount"];
                 return item;
             }
             catch (Exception)
