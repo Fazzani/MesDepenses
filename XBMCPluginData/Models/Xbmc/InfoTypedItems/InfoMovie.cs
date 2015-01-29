@@ -52,12 +52,12 @@ trailer: string (/home/user/trailer.avi)
     public int Season { get; set; }
     [DataMember]
     public int Top250 { get; set; }
-    [DataMember]
-    public int Tracknumber { get; set; }
+    //[DataMember]
+    //public int Tracknumber { get; set; }
     [DataMember]
     public float Rating { get; set; }
-    [DataMember]
-    public int Playcount { get; set; }
+    //[DataMember]
+    //public int Playcount { get; set; }
     [DataMember]
     public int Overlay { get; set; }
     [DataMember]
@@ -80,8 +80,8 @@ trailer: string (/home/user/trailer.avi)
     public string Tagline { get; set; }
     [DataMember]
     public string Writer { get; set; }
-    [DataMember]
-    public string Tvshowtitle { get; set; }
+    //[DataMember]
+    //public string Tvshowtitle { get; set; }
     [DataMember]
     public string Status { get; set; }
     [DataMember]
@@ -100,10 +100,10 @@ trailer: string (/home/user/trailer.avi)
     }
     [DataMember]
     public string Credits { get; set; }
-    [DataMember]
-    public string Lastplayed { get; set; }
-    [DataMember]
-    public string Album { get; set; }
+    //[DataMember]
+    //public string Lastplayed { get; set; }
+    //[DataMember]
+    //public string Album { get; set; }
     [DataMember]
     public string Votes { get; set; }
     [DataMember]

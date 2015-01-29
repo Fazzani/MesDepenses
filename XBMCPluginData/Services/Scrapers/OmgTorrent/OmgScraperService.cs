@@ -59,7 +59,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         public IEnumerable<Item> GetSaison(string serieName, int serieId, int saisonNumber)
         {
             HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, string.Empty, 0, OrderByEnum.Nom, OrderEnum.Desc, serieName, serieId, saisonNumber));
-            var saisonLink = Tools.TryGetValue<string>(() => FullUrl(doc.DocumentNode.SelectSingleNode("//p[@class='serie_saison']").Element("a").attribute("href").Value));
+            var saisonLink = Tools.TryGetValue(() => FullUrl(doc.DocumentNode.SelectSingleNode("//p[@class='serie_saison']").Element("a").attribute("href").Value));
 
             return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
                    .AsParallel()
@@ -332,16 +332,17 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
                         res.Results.FirstOrDefault().PosterPath));
                 }
                 else
-                    item.Info = new InfoMovie { Tvshowtitle = item.Label };
+                    item.Info = new InfoTvShow { Tvshowtitle = item.Label };
             }
             else
-                item.Info = new InfoMovie { Tvshowtitle = item.Label };
+                item.Info = new InfoTvShow { Tvshowtitle = item.Label };
         }
 
         /// <summary>
         /// Set Info TvSerie
         /// </summary>
         /// <param name="item"></param>
+        /// <param name="serieName"></param>
         /// <param name="saisonNumber"></param>
         /// <param name="episodeNumber"></param>
         private void SetInfoTvSerie(Item item, string serieName, int saisonNumber, int episodeNumber)

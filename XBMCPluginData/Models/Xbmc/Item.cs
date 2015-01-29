@@ -57,7 +57,7 @@ namespace XBMCPluginData.Models.Xbmc
     public void CompleteInfo(TvEpisode tvEpisode)
     {
       if (!string.IsNullOrEmpty(tvEpisode.Name))
-        Info = new InfoMovie
+          Info = new InfoTvShow
         {
           Duration = "45",
           Tvshowtitle = tvEpisode.Name,
