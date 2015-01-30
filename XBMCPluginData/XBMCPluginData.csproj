@@ -235,6 +235,7 @@
     </Compile>
     <Compile Include="Helpers\TmdbConfig.cs" />
     <Compile Include="Helpers\Tools.cs" />
+    <Compile Include="Hubs\HubManager.cs" />
     <Compile Include="Hubs\LoggerHub.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

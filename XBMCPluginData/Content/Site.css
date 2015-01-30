@@ -15,3 +15,19 @@ select,
 textarea {
     max-width: 280px;
 }
+/*Error Level*/
+.level0 {
+    color: red;
+}
+/*Warning Level*/
+.level1 {
+    color: goldenrod;
+}
+/*Info Level*/
+.level2 {
+    color: cornflowerblue;
+}
+/*Debug Level*/
+.level3 {
+    color: lightgray;
+}
