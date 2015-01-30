@@ -11,7 +11,7 @@ namespace XBMCPluginData.Models.Xbmc
     {
         string _sources = "0";
         string _clients = "0";
-        string isSaison = "0";
+        string _isSaison = "0";
         [DataMember]
         public string Fanart_image { get; set; }
         [DataMember]
@@ -29,8 +29,8 @@ namespace XBMCPluginData.Models.Xbmc
         [DataMember]
         public string IsSaison
         {
-            get { return isSaison; }
-            set { isSaison = value; }
+            get { return _isSaison; }
+            set { _isSaison = value; }
         }
         [DataMember]
         public string TvSerieId
@@ -44,6 +44,20 @@ namespace XBMCPluginData.Models.Xbmc
         {
             get;
             set;
+        }
+
+        [DataMember]
+        public string Label
+        {
+          get;
+          set;
+        }
+
+        [DataMember]
+        public string TorrentFileName
+        {
+          get;
+          set;
         }
     }
 }

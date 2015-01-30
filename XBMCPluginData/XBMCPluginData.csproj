@@ -252,7 +252,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Services\Scrapers\AbstractScraper.cs" />
     <Compile Include="Services\Scrapers\OmgTorrent\OmgScraperService.cs" />
-    <Compile Include="Services\Scrapers\TorrentHelper.cs" />
+    <Compile Include="Helpers\TorrentHelper.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
