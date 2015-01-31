@@ -106,6 +106,8 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         {
           item.Properties.IsSaison = "1";
           item.Path = saisonLink;
+          item.Properties.TvShowName = serieName;
+          item.Properties.SaisonNumber = saisonNumber;
         }
         else
           item.Path = Tools.TryGetValue(() => FullUrl(node.SelectSingleNode(".//td[4]").Element("a").attribute("href").Value));

@@ -59,5 +59,19 @@ namespace XBMCPluginData.Models.Xbmc
           get;
           set;
         }
+
+        [DataMember]
+        public string TvShowName
+        {
+          get;
+          set;
+        }
+
+        [DataMember]
+        public int SaisonNumber
+        {
+          get;
+          set;
+        }
     }
 }
