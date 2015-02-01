@@ -12,6 +12,7 @@ namespace XBMCPluginData.Models.Xbmc
         string _sources = "0";
         string _clients = "0";
         string _isSaison = "0";
+        string _saisonNumber = "0";
         [DataMember]
         public string Fanart_image { get; set; }
         [DataMember]
@@ -68,10 +69,17 @@ namespace XBMCPluginData.Models.Xbmc
         }
 
         [DataMember]
-        public int SaisonNumber
+        public string SaisonLabel
         {
           get;
           set;
+        }
+
+        [DataMember]
+        public string SaisonNumber
+        {
+          get { return _saisonNumber; }
+          set { _saisonNumber = value; }
         }
     }
 }

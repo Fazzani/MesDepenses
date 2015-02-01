@@ -59,7 +59,6 @@ namespace XBMCPluginData.Models.Xbmc
       if (!string.IsNullOrEmpty(tvEpisode.Name))
           Info = new InfoTvShow
         {
-          Duration = "45",
           Tvshowtitle = tvEpisode.Name,
           Season = Tools.TryGetValue(() => tvEpisode.SeasonNumber.Value),
           Episode = tvEpisode.EpisodeNumber,
@@ -93,7 +92,6 @@ namespace XBMCPluginData.Models.Xbmc
         Studio = Tools.TryGetValue(() => movie.ProductionCompanies.Select(x => x.Name).Aggregate((x, y) => string.Format("{0} {1}", x, y))),
         Rating = Tools.TryGetValue(() => (float)movie.Popularity),
         Code = movie.ImdbId,
-        Duration = "45",
       };
     }
 

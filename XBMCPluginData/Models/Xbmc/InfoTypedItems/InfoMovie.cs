@@ -72,8 +72,8 @@ trailer: string (/home/user/trailer.avi)
     public string Title { get; set; }
     [DataMember]
     public string Originaltitle { get; set; }
-    [DataMember]
-    public string Duration { get; set; }
+    //[DataMember]
+    //public string Duration { get; set; }
     [DataMember]
     public string Studio { get; set; }
     [DataMember]

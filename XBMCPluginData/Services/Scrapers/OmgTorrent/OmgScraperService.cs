@@ -75,7 +75,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, string.Empty, 0, OrderByEnum.Nom, OrderEnum.Desc, serieName, serieId, saisonNumber));
       var saisonLink = Tools.TryGetValue(() => FullUrl(doc.DocumentNode.SelectSingleNode("//p[@class='serie_saison']").Element("a").attribute("href").Value));
       var torrentInfo = TorrentHelper.GetTorrentInfoAsync(saisonLink);
-      var KeyInfosTorrents = torrentInfo.Select(x => new System.Collections.Generic.KeyValuePair<string, InfoFromTorrentName>(x.Key, TorrentHelper.GetTvInfoFromTorrentName(x.Key)));
+      var KeyInfosTorrents = torrentInfo.Item2.Select(x => new System.Collections.Generic.KeyValuePair<string, InfoFromTorrentName>(x.Key, TorrentHelper.GetTvInfoFromTorrentName(x.Key, torrentInfo.Item1)));
       return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
              .AsParallel()
              .Select((item, epIndex) => GetTvEpisodeItem(item, serieName, saisonNumber, epIndex, saisonLink, KeyInfosTorrents))
@@ -95,10 +95,11 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
     {
       try
       {
+        var torrentEpInfo = KeyInfosTorrents.FirstOrDefault(x => x.Value.EpisodeNumber == episodeNumber);
         var item = new Item
         {
           Is_playable = true,
-          Properties = new Properties { TorrentFileName = KeyInfosTorrents.FirstOrDefault(x => x.Value.EpisodeNumber == episodeNumber).Key },
+          Properties = new Properties { TorrentFileName = torrentEpInfo.Key, SaisonLabel=torrentEpInfo.Value.SaisonLabel },
           Label = node.SelectSingleNode(".//td[2]").InnerText
         };
         item.Label2 = item.Label;
@@ -107,7 +108,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
           item.Properties.IsSaison = "1";
           item.Path = saisonLink;
           item.Properties.TvShowName = serieName;
-          item.Properties.SaisonNumber = saisonNumber;
+          item.Properties.SaisonNumber = saisonNumber.ToString();
         }
         else
           item.Path = Tools.TryGetValue(() => FullUrl(node.SelectSingleNode(".//td[4]").Element("a").attribute("href").Value));
