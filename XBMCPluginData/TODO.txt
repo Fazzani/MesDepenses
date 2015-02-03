@@ -15,3 +15,24 @@
 - Tv Série épisodes
 
 
+Les Spec
+----------
+
+- List Movies => (Dvdrip, 1080p, 720p, Vostfr, fr,...)
+	
+- List TvShows => 
+	- Saison
+		or
+	- Episodes
+- Both (Movies & épisodes)
+
+
+I- Infos torrent
+-----------------
+	Ajout une fonction qui permet de récupérer les infos du torrent en décodant le fichier torrent. Elle sera appelée à la demande avant de jouer le torrent généralement.
+II- Group By Name
+-----------------
+	- Distinct By TMdb Name
+	- Renvoyer une liste avec les différents formats 
+	- Ajouter une fonction qui va récupérer les différents formats pour un lien donné
+

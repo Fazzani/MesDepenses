@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Mvc;
+using XBMCPluginData.Helpers;
 using XBMCPluginData.Models.Xbmc;
 using XBMCPluginData.Services.Scrapers.OmgTorrent;
 
