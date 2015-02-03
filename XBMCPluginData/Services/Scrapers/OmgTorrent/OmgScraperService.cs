@@ -9,7 +9,6 @@ using FluentSharp.HtmlAgilityPacK;
 using XBMCPluginData.Models.Xbmc;
 using XBMCPluginData.Models.Xbmc.InfoTypedItems;
 using XBMCPluginData.Helpers;
-using System.Threading.Tasks;
 
 namespace XBMCPluginData.Services.Scrapers.OmgTorrent
 {
@@ -75,27 +74,28 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, string.Empty, 0, OrderByEnum.Nom, OrderEnum.Desc, serieName, serieId, saisonNumber));
       var saisonLink = Tools.TryGetValue(() => FullUrl(doc.DocumentNode.SelectSingleNode("//p[@class='serie_saison']").Element("a").attribute("href").Value));
       var torrentInfo = TorrentHelper.GetTorrentInfoAsync(saisonLink);
-      var KeyInfosTorrents = torrentInfo.Item2.Select(x => new System.Collections.Generic.KeyValuePair<string, InfoFromTorrentName>(x.Key, TorrentHelper.GetTvInfoFromTorrentName(x.Key, torrentInfo.Item1)));
+      var keyInfosTorrents = torrentInfo.Item2.Select(x => new KeyValuePair<string, InfoFromTorrentName>(x.Key, TorrentHelper.GetTvInfoFromTorrentName(x.Key, torrentInfo.Item1)));
       return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
              .AsParallel()
-             .Select((item, epIndex) => GetTvEpisodeItem(item, serieName, saisonNumber, epIndex, saisonLink, KeyInfosTorrents))
+             .Select((item, epIndex) => GetTvEpisodeItem(item, serieName, saisonNumber, epIndex, saisonLink, keyInfosTorrents))
              .Where(x => x != null);
     }
 
-    /// <summary>
-    /// Get Media Container Html bloc
-    /// </summary>
-    /// <param name="node"></param>
-    /// <param name="serieName"></param>
-    /// <param name="saisonNumber"></param>
-    /// <param name="episodeNumber"></param>
-    /// <param name="saisonLink"></param>
-    /// <returns></returns>
-    private Item GetTvEpisodeItem(HtmlNode node, string serieName, int saisonNumber, int episodeNumber, string saisonLink, IEnumerable<KeyValuePair<string, InfoFromTorrentName>> KeyInfosTorrents)
+      /// <summary>
+      /// Get Media Container Html bloc
+      /// </summary>
+      /// <param name="node"></param>
+      /// <param name="serieName"></param>
+      /// <param name="saisonNumber"></param>
+      /// <param name="episodeNumber"></param>
+      /// <param name="saisonLink"></param>
+      /// <param name="keyInfosTorrents"></param>
+      /// <returns></returns>
+      private Item GetTvEpisodeItem(HtmlNode node, string serieName, int saisonNumber, int episodeNumber, string saisonLink, IEnumerable<KeyValuePair<string, InfoFromTorrentName>> keyInfosTorrents)
     {
       try
       {
-        var torrentEpInfo = KeyInfosTorrents.FirstOrDefault(x => x.Value.EpisodeNumber == episodeNumber);
+        var torrentEpInfo = keyInfosTorrents.FirstOrDefault(x => x.Value.EpisodeNumber == episodeNumber);
         var item = new Item
         {
           Is_playable = true,
