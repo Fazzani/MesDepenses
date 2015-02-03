@@ -99,7 +99,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
         var item = new Item
         {
           Is_playable = true,
-          Properties = new Properties { TorrentFileName = torrentEpInfo.Key, SaisonLabel=torrentEpInfo.Value.SaisonLabel },
+          Properties = new Properties { TorrentFileName = torrentEpInfo.Key, TorrentName=torrentEpInfo.Value.SaisonLabel },
           Label = node.SelectSingleNode(".//td[2]").InnerText
         };
         item.Label2 = item.Label;
