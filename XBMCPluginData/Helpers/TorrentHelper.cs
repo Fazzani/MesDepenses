@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
-using System.IO;
 using System.Net;
-using System.Net.Torrent;
 using System.Net.Torrent.BEncode;
-using System.Threading.Tasks;
 
 namespace XBMCPluginData.Helpers
 {
@@ -84,7 +80,7 @@ namespace XBMCPluginData.Helpers
       var res = BencodingUtils.Decode(bytes) as BDict;
       var infos = res.SingleOrDefault(x => x.Key == "info").Value as BDict;
       var name = infos.FirstOrDefault(x => x.Key == "name").Value.ToString();
-      var files = (infos.FirstOrDefault().Value as BList).Select(x => x).Cast<BDict>().Select(x => new System.Collections.Generic.KeyValuePair<string, string>((x.FirstOrDefault(k => k.Key == "path").Value as BList)[0].ToString(), x.FirstOrDefault(k => k.Key == "length").Value.ToString()));
+      var files = (infos.FirstOrDefault().Value as BList).Select(x => x).Cast<BDict>().Select(x => new KeyValuePair<string, string>((x.FirstOrDefault(k => k.Key == "path").Value as BList)[0].ToString(), x.FirstOrDefault(k => k.Key == "length").Value.ToString()));
       return new Tuple<string, IEnumerable<KeyValuePair<string, string>>>(name, files);
     }
   }
