@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using XBMCPluginData.Helpers;
 using XBMCPluginData.Services.Scrapers.OmgTorrent;
@@ -13,11 +14,11 @@ namespace XBMCPluginData.Controllers
     /// </summary>
     /// <param name="torrentLink"></param>
     /// <returns></returns>
-    //[HttpPost]
-    //[Route("Get")]
-    //public InfoFromTorrentName Get([FromBody]string torrentLink)
-    //{
-    // // return TorrentHelper.GetTorrentInfoAsync(torrentLink);
-    //}
+      [HttpPost]
+      [Route("Get")]
+      public TorrentInfo Get([FromBody]string torrentLink)
+      {
+          return TorrentHelper.GetTorrentInfoAsync(torrentLink);
+      }
   }
 }

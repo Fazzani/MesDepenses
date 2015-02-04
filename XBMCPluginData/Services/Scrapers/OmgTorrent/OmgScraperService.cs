@@ -74,7 +74,7 @@ namespace XBMCPluginData.Services.Scrapers.OmgTorrent
       HtmlDocument doc = HtmlWeb.Load(BuildUrl(string.Empty, string.Empty, string.Empty, 0, OrderByEnum.Nom, OrderEnum.Desc, serieName, serieId, saisonNumber));
       var saisonLink = Tools.TryGetValue(() => FullUrl(doc.DocumentNode.SelectSingleNode("//p[@class='serie_saison']").Element("a").attribute("href").Value));
       var torrentInfo = TorrentHelper.GetTorrentInfoAsync(saisonLink);
-      var keyInfosTorrents = torrentInfo.Item2.Select(x => new KeyValuePair<string, InfoFromTorrentName>(x.Key, TorrentHelper.GetTvInfoFromTorrentName(x.Key, torrentInfo.Item1)));
+      var keyInfosTorrents = torrentInfo.Files.Select(x => new KeyValuePair<string, InfoFromTorrentName>(x.TorrentFileName, TorrentHelper.GetTvInfoFromTorrentName(x.TorrentFileName, torrentInfo.TorrentFileName)));
       return doc.DocumentNode.SelectNodes("//table[@class='table_corps']/tr")
              .AsParallel()
              .Select((item, epIndex) => GetTvEpisodeItem(item, serieName, saisonNumber, epIndex, saisonLink, keyInfosTorrents))
