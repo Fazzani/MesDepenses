@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ConsoleApplication.VistorPattern;
 using MesDepensesServices.DAL;
+using ConsoleApplication.DecoratorPattern;
+using ConsoleApplication.DecoratorPattern.CustomExample;
 
 namespace ConsoleApplication
 {
@@ -30,10 +32,56 @@ namespace ConsoleApplication
             //    var tmp = repository.Categories.Count();
             //    Console.WriteLine(tmp);
             //}
-            var p = new ExpressionPrinter(Console.Out);
-            Expression<Func<int, int>> e = i => (0 == i % 2) ? -i * i : Math.Abs(i);
-            p.Print(e.Body);
+
+            TestCustomDecoratorPattern();
+            //var p = new ExpressionPrinter(Console.Out);
+            //Expression<Func<int, int>> e = i => (0 == i % 2) ? -i * i : Math.Abs(i);
+            //p.Print(e.Body);
             Console.ReadKey();
         }
+
+        public static void TestDecoratorPattern()
+        {
+            // Create book
+            Book book = new Book("Worley", "Inside ASP.NET", 10);
+            book.Display();
+
+            // Create video
+            Video video = new Video("Spielberg", "Jaws", 23, 92);
+            video.Display();
+
+            // Make video borrowable, then borrow and display
+            Console.WriteLine("\nMaking video borrowable:");
+
+            Borrowable borrowvideo = new Borrowable(video);
+            borrowvideo.BorrowItem("Customer #1");
+            borrowvideo.BorrowItem("Customer #2");
+
+            borrowvideo.Display();
+
+            // Wait for user
+            Console.ReadKey();
+        }
+
+        
+        public static void TestCustomDecoratorPattern()
+        {
+            TvShow tvShowMentalist = new TvShow { Title = "Mentalist", SaisonCount = 6 };
+            tvShowMentalist.Watch();
+
+            Movie movieGreenMile = new Movie { Title = "The green mile" };
+            movieGreenMile.Watch();
+            movieGreenMile.MarqueCommeVu();
+
+            // Make video borrowable, then borrow and display
+            Console.WriteLine("\nMaking video Dowloading:");
+
+            DownloadDecorator dowloadedVideo = new DownloadDecorator(movieGreenMile);
+            dowloadedVideo.Download("http://linkMovie");
+            Console.WriteLine(string.Format("{0} is downloaded statut {1}", dowloadedVideo.Title, dowloadedVideo.IsDowloaded));
+            // Wait for user
+            Console.ReadKey();
+        }
+
     }
 }
