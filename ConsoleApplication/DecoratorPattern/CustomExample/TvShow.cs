@@ -12,14 +12,14 @@ namespace ConsoleApplication.DecoratorPattern.CustomExample
 
         public override void Watch()
         {
-            Console.WriteLine(string.Format("Watching TvShow {0}", Title));
+            Console.WriteLine("Watching TvShow {0}", Title);
 
         }
 
         public override void MarqueCommeVu()
         {
             IsWatched = true;
-            Console.WriteLine(string.Format("This TvShow {0} est marqué comme vu", Title));
+            Console.WriteLine("This TvShow {0} est marqué comme vu", Title);
         }
     }
 }

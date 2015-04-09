@@ -17,7 +17,7 @@ namespace ConsoleApplication.DecoratorPattern.CustomExample
 
         public void Download(string link)
         {
-            Console.WriteLine(string.Format("Downloading {0} from {1}", Watchable.Title, link));
+            Console.WriteLine("Downloading {0} from {1}", Watchable.Title, link);
             IsDowloaded = true;
         }
     }
