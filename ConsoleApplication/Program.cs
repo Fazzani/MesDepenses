@@ -32,8 +32,9 @@ namespace ConsoleApplication
             //    var tmp = repository.Categories.Count();
             //    Console.WriteLine(tmp);
             //}
+            CreatingAnExpressionFromAnotherExpression();
 
-            TestCustomDecoratorPattern();
+            //TestCustomDecoratorPattern();
             //var p = new ExpressionPrinter(Console.Out);
             //Expression<Func<int, int>> e = i => (0 == i % 2) ? -i * i : Math.Abs(i);
             //p.Print(e.Body);
@@ -63,7 +64,7 @@ namespace ConsoleApplication
             Console.ReadKey();
         }
 
-        
+
         public static void TestCustomDecoratorPattern()
         {
             TvShow tvShowMentalist = new TvShow { Title = "Mentalist", SaisonCount = 6 };
@@ -83,5 +84,18 @@ namespace ConsoleApplication
             Console.ReadKey();
         }
 
+        public static void CreatingAnExpressionFromAnotherExpression()
+        {
+            Expression<Func<int, int>> square = x => x * x;
+
+            BinaryExpression spuareMoins5 = Expression.Add(square.Body, Expression.Negate(Expression.Constant(5)));
+            BinaryExpression squareplus2 = Expression.Add(square.Body, Expression.Constant(2));
+            ConditionalExpression codExpression = Expression.Condition(Expression.IsTrue(Expression.GreaterThan(square.Parameters.FirstOrDefault(), Expression.Constant(10))), spuareMoins5, squareplus2);
+            Expression<Func<int, int>> expr = Expression.Lambda<Func<int, int>>(codExpression, square.Parameters);
+
+            Func<int, int> compile = expr.Compile();
+            Console.WriteLine(compile(10));//102
+            Console.WriteLine(compile(11));//116
+        }
     }
 }
