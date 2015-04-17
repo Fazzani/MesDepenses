@@ -6,19 +6,17 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication.DecoratorPattern.CustomExample
 {
-    public class Movie: Watchable
+    public class Movie : Watchable
     {
-       
-
         public override void Watch()
         {
-            Console.WriteLine(string.Format("Watching Movie {0}", Title));
+            Console.WriteLine("Watching Movie {0}", Title);
         }
 
         public override void MarqueCommeVu()
         {
             IsWatched = true;
-            Console.WriteLine(string.Format("This Movie {0} est marqué comme vu", Title));
+            Console.WriteLine("This Movie {0} est marqué comme vu", Title);
         }
     }
 }

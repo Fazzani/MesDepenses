@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication.DecoratorPattern.CustomExample
 {
-    public abstract class WatchableDecorator: Watchable
+    public abstract class WatchableDecorator : Watchable
     {
         protected Watchable Watchable { get; set; }
 
-        public WatchableDecorator(Watchable watchable)
+        protected WatchableDecorator(Watchable watchable)
         {
             Watchable = watchable;
         }
